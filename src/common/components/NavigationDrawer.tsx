@@ -1,8 +1,10 @@
 import React from "react";
-import { Divider, Drawer, List, ListItem, ListItemText } from "@material-ui/core";
+import { Divider, Drawer, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import styled from "styled-components";
+import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
+import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 
-export const DRAWER_WIDTH_PX = 300;
+export const DRAWER_WIDTH_PX = 250;
 
 const DrawerList = styled(List)`
     width: ${DRAWER_WIDTH_PX}px;
@@ -18,8 +20,17 @@ const NavigationDrawer = (): JSX.Element => {
             </DrawerList>
             <Divider />
             <DrawerList>
-                <ListItem>
+                <ListItem button>
+                    <ListItemIcon>
+                        <AccountBalanceWalletIcon />
+                    </ListItemIcon>
                     <ListItemText primary="Budget" />
+                </ListItem>
+                <ListItem button>
+                    <ListItemIcon>
+                        <AccountBalanceIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Accounts" />
                 </ListItem>
             </DrawerList>
         </Drawer>
