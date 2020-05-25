@@ -1,7 +1,14 @@
 import React from "react";
+import { AppBar, Toolbar, Typography } from "@material-ui/core";
 
 const Header = (): JSX.Element => {
-  return <div>Hello world 2</div>;
+  return (
+    <AppBar position="static">
+      <Toolbar>
+        <Typography>Test</Typography>
+      </Toolbar>
+    </AppBar>
+  );
 };
 
 export default Header;
