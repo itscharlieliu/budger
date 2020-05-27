@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { theme } from "../../defs/theme";
+import { theme, UNIT_LENGTH } from "../../defs/theme";
 
 const AppBar = styled.div`
-    width: ${theme.size.appBar.width};
-    height: ${theme.size.appBar.height};
+    width: auto;
+    height: ${UNIT_LENGTH}px;
     background-color: ${theme.palette.primary.main};
     color: ${theme.palette.primary.contrast};
     box-shadow: ${theme.shadow.high};
