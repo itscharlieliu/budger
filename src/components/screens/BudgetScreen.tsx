@@ -1,7 +1,7 @@
 import React from "react";
 
 const BudgetScreen = (): JSX.Element => {
-    return <div>Budget</div>;
+    return <div>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</div>;
 };
 
 export default BudgetScreen;

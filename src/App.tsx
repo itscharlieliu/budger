@@ -1,7 +1,8 @@
 import React from "react";
-import Header from "./common/components/Header";
 import styled from "styled-components";
-import NavigationDrawer from "./common/components/NavigationDrawer";
+import NavigationDrawer from "./components/NavigationDrawer";
+import Router from "./components/Router";
+import AppBar from "./components/common/AppBar";
 
 const AppContainer = styled.div`
     width: 100vw;
@@ -11,8 +12,9 @@ const AppContainer = styled.div`
 function App() {
     return (
         <AppContainer>
-            <Header />
+            <AppBar>Budger</AppBar>
             <NavigationDrawer />
+            <Router />
         </AppContainer>
     );
 }
