@@ -6,7 +6,7 @@ const AppBar = styled.div`
     height: ${UNIT_LENGTH}px;
     background-color: ${theme.palette.primary.main};
     color: ${theme.palette.primary.contrast};
-    box-shadow: ${theme.shadow.high};
+    ${theme.shadow.high};
     display: flex;
     flex-direction: row;
     padding: 0 16px;

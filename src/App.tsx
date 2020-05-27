@@ -7,14 +7,24 @@ import AppBar from "./components/common/AppBar";
 const AppContainer = styled.div`
     width: 100vw;
     height: 100vh;
+    display: flex;
+    flex-direction: row;
+`;
+
+const BodyContainer = styled.div`
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 `;
 
 function App() {
     return (
         <AppContainer>
-            <AppBar>Budger</AppBar>
             <NavigationDrawer />
-            <Router />
+            <BodyContainer>
+                <AppBar>Budger</AppBar>
+                <Router />
+            </BodyContainer>
         </AppContainer>
     );
 }
