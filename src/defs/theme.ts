@@ -1,5 +1,10 @@
 export const UNIT_LENGTH = 64;
 
+export const colors = {
+    white: "#FFFFFF",
+    divider: "#00000020",
+};
+
 export const theme = {
     palette: {
         primary: {

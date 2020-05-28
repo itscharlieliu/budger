@@ -9,7 +9,7 @@ const AppBar = styled.div`
     ${theme.shadow.high};
     display: flex;
     flex-direction: row;
-    padding: 0 16px;
+    padding: 0 ${UNIT_LENGTH / 4}px;
     align-items: center;
 `;
 
