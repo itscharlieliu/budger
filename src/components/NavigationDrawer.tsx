@@ -11,13 +11,13 @@ const NavigationDrawer = (): JSX.Element => {
             <ListItem>Budger</ListItem>
             <Divider />
             <ListItem>
-                <Icon>
+                <Icon edge={"left"}>
                     <FiCreditCard />
                 </Icon>
                 Budget
             </ListItem>
             <ListItem>
-                <Icon>
+                <Icon edge={"left"}>
                     <FiDatabase />
                 </Icon>
                 Accounts
