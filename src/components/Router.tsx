@@ -1,6 +1,8 @@
 import React from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+
 import { BUDGET } from "../defs/routerPaths";
+
 import BudgetScreen from "./screens/BudgetScreen";
 
 const Router = (): JSX.Element => {

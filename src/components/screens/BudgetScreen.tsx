@@ -1,11 +1,12 @@
 import React from "react";
-import styled from "styled-components";
-import { UNIT_LENGTH } from "../../defs/theme";
-import Header from "../common/Header";
 import { connect } from "react-redux";
+import styled from "styled-components";
+
+import { UNIT_LENGTH } from "../../defs/theme";
 import IApplicationState from "../../store";
 import { ITotalBudget } from "../../store/budget/budgetInterfaces";
 import Button from "../common/Button";
+import Header from "../common/Header";
 
 const ScreenContainer = styled.div`
     padding: ${UNIT_LENGTH}px;

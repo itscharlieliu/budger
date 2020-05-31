@@ -1,4 +1,5 @@
 import styled from "styled-components";
+
 import { theme } from "../../defs/theme";
 
 const Divider = styled.div`

@@ -1,9 +1,10 @@
 import React from "react";
-import Drawer from "./common/Drawer";
-import ListItem from "./common/ListItem";
-import Divider from "./common/Divider";
 import { FiCreditCard, FiDatabase } from "react-icons/all";
+
+import Divider from "./common/Divider";
+import Drawer from "./common/Drawer";
 import Icon from "./common/Icon";
+import ListItem from "./common/ListItem";
 
 const NavigationDrawer = (): JSX.Element => {
     return (

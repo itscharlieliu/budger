@@ -1,6 +1,7 @@
-import styled from "styled-components";
-import { theme } from "../../defs/theme";
 import React, { ReactNode } from "react";
+import styled from "styled-components";
+
+import { theme } from "../../defs/theme";
 
 const RaisedButton = styled.a`
     padding: 16px 32px;
