@@ -1,1 +1,5 @@
-export default interface IApplicationState {}
+import { IBudgetState } from "./budget/budgetInterfaces";
+
+export default interface IApplicationState {
+    budget: IBudgetState;
+}
