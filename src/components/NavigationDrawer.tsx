@@ -8,8 +8,6 @@ import Icon from "./common/Icon";
 const NavigationDrawer = (): JSX.Element => {
     return (
         <Drawer>
-            <ListItem>Budger</ListItem>
-            <Divider />
             <ListItem>
                 <Icon edge={"left"}>
                     <FiCreditCard />

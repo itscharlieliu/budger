@@ -8,21 +8,22 @@ const AppContainer = styled.div`
     width: 100vw;
     height: 100vh;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 `;
 
 const BodyContainer = styled.div`
     flex-grow: 1;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 `;
 
 function App() {
     return (
         <AppContainer>
-            <NavigationDrawer />
+            <AppBar>Budger</AppBar>
+
             <BodyContainer>
-                <AppBar>Budger</AppBar>
+                <NavigationDrawer />
                 <Router />
             </BodyContainer>
         </AppContainer>

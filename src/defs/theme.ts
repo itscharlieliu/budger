@@ -1,10 +1,5 @@
 export const UNIT_LENGTH = 64;
 
-export const colors = {
-    white: "#FFFFFF",
-    divider: "#00000020",
-};
-
 export const theme = {
     palette: {
         primary: {
@@ -15,14 +10,21 @@ export const theme = {
             main: "#ffa69e",
             contrast: "#000000",
         },
+        background: {
+            main: "#FFFFFF",
+            contrast: "#000000",
+        },
+        divider: {
+            main: "#00000020",
+        },
     },
     shadow: {
         low:
-            "-webkit-box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.5);-moz-box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.5);box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.5);",
+            "-webkit-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.5);-moz-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.5);box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.5);",
         med:
-            "-webkit-box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.5);-moz-box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.5);box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.5);",
+            "-webkit-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);-moz-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);",
         high:
-            "-webkit-box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.5);-moz-box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.5);box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.5);",
+            "-webkit-box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.5);-moz-box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.5);box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.5);",
     },
     font: {
         biggest: "2em",
