@@ -14,7 +14,7 @@ export interface IMonthlyBudget {
 }
 
 export interface ITotalBudget {
-    [monthsSinceEpoch: number]: IMonthlyBudget;
+    [month: string]: IMonthlyBudget;
 }
 
 export interface IBudgetState {

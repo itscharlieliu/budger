@@ -20,11 +20,17 @@ export const theme = {
     },
     shadow: {
         low:
-            "-webkit-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.5);-moz-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.5);box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.5);",
+            "-webkit-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.5);" +
+            "-moz-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.5);" +
+            "box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.5);",
         med:
-            "-webkit-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);-moz-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);",
+            "-webkit-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);" +
+            "-moz-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);" +
+            "box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);",
         high:
-            "-webkit-box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.5);-moz-box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.5);box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.5);",
+            "-webkit-box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.5);" +
+            "-moz-box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.5);" +
+            "box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.5);",
     },
     font: {
         biggest: "2em",
