@@ -10,15 +10,13 @@ export const updateBudget = (
     date: Date,
     categoryGroup: string,
     category: string,
-    budgeted?: number,
-    activity?: number,
+    budgeted: number,
+    activity: number,
 ): TGenericBudgetThunkAction => async (
     dispatch: ThunkDispatch<IApplicationState, null, TGenericBudgetAction>,
     getState: () => IApplicationState,
 ): Promise<void> => {
     dispatch({ type: SETTING_TOTAL_BUDGET });
-
-    console.log(date.getMonth());
 
     // We store the budget with the format YYYY-mm
     const formattedDate = `${date.getFullYear().toString()}-${date.getMonth().toString().padStart(2, "0")}`;
@@ -26,7 +24,7 @@ export const updateBudget = (
     const newBudget: ITotalBudget = {
         ...getState().budget.totalBudget,
         [formattedDate]: {
-            test: { budgeted: 1, activity: 2 },
+            [category]: { budgeted, activity },
         },
     };
 

@@ -6,7 +6,7 @@ import {
     TGenericBudgetAction,
 } from "./budgetInterfaces";
 
-const defaultBudgetState: IBudgetState = {
+export const defaultBudgetState: IBudgetState = {
     totalBudget: {},
     isSettingBudget: false,
     error: null,
