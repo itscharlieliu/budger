@@ -1,11 +1,10 @@
-import thunk, { ThunkDispatch } from "redux-thunk";
 import configureMockStore, { MockStoreEnhanced } from "redux-mock-store";
-import IApplicationState from "../index";
+import thunk, { ThunkDispatch } from "redux-thunk";
+
+import { updateBudget } from "../budget/budgetActions";
 import { SET_TOTAL_BUDGET_SUCCESS, SETTING_TOTAL_BUDGET, TGenericBudgetAction } from "../budget/budgetInterfaces";
 import budgetReducer, { defaultBudgetState } from "../budget/budgetReducer";
-import { updateBudget } from "../budget/budgetActions";
-import { Action } from "redux";
-import rootReducer from "../rootReducer";
+import IApplicationState from "../index";
 
 type TDispatch = ThunkDispatch<IApplicationState, null, TGenericBudgetAction>;
 
@@ -20,8 +19,7 @@ describe("budget actions", () => {
 
     it("successfully updates budget", async () => {
         const currDate = new Date();
-        // @ts-ignore
-        await store.dispatch(updateBudget(currDate, "testGroup", "testCategory"));
+        await store.dispatch(updateBudget(currDate, "testGroup", "testCategory", 5, -3));
         const actions = store.getActions();
 
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);

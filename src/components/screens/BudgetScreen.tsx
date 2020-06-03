@@ -4,10 +4,10 @@ import styled from "styled-components";
 
 import { UNIT_LENGTH } from "../../defs/theme";
 import IApplicationState from "../../store";
+import { updateBudget } from "../../store/budget/budgetActions";
 import { ITotalBudget } from "../../store/budget/budgetInterfaces";
 import Button from "../common/Button";
 import Header from "../common/Header";
-import { updateBudget } from "../../store/budget/budgetActions";
 
 const ScreenContainer = styled.div`
     padding: ${UNIT_LENGTH}px;

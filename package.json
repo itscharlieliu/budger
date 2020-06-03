@@ -41,6 +41,8 @@
     "build": "react-scripts build",
     "lint": "eslint -c .eslintrc.js 'src/**/*'",
     "lint-fix": "eslint --fix -c .eslintrc.js 'src/**/*'",
+    "pretty": "prettier --check \"src/**/*.{ts,tsx}\"",
+    "pretty-fix": "prettier --write \"src/**/*.{ts,tsx}\"",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
