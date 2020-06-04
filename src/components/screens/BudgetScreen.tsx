@@ -9,6 +9,10 @@ import { ITotalBudget } from "../../store/budget/budgetInterfaces";
 import Button from "../common/Button";
 import Header from "../common/Header";
 
+const BudgetContainer = (): JSX.Element => {
+    return <div>Container</div>;
+};
+
 const ScreenContainer = styled.div`
     padding: ${UNIT_LENGTH}px;
 `;
@@ -29,6 +33,7 @@ const BudgetScreen = (props: TAllProps): JSX.Element => {
         <ScreenContainer>
             <Header>Budget</Header>
             <Button onClick={() => props.updateBudget(new Date(), "test", "test", 3, 3)}>Hello</Button>
+            <BudgetContainer />
         </ScreenContainer>
     );
 };
