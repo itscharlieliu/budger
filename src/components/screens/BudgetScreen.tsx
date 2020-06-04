@@ -5,16 +5,15 @@ import styled from "styled-components";
 import { UNIT_LENGTH } from "../../defs/theme";
 import IApplicationState from "../../store";
 import { updateBudget } from "../../store/budget/budgetActions";
-import { ITotalBudget } from "../../store/budget/budgetInterfaces";
+import { IBudgetCategory, IMonthlyBudget, ITotalBudget } from "../../store/budget/budgetInterfaces";
 import Button from "../common/Button";
-import Header from "../common/Header";
 
 const BudgetContainer = (): JSX.Element => {
     return <div>Container</div>;
 };
 
 const ScreenContainer = styled.div`
-    padding: ${UNIT_LENGTH}px;
+    padding: ${UNIT_LENGTH / 2}px;
 `;
 
 interface IStateProps {
@@ -28,7 +27,6 @@ interface IDispatchProps {
 type TAllProps = IStateProps & ResolveThunks<IDispatchProps>;
 
 const BudgetScreen = (props: TAllProps): JSX.Element => {
-    console.log(props);
     return (
         <ScreenContainer>
             <Header>Budget</Header>

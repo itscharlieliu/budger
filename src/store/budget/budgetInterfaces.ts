@@ -5,16 +5,18 @@ export const SET_TOTAL_BUDGET_SUCCESS = "SET_TOTAL_BUDGET_SUCCESS";
 export const SET_TOTAL_BUDGET_FAILURE = "SET_TOTAL_BUDGET_FAILURE";
 
 export interface IBudgetCategory {
+    name: string;
     budgeted: number;
     activity: number;
 }
 
-export interface IMonthlyBudget {
-    [budgetGroup: string]: IBudgetCategory;
+export interface IBudgetGroup {
+    name: string;
+    [category: number]: IBudgetCategory[];
 }
 
 export interface ITotalBudget {
-    [month: string]: IMonthlyBudget;
+    [month: string]: IBudgetGroup[];
 }
 
 export interface IBudgetState {
