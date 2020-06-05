@@ -25,6 +25,16 @@ const BudgetHeaderText = styled.span`
     padding: 16px;
 `;
 
+const BudgetGroupText = styled.span`
+    font-size: ${theme.font.size.small};
+    font-weight: ${theme.font.weight.bold};
+    padding: 16px;
+    border-top: 1px solid ${theme.palette.divider.main};
+
+    grid-column-start: 1;
+    grid-column-end: 5;
+`;
+
 const BudgetCategoryText = styled.span`
     font-size: ${theme.font.size.small};
     padding: 16px;
@@ -42,19 +52,31 @@ const BudgetHeader = (): JSX.Element => {
     );
 };
 
-interface IBudgetRowProps {
+interface IBudgetCategoryRowProps {
     category: string;
     budgeted: number;
     activity: number;
 }
 
-const BudgetRow = (props: IBudgetRowProps): JSX.Element => {
+const BudgetCategoryRow = (props: IBudgetCategoryRowProps): JSX.Element => {
     return (
         <>
             <BudgetCategoryText>{props.category}</BudgetCategoryText>
             <BudgetCategoryText>{props.budgeted}</BudgetCategoryText>
             <BudgetCategoryText>{props.activity}</BudgetCategoryText>
             <BudgetCategoryText>{props.budgeted + props.activity}</BudgetCategoryText>
+        </>
+    );
+};
+
+interface IBudgetGroupRowProps {
+    group: string;
+}
+
+const BudgetGroupRow = (props: IBudgetGroupRowProps): JSX.Element => {
+    return (
+        <>
+            <BudgetGroupText>{props.group}</BudgetGroupText>
         </>
     );
 };
@@ -75,7 +97,8 @@ const BudgetScreen = (props: TAllProps): JSX.Element => {
             <Button onClick={() => props.updateBudget(new Date(), "test", "test", 3, 3)}>Hello</Button>
             <BudgetContainer>
                 <BudgetHeader />
-                <BudgetRow category={"test1"} budgeted={100} activity={-60} />
+                <BudgetGroupRow group={"Test group"} />
+                <BudgetCategoryRow category={"test1"} budgeted={100} activity={-60} />
             </BudgetContainer>
         </ScreenContainer>
     );
