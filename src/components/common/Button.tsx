@@ -30,8 +30,7 @@ interface ButtonProps extends React.HTMLAttributes<HTMLAnchorElement> {
 }
 
 const Button = (props: ButtonProps): JSX.Element => {
-    const { lower, ...otherProps } = props;
-    return <RaisedButton {...otherProps} />;
+    return <RaisedButton {...props} />;
 };
 
 export default Button;
