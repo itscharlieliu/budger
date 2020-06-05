@@ -6,8 +6,11 @@ import {
     TGenericBudgetAction,
 } from "./budgetInterfaces";
 
+// // TODO Remove this when done
+// const mockBudget:
+
 export const defaultBudgetState: IBudgetState = {
-    totalBudget: {},
+    totalBudget: [],
     isSettingBudget: false,
     error: null,
 };

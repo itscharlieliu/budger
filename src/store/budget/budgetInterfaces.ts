@@ -5,22 +5,20 @@ export const SET_TOTAL_BUDGET_SUCCESS = "SET_TOTAL_BUDGET_SUCCESS";
 export const SET_TOTAL_BUDGET_FAILURE = "SET_TOTAL_BUDGET_FAILURE";
 
 export interface IBudgetCategory {
-    name: string;
+    category: string;
     budgeted: number;
     activity: number;
 }
 
 export interface IBudgetGroup {
-    name: string;
-    [category: number]: IBudgetCategory[];
+    group: string;
+    categories: IBudgetCategory[];
 }
 
-export interface ITotalBudget {
-    [month: string]: IBudgetGroup[];
-}
+export type TotalBudget = IBudgetGroup[];
 
 export interface IBudgetState {
-    totalBudget: ITotalBudget;
+    totalBudget: IBudgetGroup[];
     isSettingBudget: boolean;
     error: Error | null;
 }
@@ -28,7 +26,7 @@ export interface IBudgetState {
 export interface ISettingTotalBudgetAction extends Action<typeof SETTING_TOTAL_BUDGET> {}
 
 export interface ISetTotalBudgetActionSuccess extends Action<typeof SET_TOTAL_BUDGET_SUCCESS> {
-    totalBudget: ITotalBudget;
+    totalBudget: IBudgetGroup[];
 }
 
 export interface ISetTotalBudgetActionFailure extends Action<typeof SET_TOTAL_BUDGET_FAILURE> {
