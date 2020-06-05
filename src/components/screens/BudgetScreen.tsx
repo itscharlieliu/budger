@@ -53,7 +53,7 @@ const BudgetHeader = (): JSX.Element => {
 };
 
 interface IBudgetCategoryRowProps {
-    category: string;
+    name: string;
     budgeted: number;
     activity: number;
 }
@@ -61,7 +61,7 @@ interface IBudgetCategoryRowProps {
 const BudgetCategoryRow = (props: IBudgetCategoryRowProps): JSX.Element => {
     return (
         <>
-            <BudgetCategoryText>{props.category}</BudgetCategoryText>
+            <BudgetCategoryText>{props.name}</BudgetCategoryText>
             <BudgetCategoryText>{props.budgeted}</BudgetCategoryText>
             <BudgetCategoryText>{props.activity}</BudgetCategoryText>
             <BudgetCategoryText>{props.budgeted + props.activity}</BudgetCategoryText>
@@ -71,12 +71,21 @@ const BudgetCategoryRow = (props: IBudgetCategoryRowProps): JSX.Element => {
 
 interface IBudgetGroupRowProps {
     group: string;
+    categories: IBudgetCategoryRowProps[];
 }
 
 const BudgetGroupRow = (props: IBudgetGroupRowProps): JSX.Element => {
     return (
         <>
             <BudgetGroupText>{props.group}</BudgetGroupText>
+            {props.categories.map((category: IBudgetCategoryRowProps) => (
+                <BudgetCategoryRow
+                    key={category.name}
+                    name={category.name}
+                    budgeted={category.budgeted}
+                    activity={category.activity}
+                />
+            ))}
         </>
     );
 };
@@ -92,13 +101,26 @@ interface IDispatchProps {
 type TAllProps = IStateProps & ResolveThunks<IDispatchProps>;
 
 const BudgetScreen = (props: TAllProps): JSX.Element => {
+    // TODO Replace with with data from redux
+    const categories: IBudgetCategoryRowProps[] = [
+        {
+            name: "test1",
+            budgeted: 50,
+            activity: -30,
+        },
+        {
+            name: "test2",
+            budgeted: 100,
+            activity: -60,
+        },
+    ];
+
     return (
         <ScreenContainer>
             <Button onClick={() => props.updateBudget(new Date(), "test", "test", 3, 3)}>Hello</Button>
             <BudgetContainer>
                 <BudgetHeader />
-                <BudgetGroupRow group={"Test group"} />
-                <BudgetCategoryRow category={"test1"} budgeted={100} activity={-60} />
+                <BudgetGroupRow group={"Test group"} categories={categories} />
             </BudgetContainer>
         </ScreenContainer>
     );
