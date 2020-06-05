@@ -2,16 +2,16 @@ import configureMockStore, { MockStoreEnhanced } from "redux-mock-store";
 import thunk, { ThunkDispatch } from "redux-thunk";
 
 import { updateBudget } from "../budget/budgetActions";
-import { SET_TOTAL_BUDGET_SUCCESS, SETTING_TOTAL_BUDGET, TGenericBudgetAction } from "../budget/budgetInterfaces";
+import { SET_TOTAL_BUDGET_SUCCESS, SETTING_TOTAL_BUDGET, GenericBudgetAction } from "../budget/budgetInterfaces";
 import budgetReducer, { defaultBudgetState } from "../budget/budgetReducer";
-import IApplicationState from "../index";
+import ApplicationState from "../index";
 
-type TDispatch = ThunkDispatch<IApplicationState, null, TGenericBudgetAction>;
+type Dispatch = ThunkDispatch<ApplicationState, null, GenericBudgetAction>;
 
-const mockStore = configureMockStore<IApplicationState, TDispatch>([thunk]);
+const mockStore = configureMockStore<ApplicationState, Dispatch>([thunk]);
 
 describe("budget actions", () => {
-    let store: MockStoreEnhanced<IApplicationState, TDispatch>;
+    let store: MockStoreEnhanced<ApplicationState, Dispatch>;
 
     beforeEach(() => {
         store = mockStore({ budget: defaultBudgetState });

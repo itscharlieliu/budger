@@ -1,21 +1,21 @@
 import {
-    IBudgetState,
+    BudgetState,
     SET_TOTAL_BUDGET_FAILURE,
     SET_TOTAL_BUDGET_SUCCESS,
     SETTING_TOTAL_BUDGET,
-    TGenericBudgetAction,
+    GenericBudgetAction,
 } from "./budgetInterfaces";
 
 // // TODO Remove this when done
 // const mockBudget:
 
-export const defaultBudgetState: IBudgetState = {
+export const defaultBudgetState: BudgetState = {
     totalBudget: [],
     isSettingBudget: false,
     error: null,
 };
 
-const budgetReducer = (state: IBudgetState = defaultBudgetState, action: TGenericBudgetAction): IBudgetState => {
+const budgetReducer = (state: BudgetState = defaultBudgetState, action: GenericBudgetAction): BudgetState => {
     switch (action.type) {
         case SETTING_TOTAL_BUDGET: {
             return { ...state, isSettingBudget: true, error: null };

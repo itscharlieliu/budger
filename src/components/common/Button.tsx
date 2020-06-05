@@ -25,11 +25,11 @@ const RaisedButton = styled.a`
     transition: box-shadow 0.3s;
 `;
 
-interface IButtonProps extends React.HTMLAttributes<HTMLAnchorElement> {
+interface ButtonProps extends React.HTMLAttributes<HTMLAnchorElement> {
     lower?: boolean;
 }
 
-const Button = (props: IButtonProps): JSX.Element => {
+const Button = (props: ButtonProps): JSX.Element => {
     const { lower, ...otherProps } = props;
     return <RaisedButton {...otherProps} />;
 };

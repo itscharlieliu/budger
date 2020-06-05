@@ -4,38 +4,38 @@ export const SETTING_TOTAL_BUDGET = "SETTING_TOTAL_BUDGET";
 export const SET_TOTAL_BUDGET_SUCCESS = "SET_TOTAL_BUDGET_SUCCESS";
 export const SET_TOTAL_BUDGET_FAILURE = "SET_TOTAL_BUDGET_FAILURE";
 
-export interface IBudgetCategory {
+export interface BudgetCategory {
     category: string;
     budgeted: number;
     activity: number;
 }
 
-export interface IBudgetGroup {
+export interface BudgetGroup {
     group: string;
-    categories: IBudgetCategory[];
+    categories: BudgetCategory[];
 }
 
-export type TotalBudget = IBudgetGroup[];
+export type TotalBudget = BudgetGroup[];
 
-export interface IBudgetState {
-    totalBudget: IBudgetGroup[];
+export interface BudgetState {
+    totalBudget: BudgetGroup[];
     isSettingBudget: boolean;
     error: Error | null;
 }
 
-export interface ISettingTotalBudgetAction extends Action<typeof SETTING_TOTAL_BUDGET> {}
+export interface SettingTotalBudgetAction extends Action<typeof SETTING_TOTAL_BUDGET> {}
 
-export interface ISetTotalBudgetActionSuccess extends Action<typeof SET_TOTAL_BUDGET_SUCCESS> {
-    totalBudget: IBudgetGroup[];
+export interface SetTotalBudgetActionSuccess extends Action<typeof SET_TOTAL_BUDGET_SUCCESS> {
+    totalBudget: BudgetGroup[];
 }
 
-export interface ISetTotalBudgetActionFailure extends Action<typeof SET_TOTAL_BUDGET_FAILURE> {
+export interface SetTotalBudgetActionFailure extends Action<typeof SET_TOTAL_BUDGET_FAILURE> {
     error: Error;
 }
 
-export type TGenericSetBudgetAction =
-    | ISettingTotalBudgetAction
-    | ISetTotalBudgetActionSuccess
-    | ISetTotalBudgetActionFailure;
+export type GenericSetBudgetAction =
+    | SettingTotalBudgetAction
+    | SetTotalBudgetActionSuccess
+    | SetTotalBudgetActionFailure;
 
-export type TGenericBudgetAction = TGenericSetBudgetAction;
+export type GenericBudgetAction = GenericSetBudgetAction;

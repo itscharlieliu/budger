@@ -4,9 +4,9 @@ import thunk from "redux-thunk";
 
 import rootReducer from "./rootReducer";
 
-import IApplicationState from "./index";
+import ApplicationState from "./index";
 
-function configureStore(): Store<CombinedState<IApplicationState>> {
+function configureStore(): Store<CombinedState<ApplicationState>> {
     return createStore(rootReducer, applyMiddleware(thunk, logger));
 }
 

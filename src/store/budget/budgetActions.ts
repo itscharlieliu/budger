@@ -3,11 +3,11 @@
 
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 
-import IApplicationState from "../index";
+import ApplicationState from "../index";
 
-import { SET_TOTAL_BUDGET_SUCCESS, SETTING_TOTAL_BUDGET, TGenericBudgetAction } from "./budgetInterfaces";
+import { SET_TOTAL_BUDGET_SUCCESS, SETTING_TOTAL_BUDGET, GenericBudgetAction } from "./budgetInterfaces";
 
-type TGenericBudgetThunkAction = ThunkAction<Promise<void>, IApplicationState, null, TGenericBudgetAction>;
+type GenericBudgetThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericBudgetAction>;
 
 export const updateBudget = (
     date: Date,
@@ -15,9 +15,9 @@ export const updateBudget = (
     category: string,
     budgeted: number,
     activity: number,
-): TGenericBudgetThunkAction => async (
-    dispatch: ThunkDispatch<IApplicationState, null, TGenericBudgetAction>,
-    getState: () => IApplicationState,
+): GenericBudgetThunkAction => async (
+    dispatch: ThunkDispatch<ApplicationState, null, GenericBudgetAction>,
+    getState: () => ApplicationState,
 ): Promise<void> => {
     // dispatch({ type: SETTING_TOTAL_BUDGET });
     //

@@ -3,20 +3,20 @@ import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
 import { theme, UNIT_LENGTH } from "../../defs/theme";
-import IApplicationState from "../../store";
+import ApplicationState from "../../store";
 import { updateBudget } from "../../store/budget/budgetActions";
-import { IBudgetCategory, IBudgetGroup } from "../../store/budget/budgetInterfaces";
+import { BudgetCategory, BudgetGroup } from "../../store/budget/budgetInterfaces";
 import Button from "../common/Button";
 
-interface IStateProps {
-    totalBudget: IBudgetGroup[];
+interface StateProps {
+    totalBudget: BudgetGroup[];
 }
 
-interface IDispatchProps {
+interface DispatchProps {
     updateBudget: typeof updateBudget;
 }
 
-type TAllProps = IStateProps & ResolveThunks<IDispatchProps>;
+type AllProps = StateProps & ResolveThunks<DispatchProps>;
 
 const ScreenContainer = styled.div`
     flex-grow: 1;
@@ -62,7 +62,7 @@ const BudgetHeader = (): JSX.Element => {
     );
 };
 
-const BudgetCategoryRow = (props: IBudgetCategory): JSX.Element => {
+const BudgetCategoryRow = (props: BudgetCategory): JSX.Element => {
     return (
         <>
             <BudgetCategoryText>{props.category}</BudgetCategoryText>
@@ -73,11 +73,11 @@ const BudgetCategoryRow = (props: IBudgetCategory): JSX.Element => {
     );
 };
 
-const BudgetGroupRow = (props: IBudgetGroup): JSX.Element => {
+const BudgetGroupRow = (props: BudgetGroup): JSX.Element => {
     return (
         <>
             <BudgetGroupText>{props.group}</BudgetGroupText>
-            {props.categories.map((category: IBudgetCategory) => (
+            {props.categories.map((category: BudgetCategory) => (
                 <BudgetCategoryRow
                     key={category.category}
                     category={category.category}
@@ -89,7 +89,7 @@ const BudgetGroupRow = (props: IBudgetGroup): JSX.Element => {
     );
 };
 
-const BudgetScreen = (props: TAllProps): JSX.Element => {
+const BudgetScreen = (props: AllProps): JSX.Element => {
     // TODO Replace with with data from redux
     // const categories: IBudgetCategory[] = [
     //     {
@@ -109,7 +109,7 @@ const BudgetScreen = (props: TAllProps): JSX.Element => {
             <Button onClick={() => props.updateBudget(new Date(), "test", "test", 3, 3)}>Hello</Button>
             <BudgetContainer>
                 <BudgetHeader />
-                {props.totalBudget.map((budgetGroup: IBudgetGroup) => (
+                {props.totalBudget.map((budgetGroup: BudgetGroup) => (
                     <BudgetGroupRow
                         key={budgetGroup.group}
                         group={budgetGroup.group}
@@ -121,7 +121,7 @@ const BudgetScreen = (props: TAllProps): JSX.Element => {
     );
 };
 
-const mapStateToProps = (state: IApplicationState): IStateProps => ({
+const mapStateToProps = (state: ApplicationState): StateProps => ({
     totalBudget: state.budget.totalBudget,
 });
 
