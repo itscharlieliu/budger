@@ -8,13 +8,13 @@ import ListItem from "./common/ListItem";
 const NavigationDrawer = (): JSX.Element => {
     return (
         <Drawer>
-            <ListItem>
+            <ListItem isHighlighted isButton>
                 <Icon edge={"left"}>
                     <FiCreditCard />
                 </Icon>
                 Budget
             </ListItem>
-            <ListItem>
+            <ListItem isButton>
                 <Icon edge={"left"}>
                     <FiDatabase />
                 </Icon>
