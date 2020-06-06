@@ -1,18 +1,18 @@
 import React from "react";
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 
-import { BUDGET } from "../defs/routerPaths";
+import { BUDGET, TRANSACTIONS } from "../defs/routerPaths";
 
 import BudgetScreen from "./screens/BudgetScreen";
+import TransactionsScreen from "./screens/TransactionsScreen";
 
 const Router = (): JSX.Element => {
     return (
-        <BrowserRouter>
-            <Switch>
-                <Route path={BUDGET} exact component={BudgetScreen} />
-                <Redirect to={BUDGET} />
-            </Switch>
-        </BrowserRouter>
+        <Switch>
+            <Route path={BUDGET} exact component={BudgetScreen} />
+            <Route path={TRANSACTIONS} exact component={TransactionsScreen} />
+            <Redirect to={BUDGET} />
+        </Switch>
     );
 };
 

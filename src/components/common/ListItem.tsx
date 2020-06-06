@@ -1,12 +1,13 @@
 import React, { ReactNode } from "react";
 import styled from "styled-components";
 
-import { theme, UNIT_LENGTH } from "../../defs/theme";
+import { theme, UNIT_LENGTH, Z_INDEX_ACTIVE, Z_INDEX_INACTIVE } from "../../defs/theme";
 
 interface ListItemProps {
     isHighlighted?: boolean;
     isButton?: boolean;
     children: ReactNode;
+    onClick?: ({ ...any }) => void;
 }
 
 interface ListItemContainerProps {
@@ -17,20 +18,24 @@ const ListItemContainer = styled.div<ListItemContainerProps>`
     width: 100%;
     display: flex;
     align-items: center;
-    background-color: ${(props: ListItemContainerProps): string => (props.highlight ? theme.palette.primary.main : "")};
+    background: ${(props: ListItemContainerProps): string => (props.highlight ? theme.palette.primary.main : "")};
     border-radius: 0 32px 32px 0;
 `;
 
 const ListItemButtonContainer = styled(ListItemContainer)`
     cursor: pointer;
+    position: relative;
+    z-index: ${Z_INDEX_INACTIVE};
 
     &:hover {
-        ${theme.shadow.med}
+        ${theme.shadow.med};
+        z-index: ${Z_INDEX_ACTIVE};
     }
 
     &:active {
         transition: box-shadow 0s;
         ${theme.shadow.low};
+        z-index: ${Z_INDEX_ACTIVE};
     }
 
     transition: box-shadow 0.3s;
@@ -43,18 +48,18 @@ const ListItemContent = styled.div<ListItemProps>`
 `;
 
 const ListItem = (props: ListItemProps): JSX.Element => {
-    const { isHighlighted, isButton, ...otherProps } = props;
+    const { isHighlighted, isButton, onClick, ...otherProps } = props;
 
     if (isButton) {
         return (
-            <ListItemButtonContainer highlight={isHighlighted}>
+            <ListItemButtonContainer highlight={isHighlighted} onClick={onClick}>
                 <ListItemContent {...otherProps} />
             </ListItemButtonContainer>
         );
     }
 
     return (
-        <ListItemContainer highlight={isHighlighted}>
+        <ListItemContainer highlight={isHighlighted} onClick={onClick}>
             <ListItemContent {...otherProps} />
         </ListItemContainer>
     );

@@ -1,5 +1,8 @@
 export const UNIT_LENGTH = 64;
 
+export const Z_INDEX_ACTIVE = 5;
+export const Z_INDEX_INACTIVE = 4;
+
 export const theme = {
     palette: {
         primary: {

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import NavigationDrawer from "./components/NavigationDrawer";
 import Router from "./components/Router";
 import AppBar from "./components/common/AppBar";
+import { BrowserRouter } from "react-router-dom";
 
 const AppContainer = styled.div`
     width: 100vw;
@@ -21,12 +22,14 @@ const BodyContainer = styled.div`
 function App(): JSX.Element {
     return (
         <AppContainer>
-            <AppBar>Budger</AppBar>
+            <BrowserRouter>
+                <AppBar>Budger</AppBar>
 
-            <BodyContainer>
-                <NavigationDrawer />
-                <Router />
-            </BodyContainer>
+                <BodyContainer>
+                    <NavigationDrawer />
+                    <Router />
+                </BodyContainer>
+            </BrowserRouter>
         </AppContainer>
     );
 }
