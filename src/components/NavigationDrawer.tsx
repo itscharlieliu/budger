@@ -6,21 +6,23 @@ import { BUDGET, TRANSACTIONS } from "../defs/routerPaths";
 
 import Drawer from "./common/Drawer";
 import Icon from "./common/Icon";
-import ListItem from "./common/ListItem";
+import DrawerListItem from "./common/DrawerListItem";
 
 const NavigationDrawer = (): JSX.Element => {
     const location = useLocation();
     const history = useHistory();
 
+    console.log("rerendered");
+
     return (
         <Drawer>
-            <ListItem isHighlighted={location.pathname === BUDGET} isButton onClick={() => history.push(BUDGET)}>
+            <DrawerListItem isHighlighted={location.pathname === BUDGET} isButton onClick={() => history.push(BUDGET)}>
                 <Icon edge={"left"}>
                     <FiCreditCard />
                 </Icon>
                 Budget
-            </ListItem>
-            <ListItem
+            </DrawerListItem>
+            <DrawerListItem
                 isHighlighted={location.pathname === TRANSACTIONS}
                 isButton
                 onClick={() => history.push(TRANSACTIONS)}
@@ -29,7 +31,7 @@ const NavigationDrawer = (): JSX.Element => {
                     <FiDatabase />
                 </Icon>
                 Accounts
-            </ListItem>
+            </DrawerListItem>
         </Drawer>
     );
 };

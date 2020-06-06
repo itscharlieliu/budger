@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import NavigationDrawer from "./components/NavigationDrawer";
 import Router from "./components/Router";
-import AppBar from "./components/common/AppBar";
+import AppBar from "./components/AppBar";
 import { BrowserRouter } from "react-router-dom";
 
 const AppContainer = styled.div`
@@ -23,7 +23,7 @@ function App(): JSX.Element {
     return (
         <AppContainer>
             <BrowserRouter>
-                <AppBar>Budger</AppBar>
+                <AppBar />
 
                 <BodyContainer>
                     <NavigationDrawer />

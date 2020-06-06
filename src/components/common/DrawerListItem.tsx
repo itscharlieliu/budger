@@ -20,6 +20,8 @@ const ListItemContainer = styled.div<ListItemContainerProps>`
     align-items: center;
     background: ${(props: ListItemContainerProps): string => (props.highlight ? theme.palette.primary.main : "")};
     border-radius: 0 32px 32px 0;
+    font-weight: ${(props: ListItemContainerProps): number =>
+        props.highlight ? theme.font.weight.bold : theme.font.weight.none};
 `;
 
 const ListItemButtonContainer = styled(ListItemContainer)`
@@ -41,13 +43,13 @@ const ListItemButtonContainer = styled(ListItemContainer)`
     transition: box-shadow 0.3s;
 `;
 
-const ListItemContent = styled.div<ListItemProps>`
+const ListItemContent = styled.div`
     display: flex;
     align-items: center;
     padding: 0 ${UNIT_LENGTH / 4}px;
 `;
 
-const ListItem = (props: ListItemProps): JSX.Element => {
+const DrawerListItem = (props: ListItemProps): JSX.Element => {
     const { isHighlighted, isButton, onClick, ...otherProps } = props;
 
     if (isButton) {
@@ -65,4 +67,4 @@ const ListItem = (props: ListItemProps): JSX.Element => {
     );
 };
 
-export default ListItem;
+export default DrawerListItem;
