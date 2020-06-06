@@ -2,11 +2,12 @@ import React from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
-import { theme, UNIT_LENGTH } from "../../defs/theme";
+import { theme } from "../../defs/theme";
 import ApplicationState from "../../store";
 import { updateBudget } from "../../store/budget/budgetActions";
 import { BudgetCategory, BudgetGroup } from "../../store/budget/budgetInterfaces";
 import Button from "../common/Button";
+import ScreenContainer from "../common/ScreenContainer";
 
 interface StateProps {
     totalBudget: BudgetGroup[];
@@ -18,11 +19,6 @@ interface DispatchProps {
 
 type AllProps = StateProps & ResolveThunks<DispatchProps>;
 
-const ScreenContainer = styled.div`
-    flex-grow: 1;
-    padding: ${UNIT_LENGTH / 2}px;
-`;
-
 const BudgetContainer = styled.div`
     display: grid;
     width: auto;
@@ -33,6 +29,7 @@ const BudgetHeaderText = styled.span`
     font-size: ${theme.font.size.big};
     font-weight: ${theme.font.weight.bold};
     padding: 16px;
+    border-bottom: 2px solid ${theme.palette.background.contrast};
 `;
 
 const BudgetGroupText = styled.span`
@@ -90,23 +87,9 @@ const BudgetGroupRow = (props: BudgetGroup): JSX.Element => {
 };
 
 const BudgetScreen = (props: AllProps): JSX.Element => {
-    // TODO Replace with with data from redux
-    // const categories: IBudgetCategory[] = [
-    //     {
-    //         name: "test1",
-    //         budgeted: 50,
-    //         activity: -30,
-    //     },
-    //     {
-    //         name: "test2",
-    //         budgeted: 100,
-    //         activity: -60,
-    //     },
-    // ];
-
     return (
         <ScreenContainer>
-            <Button onClick={() => props.updateBudget(new Date(), "test", "test", 3, 3)}>Hello</Button>
+            <Button onClick={() => props.updateBudget(new Date(), "test", "test", 3, 3)}>Add test category</Button>
             <BudgetContainer>
                 <BudgetHeader />
                 {props.totalBudget.map((budgetGroup: BudgetGroup) => (

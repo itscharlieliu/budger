@@ -30,7 +30,7 @@ const NavigationDrawer = (): JSX.Element => {
                 <Icon edge={"left"}>
                     <FiDatabase />
                 </Icon>
-                Accounts
+                Transactions
             </DrawerListItem>
         </Drawer>
     );
