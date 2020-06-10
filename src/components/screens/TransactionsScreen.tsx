@@ -3,6 +3,13 @@ import styled from "styled-components";
 
 import { theme } from "../../defs/theme";
 import ScreenContainer from "../common/ScreenContainer";
+import { Transaction } from "../../store/transactions/transactionInterfaces";
+import { connect } from "react-redux";
+import ApplicationState from "../../store";
+
+interface StateProps {
+    transactions: Transaction[];
+}
 
 const TransactionsContainer = styled.div`
     display: grid;
@@ -26,7 +33,7 @@ const TransactionsRowText = styled.span`
 const TransactionsHeader = (): JSX.Element => {
     return (
         <>
-            <TransactionsHeaderText>Payee</TransactionsHeaderText>
+            <TransactionsHeaderText>To / From</TransactionsHeaderText>
             <TransactionsHeaderText>Account</TransactionsHeaderText>
             <TransactionsHeaderText>Category</TransactionsHeaderText>
             <TransactionsHeaderText>Date</TransactionsHeaderText>
@@ -37,29 +44,38 @@ const TransactionsHeader = (): JSX.Element => {
     );
 };
 
-const TransactionsRow = (): JSX.Element => {
+const TransactionsRow = (props: Transaction): JSX.Element => {
+    const inFlow = props.activity > 0 ? props.activity : 0;
+    const outFlow = props.activity < 0 ? -props.activity : 0;
+
     return (
         <>
-            <TransactionsRowText>Test1</TransactionsRowText>
-            <TransactionsRowText>Test1</TransactionsRowText>
-            <TransactionsRowText>Test1</TransactionsRowText>
-            <TransactionsRowText>Test1</TransactionsRowText>
-            <TransactionsRowText>Test1</TransactionsRowText>
-            <TransactionsRowText>Test1</TransactionsRowText>
-            <TransactionsRowText>Test1</TransactionsRowText>
+            <TransactionsRowText>{props.payee}</TransactionsRowText>
+            <TransactionsRowText>{props.account}</TransactionsRowText>
+            <TransactionsRowText>{props.category}</TransactionsRowText>
+            <TransactionsRowText>{props.date.getTime()}</TransactionsRowText>
+            <TransactionsRowText>{inFlow}</TransactionsRowText>
+            <TransactionsRowText>{outFlow}</TransactionsRowText>
+            <TransactionsRowText>{props.note}</TransactionsRowText>
         </>
     );
 };
 
-const TransactionsScreen = (): JSX.Element => {
+const TransactionsScreen = (props: StateProps): JSX.Element => {
     return (
         <ScreenContainer>
             <TransactionsContainer>
                 <TransactionsHeader />
-                <TransactionsRow />
+                {props.transactions.map((transaction: Transaction, index: number) => (
+                    <TransactionsRow key={"transaction" + index} {...transaction} />
+                ))}
             </TransactionsContainer>
         </ScreenContainer>
     );
 };
 
-export default TransactionsScreen;
+const mapStateToProps = (state: ApplicationState): StateProps => ({
+    transactions: state.transaction.transactions,
+});
+
+export default connect(mapStateToProps, {})(TransactionsScreen);

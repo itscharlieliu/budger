@@ -1,5 +1,6 @@
 import { ThunkAction } from "redux-thunk";
-import ApplicationState from "../index";
+
 import { GenericBudgetAction } from "../budget/budgetInterfaces";
+import ApplicationState from "../index";
 
 export type GenericTransactionThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericBudgetAction>;

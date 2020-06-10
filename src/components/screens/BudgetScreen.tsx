@@ -92,12 +92,8 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
             <Button onClick={() => props.updateBudget(new Date(), "test", "test", 3, 3)}>Add test category</Button>
             <BudgetContainer>
                 <BudgetHeader />
-                {props.totalBudget.map((budgetGroup: BudgetGroup) => (
-                    <BudgetGroupRow
-                        key={budgetGroup.group}
-                        group={budgetGroup.group}
-                        categories={budgetGroup.categories}
-                    />
+                {props.totalBudget.map((budgetGroup: BudgetGroup, index: number) => (
+                    <BudgetGroupRow key={"budgetGroup" + index} {...budgetGroup} />
                 ))}
             </BudgetContainer>
         </ScreenContainer>

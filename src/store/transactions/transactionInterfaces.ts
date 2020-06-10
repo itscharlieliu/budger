@@ -9,7 +9,7 @@ export interface Transaction {
     date: Date;
     payee: string;
     category: string;
-    note: string;
+    note?: string;
     activity: number;
 }
 

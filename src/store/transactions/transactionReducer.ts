@@ -2,11 +2,31 @@ import {
     ADD_TRANSACTION_SUCCESS,
     ADDING_TRANSACTION,
     GenericTransactionAction,
+    Transaction,
     TransactionState,
 } from "./transactionInterfaces";
 
+const mockTransactions: Transaction[] = [
+    {
+        account: "checkings 1",
+        date: new Date(),
+        payee: "testPayee",
+        category: "groceries",
+        note: "test",
+        activity: 5,
+    },
+    {
+        account: "checkings 2",
+        date: new Date(),
+        payee: "testPayee2",
+        category: "fun",
+        note: "test2",
+        activity: -5,
+    },
+];
+
 export const defaultTransactionState: TransactionState = {
-    transactions: [],
+    transactions: mockTransactions,
     isAddingTransaction: false,
     error: null,
 };
