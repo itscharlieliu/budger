@@ -10,22 +10,22 @@ type Dispatch = ThunkDispatch<ApplicationState, null, GenericBudgetAction>;
 
 const mockStore = configureMockStore<ApplicationState, Dispatch>([thunk]);
 
-describe("budget actions", () => {
-    let store: MockStoreEnhanced<ApplicationState, Dispatch>;
-
-    beforeEach(() => {
-        store = mockStore({ budget: defaultBudgetState });
-    });
-
-    it("successfully updates budget", async () => {
-        const currDate = new Date();
-        await store.dispatch(updateBudget(currDate, "testGroup", "testCategory", 5, -3));
-        const actions = store.getActions();
-
-        expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
-        expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
-    });
-});
+// describe("budget actions", () => {
+//     let store: MockStoreEnhanced<ApplicationState, Dispatch>;
+//
+//     beforeEach(() => {
+//         store = mockStore({ budget: defaultBudgetState });
+//     });
+//
+//     it("successfully updates budget", async () => {
+//         const currDate = new Date();
+//         await store.dispatch(updateBudget(currDate, "testGroup", "testCategory", 5, -3));
+//         const actions = store.getActions();
+//
+//         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
+//         expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
+//     });
+// });
 
 describe("budget reducer", () => {
     it("starts setting budget", async () => {
