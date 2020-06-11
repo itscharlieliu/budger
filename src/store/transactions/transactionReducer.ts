@@ -1,9 +1,10 @@
 import {
-    ADD_TRANSACTION_SUCCESS,
-    ADDING_TRANSACTION,
     GenericTransactionAction,
     Transaction,
     TransactionState,
+    UPDATE_TRANSACTIONS_FAILURE,
+    UPDATE_TRANSACTIONS_SUCCESS,
+    UPDATING_TRANSACTIONS,
 } from "./transactionInterfaces";
 
 const mockTransactions: Transaction[] = [
@@ -27,7 +28,7 @@ const mockTransactions: Transaction[] = [
 
 export const defaultTransactionState: TransactionState = {
     transactions: mockTransactions,
-    isAddingTransaction: false,
+    isUpdatingTransactions: false,
     error: null,
 };
 
@@ -36,11 +37,14 @@ const transactionReducer = (
     action: GenericTransactionAction,
 ): TransactionState => {
     switch (action.type) {
-        case ADDING_TRANSACTION: {
-            return { ...state, isAddingTransaction: true, error: null };
+        case UPDATING_TRANSACTIONS: {
+            return { ...state, isUpdatingTransactions: true, error: null };
         }
-        case ADD_TRANSACTION_SUCCESS: {
-            return { ...state, isAddingTransaction: false, transactions: action.transactions };
+        case UPDATE_TRANSACTIONS_SUCCESS: {
+            return { ...state, isUpdatingTransactions: false, transactions: action.transactions };
+        }
+        case UPDATE_TRANSACTIONS_FAILURE: {
+            return { ...state, isUpdatingTransactions: false, error: action.error };
         }
         default: {
             return { ...state };
