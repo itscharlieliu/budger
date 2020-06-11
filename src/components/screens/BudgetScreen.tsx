@@ -104,7 +104,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
     totalBudget: state.budget.totalBudget,
 });
 
-const mapDispatchToProps = {
+const mapDispatchToProps: DispatchProps = {
     updateBudget,
 };
 
