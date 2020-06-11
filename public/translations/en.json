@@ -8,6 +8,7 @@
     "toFrom": "To / From",
     "account": "Account",
     "date": "Date",
+    "fullDate": "{{- date, L}}",
     "in": "In",
     "out": "Out",
     "notes": "Notes",

@@ -3,7 +3,7 @@ import { FiCreditCard, FiDatabase } from "react-icons/all";
 import { useLocation, useHistory } from "react-router-dom";
 
 import { BUDGET, TRANSACTIONS } from "../defs/routerPaths";
-import t from "../services/language";
+import t from "../services/i18n/language";
 
 import Drawer from "./common/Drawer";
 import DrawerListItem from "./common/DrawerListItem";

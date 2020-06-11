@@ -7,7 +7,7 @@ import AppBar from "./components/AppBar";
 import NavigationDrawer from "./components/NavigationDrawer";
 import Router from "./components/Router";
 import { I18N_DEFAULT_OPTIONS } from "./defs/i18n";
-import { language } from "./services/language";
+import { language } from "./services/i18n/language";
 import ApplicationState from "./store";
 import { setLanguageInitialized } from "./store/initialization/initializationActions";
 import useMount from "./utils/useMount";
