@@ -3,6 +3,7 @@ import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
 import { theme } from "../../defs/theme";
+import t from "../../services/language";
 import ApplicationState from "../../store";
 import { updateBudget } from "../../store/budget/budgetActions";
 import { BudgetCategory, BudgetGroup } from "../../store/budget/budgetInterfaces";
@@ -51,10 +52,10 @@ const BudgetCategoryText = styled.span`
 const BudgetHeader = (): JSX.Element => {
     return (
         <>
-            <BudgetHeaderText>Category</BudgetHeaderText>
-            <BudgetHeaderText>Budgeted</BudgetHeaderText>
-            <BudgetHeaderText>Activity</BudgetHeaderText>
-            <BudgetHeaderText>Remaining</BudgetHeaderText>
+            <BudgetHeaderText>{t("category")}</BudgetHeaderText>
+            <BudgetHeaderText>{t("budgeted")}</BudgetHeaderText>
+            <BudgetHeaderText>{t("activity")}</BudgetHeaderText>
+            <BudgetHeaderText>{t("remaining")}</BudgetHeaderText>
         </>
     );
 };
@@ -89,7 +90,7 @@ const BudgetGroupRow = (props: BudgetGroup): JSX.Element => {
 const BudgetScreen = (props: AllProps): JSX.Element => {
     return (
         <ScreenContainer>
-            <Button onClick={() => props.updateBudget(new Date(), "test", "test", 3, 3)}>Add test category</Button>
+            <Button onClick={() => props.updateBudget(new Date(), "test", "test", 3, 3)}>{t("add")}</Button>
             <BudgetContainer>
                 <BudgetHeader />
                 {props.totalBudget.map((budgetGroup: BudgetGroup, index: number) => (

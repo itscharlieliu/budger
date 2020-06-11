@@ -6,6 +6,7 @@ import ScreenContainer from "../common/ScreenContainer";
 import { Transaction } from "../../store/transactions/transactionInterfaces";
 import { connect } from "react-redux";
 import ApplicationState from "../../store";
+import t from "../../services/language";
 
 interface StateProps {
     transactions: Transaction[];
@@ -33,13 +34,13 @@ const TransactionsRowText = styled.span`
 const TransactionsHeader = (): JSX.Element => {
     return (
         <>
-            <TransactionsHeaderText>To / From</TransactionsHeaderText>
-            <TransactionsHeaderText>Account</TransactionsHeaderText>
-            <TransactionsHeaderText>Category</TransactionsHeaderText>
-            <TransactionsHeaderText>Date</TransactionsHeaderText>
-            <TransactionsHeaderText>In</TransactionsHeaderText>
-            <TransactionsHeaderText>Out</TransactionsHeaderText>
-            <TransactionsHeaderText>Notes</TransactionsHeaderText>
+            <TransactionsHeaderText>{t("toFrom")}</TransactionsHeaderText>
+            <TransactionsHeaderText>{t("account")}</TransactionsHeaderText>
+            <TransactionsHeaderText>{t("category")}</TransactionsHeaderText>
+            <TransactionsHeaderText>{t("date")}</TransactionsHeaderText>
+            <TransactionsHeaderText>{t("in")}</TransactionsHeaderText>
+            <TransactionsHeaderText>{t("out")}</TransactionsHeaderText>
+            <TransactionsHeaderText>{t("notes")}</TransactionsHeaderText>
         </>
     );
 };

@@ -1,5 +1,18 @@
 {
   "translation": {
-    "budger": "Budger"
+    "activity": "Activity",
+    "budger": "Budger",
+    "add": "Add",
+    "budget": "Budget",
+    "budgeted": "Budgeted",
+    "toFrom": "To / From",
+    "account": "Account",
+    "date": "Date",
+    "in": "In",
+    "out": "Out",
+    "notes": "Notes",
+    "category": "Category",
+    "remaining": "Remaining",
+    "transactions": "Transactions"
   }
 }

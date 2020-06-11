@@ -3,16 +3,15 @@ import { FiCreditCard, FiDatabase } from "react-icons/all";
 import { useLocation, useHistory } from "react-router-dom";
 
 import { BUDGET, TRANSACTIONS } from "../defs/routerPaths";
+import t from "../services/language";
 
 import Drawer from "./common/Drawer";
-import Icon from "./common/Icon";
 import DrawerListItem from "./common/DrawerListItem";
+import Icon from "./common/Icon";
 
 const NavigationDrawer = (): JSX.Element => {
     const location = useLocation();
     const history = useHistory();
-
-    console.log("rerendered");
 
     return (
         <Drawer>
@@ -20,7 +19,7 @@ const NavigationDrawer = (): JSX.Element => {
                 <Icon edge={"left"}>
                     <FiCreditCard />
                 </Icon>
-                Budget
+                {t("budget")}
             </DrawerListItem>
             <DrawerListItem
                 isHighlighted={location.pathname === TRANSACTIONS}
@@ -30,7 +29,7 @@ const NavigationDrawer = (): JSX.Element => {
                 <Icon edge={"left"}>
                     <FiDatabase />
                 </Icon>
-                Transactions
+                {t("transactions")}
             </DrawerListItem>
         </Drawer>
     );
