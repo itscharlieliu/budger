@@ -41,7 +41,7 @@ function App(props: AllProps): JSX.Element {
         language
             .init(I18N_DEFAULT_OPTIONS)
             .then(() => props.setLanguageInitialized(true))
-            .catch((e: Error) => console.warn(e));
+            .catch((e: Error) => console.error(e));
     });
 
     if (!props.translationInitialized) {
