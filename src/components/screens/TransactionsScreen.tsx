@@ -1,12 +1,12 @@
 import React from "react";
+import { connect } from "react-redux";
 import styled from "styled-components";
 
 import { theme } from "../../defs/theme";
-import ScreenContainer from "../common/ScreenContainer";
-import { Transaction } from "../../store/transactions/transactionInterfaces";
-import { connect } from "react-redux";
-import ApplicationState from "../../store";
 import t from "../../services/language";
+import ApplicationState from "../../store";
+import { Transaction } from "../../store/transactions/transactionInterfaces";
+import ScreenContainer from "../common/ScreenContainer";
 
 interface StateProps {
     transactions: Transaction[];

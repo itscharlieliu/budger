@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
 
 import budgetReducer from "./budget/budgetReducer";
-import transactionReducer from "./transactions/transactionReducer";
 import initializationReducer from "./initialization/initializationReducer";
+import transactionReducer from "./transactions/transactionReducer";
 
 const rootReducer = combineReducers({
     budget: budgetReducer,
