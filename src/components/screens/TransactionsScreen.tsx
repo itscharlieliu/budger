@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 
 import { theme } from "../../defs/theme";
-import t from "../../services/language";
+import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
 import { Transaction } from "../../store/transactions/transactionInterfaces";
 import ScreenContainer from "../common/ScreenContainer";
@@ -54,7 +54,7 @@ const TransactionsRow = (props: Transaction): JSX.Element => {
             <TransactionsRowText>{props.payee}</TransactionsRowText>
             <TransactionsRowText>{props.account}</TransactionsRowText>
             <TransactionsRowText>{props.category}</TransactionsRowText>
-            <TransactionsRowText>{props.date.getTime()}</TransactionsRowText>
+            <TransactionsRowText>{t("fullDate", { date: props.date })}</TransactionsRowText>
             <TransactionsRowText>{inFlow}</TransactionsRowText>
             <TransactionsRowText>{outFlow}</TransactionsRowText>
             <TransactionsRowText>{props.note}</TransactionsRowText>

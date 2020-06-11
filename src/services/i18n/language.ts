@@ -1,6 +1,8 @@
 import i18next, { StringMap } from "i18next";
 
-import { FALLBACK_LOCALE, SUPPORTED_LOCALES } from "../defs/i18n";
+import { FALLBACK_LOCALE, SUPPORTED_LOCALES } from "../../defs/i18n";
+
+import date from "./dates";
 
 interface IInitOptions {
     locale: string;
@@ -22,7 +24,19 @@ const language = {
 
         const response = await fetch(`/translations/${locale}.json`);
         const resources = await response.json();
-        await i18next.init({ resources: { [locale]: resources }, ...commonOptions });
+        await date.init(locale);
+        const i18nextOpt = {
+            ...commonOptions,
+            interpolation: {
+                format: (value: string | Date, format: string = "") => {
+                    if (value instanceof Date) {
+                        return date.format(value, format);
+                    }
+                    return value;
+                },
+            },
+        };
+        await i18next.init({ resources: { [locale]: resources }, ...i18nextOpt });
     },
 
     activate(newLocaleCode: string = i18next.language): string {
@@ -50,6 +64,7 @@ const language = {
     },
 
     t(key: string, options?: IInitOptions | StringMap): string {
+        console.log(i18next.t(key, options));
         return i18next.t(key, options);
     },
 

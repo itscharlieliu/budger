@@ -3,7 +3,7 @@ import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
 import { theme } from "../../defs/theme";
-import t from "../../services/language";
+import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
 import { updateBudget } from "../../store/budget/budgetActions";
 import { BudgetCategory, BudgetGroup } from "../../store/budget/budgetInterfaces";

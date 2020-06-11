@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { theme, UNIT_LENGTH } from "../defs/theme";
 import { ReactComponent as BudgerLogo } from "../resources/images/BudgerLogo.svg";
-import t from "../services/language";
+import t from "../services/i18n/language";
 
 const AppBarContainer = styled.div`
     width: auto;
