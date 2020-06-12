@@ -6,8 +6,6 @@ const Drawer = styled.div`
     width: ${4 * UNIT_LENGTH}px;
     height: auto;
     background-color: ${theme.palette.background.main};
-    // border-right: 1px solid ${theme.palette.divider.main};
-    padding: 16px 0;
 `;
 
 export default Drawer;

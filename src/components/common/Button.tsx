@@ -3,15 +3,22 @@ import styled from "styled-components";
 
 import { theme } from "../../defs/theme";
 
+interface ButtonTextProps {
+    hasIcon: boolean;
+}
+
 const RaisedButton = styled.a`
-    padding: 16px 32px;
+    padding: 16px;
     outline: none;
     border: none;
     border-radius: 32px;
     ${theme.shadow.med};
     background-color: ${theme.palette.background.main};
-    display: inline-block;
+    display: flex;
+    align-items: center;
     cursor: pointer;
+    margin: 16px;
+    width: max-content;
 
     &:hover {
         ${theme.shadow.high}
@@ -25,12 +32,23 @@ const RaisedButton = styled.a`
     transition: box-shadow 0.3s;
 `;
 
+const ButtonContent = styled.div<ButtonTextProps>`
+    margin-left: ${(props: ButtonTextProps): string => (props.hasIcon ? "16px" : "")};
+`;
+
 interface ButtonProps extends React.HTMLAttributes<HTMLAnchorElement> {
     lower?: boolean;
+    icon?: JSX.Element;
 }
 
 const Button = (props: ButtonProps): JSX.Element => {
-    return <RaisedButton {...props} />;
+    const { children, ...otherProps } = props;
+    return (
+        <RaisedButton {...otherProps}>
+            {props.icon}
+            {children && <ButtonContent hasIcon={!!props.icon}>{children}</ButtonContent>}
+        </RaisedButton>
+    );
 };
 
 export default Button;
