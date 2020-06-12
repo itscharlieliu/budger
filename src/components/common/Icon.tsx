@@ -7,6 +7,8 @@ interface IconProps {
 const Icon = styled.div<IconProps>`
     margin: 16px ${(props: IconProps) => (props.edge === "right" ? 0 : 16)}px 16px
         ${(props: IconProps) => (props.edge === "left" ? 0 : 16)}px;
+    display: flex;
+    align-items: center;
 `;
 
 export default Icon;

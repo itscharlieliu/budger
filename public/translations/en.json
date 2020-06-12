@@ -10,6 +10,7 @@
     "date": "Date",
     "fullDate": "{{- date, L}}",
     "in": "In",
+    "addTransaction": "Add Transaction",
     "out": "Out",
     "notes": "Notes",
     "category": "Category",

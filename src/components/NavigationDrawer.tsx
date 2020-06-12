@@ -1,5 +1,4 @@
 import React from "react";
-import { FiCreditCard, FiDatabase } from "react-icons/all";
 import { useLocation, useHistory } from "react-router-dom";
 
 import { BUDGET, TRANSACTIONS } from "../defs/routerPaths";
@@ -8,6 +7,9 @@ import t from "../services/i18n/language";
 import Drawer from "./common/Drawer";
 import DrawerListItem from "./common/DrawerListItem";
 import Icon from "./common/Icon";
+import Button from "./common/Button";
+import { ReactComponent as PlusIcon } from "../resources/images/plusIcon.svg";
+import { ReactComponent as WalletIcon } from "../resources/images/wallet.svg";
 
 const NavigationDrawer = (): JSX.Element => {
     const location = useLocation();
@@ -15,9 +17,10 @@ const NavigationDrawer = (): JSX.Element => {
 
     return (
         <Drawer>
+            <Button icon={<PlusIcon />}>{t("addTransaction")}</Button>
             <DrawerListItem isHighlighted={location.pathname === BUDGET} isButton onClick={() => history.push(BUDGET)}>
                 <Icon edge={"left"}>
-                    <FiCreditCard />
+                    <WalletIcon />
                 </Icon>
                 {t("budget")}
             </DrawerListItem>
@@ -27,7 +30,7 @@ const NavigationDrawer = (): JSX.Element => {
                 onClick={() => history.push(TRANSACTIONS)}
             >
                 <Icon edge={"left"}>
-                    <FiDatabase />
+                    <PlusIcon />
                 </Icon>
                 {t("transactions")}
             </DrawerListItem>
