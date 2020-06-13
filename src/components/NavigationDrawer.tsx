@@ -10,6 +10,7 @@ import Icon from "./common/Icon";
 import Button from "./common/Button";
 import { ReactComponent as PlusIcon } from "../resources/images/plusIcon.svg";
 import { ReactComponent as WalletIcon } from "../resources/images/wallet.svg";
+import { ReactComponent as RecieptIcon } from "../resources/images/reciept.svg";
 
 const NavigationDrawer = (): JSX.Element => {
     const location = useLocation();
@@ -30,7 +31,7 @@ const NavigationDrawer = (): JSX.Element => {
                 onClick={() => history.push(TRANSACTIONS)}
             >
                 <Icon edge={"left"}>
-                    <PlusIcon />
+                    <RecieptIcon />
                 </Icon>
                 {t("transactions")}
             </DrawerListItem>
