@@ -64,7 +64,6 @@ const language = {
     },
 
     t(key: string, options?: IInitOptions | StringMap): string {
-        console.log(i18next.t(key, options));
         return i18next.t(key, options);
     },
 
