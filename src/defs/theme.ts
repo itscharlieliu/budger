@@ -2,6 +2,7 @@ export const UNIT_LENGTH = 64;
 
 export const Z_INDEX_ACTIVE = 5;
 export const Z_INDEX_INACTIVE = 4;
+export const Z_INDEX_MODAL = 6;
 
 export const theme = {
     palette: {
@@ -19,6 +20,9 @@ export const theme = {
         },
         divider: {
             main: "#00000020",
+        },
+        modal: {
+            background: "#00000060",
         },
     },
     shadow: {

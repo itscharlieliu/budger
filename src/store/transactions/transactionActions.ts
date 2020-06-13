@@ -4,6 +4,7 @@ import { GenericBudgetAction } from "../budget/budgetInterfaces";
 import ApplicationState from "../index";
 import {
     GenericTransactionAction,
+    Transaction,
     UPDATE_TRANSACTIONS_FAILURE,
     UPDATE_TRANSACTIONS_SUCCESS,
     UPDATING_TRANSACTIONS,
@@ -17,7 +18,7 @@ export const addTransaction = (
     category: string,
     date: Date,
     activity: number,
-    notes: string,
+    note?: string,
 ): GenericTransactionThunkAction => {
     return async (
         dispatch: ThunkDispatch<ApplicationState, null, GenericTransactionAction>,
@@ -28,7 +29,19 @@ export const addTransaction = (
 
         try {
             // update transactions
-            dispatch({ type: UPDATE_TRANSACTIONS_SUCCESS, transactions });
+            const newTransactions: Transaction[] = [
+                ...transactions,
+                {
+                    account,
+                    date,
+                    payee,
+                    category,
+                    note,
+                    activity,
+                },
+            ];
+
+            dispatch({ type: UPDATE_TRANSACTIONS_SUCCESS, transactions: newTransactions });
         } catch (error) {
             console.warn(error);
             dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error });
