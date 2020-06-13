@@ -1,7 +1,7 @@
 <svg width="24" height="24" version="1.1" viewBox="0 0 6.35 6.35" xmlns="http://www.w3.org/2000/svg">
- <g transform="translate(0,-290.65)" stroke-width="1.0583">
-  <path d="m4.5642 292.91c0.71342 0 1.2566 0.45141 1.2566 1.0731v0.9573c0 0.57466-0.29783 1.2646-1.0112 1.2646h-3.2592c-0.59404 0-1.0213-0.53366-1.0213-1.0482v-2.6417c0-0.60651 0.48131-1.0726 1.0911-1.0726h1.7937c0.89801 0 1.1503 0.81373 1.1503 1.4675z" fill="none" stroke="#000"/>
-  <circle transform="scale(-1,1)" cx="-4.3141" cy="294.48" r=".52917" stroke-linecap="round"/>
-  <path d="m4.5392 292.93h-2.4181" fill="none" stroke="#000" stroke-linecap="round"/>
+ <g transform="translate(0,-290.65)" stroke-width=".52917">
+  <path d="m4.7032 292.14c0.78477 0 1.3823 0.50156 1.3823 1.1923v1.7318c0 0.63851-0.32761 1.4052-1.1123 1.4052h-3.5852c-0.65345 0-1.1234-0.59296-1.1234-1.1646v-2.9352c0-0.6739 0.52944-1.1918 1.2002-1.1918h1.9731c0.98781 0 1.2653 0.23597 1.2653 0.96234z" fill="none" stroke="#000"/>
+  <ellipse transform="scale(-1,1)" cx="-4.4281" cy="294.22" rx=".58208" ry=".58796" stroke-linecap="round"/>
+  <path d="m4.7032 292.14h-2.6599" fill="none" stroke="#000" stroke-linecap="round"/>
  </g>
 </svg>
