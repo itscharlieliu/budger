@@ -24,6 +24,10 @@ export const theme = {
         modal: {
             background: "#00000060",
         },
+        input: {
+            inactive: "#00000020",
+            active: "#000000",
+        },
     },
     shadow: {
         low:

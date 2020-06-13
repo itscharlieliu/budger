@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useHistory } from "react-router-dom";
+import styled from "styled-components";
 
 import { BUDGET, TRANSACTIONS } from "../defs/routerPaths";
 import { ReactComponent as PlusIcon } from "../resources/images/plusIcon.svg";
@@ -12,19 +13,12 @@ import Drawer from "./common/Drawer";
 import DrawerListItem from "./common/DrawerListItem";
 import Icon from "./common/Icon";
 import Modal from "./common/Modal";
-import styled from "styled-components";
-
-const Test = styled.div`
-    width: 500px;
-    height: 500px;
-`;
+import TransactionAddForm from "./TransactionAddForm";
 
 const NavigationDrawer = (): JSX.Element => {
-    const [isAddingTransaction, setIsAddingTransaction] = useState<boolean>(false);
+    const [isAddingTransaction, setIsAddingTransaction] = useState(true);
     const location = useLocation();
     const history = useHistory();
-
-    console.log("drawer rerender");
 
     return (
         <Drawer>
@@ -34,7 +28,7 @@ const NavigationDrawer = (): JSX.Element => {
                     setIsAddingTransaction(false);
                 }}
             >
-                <Test>Hello</Test>
+                <TransactionAddForm />
             </Modal>
 
             <Button onClick={() => setIsAddingTransaction(true)} icon={<PlusIcon />}>
