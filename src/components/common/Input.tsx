@@ -9,6 +9,7 @@ const Input = styled.input`
     border-style: none none solid none;
     border-color: ${theme.palette.input.inactive};
     padding: 8px 0;
+    margin: 4px;
 
     &:focus {
         border-color: ${theme.palette.input.active};

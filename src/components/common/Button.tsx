@@ -7,7 +7,7 @@ interface ButtonTextProps {
     hasIcon: boolean;
 }
 
-const RaisedButton = styled.a`
+const RaisedButton = styled.button`
     padding: 16px;
     outline: none;
     border: none;
@@ -19,6 +19,14 @@ const RaisedButton = styled.a`
     cursor: pointer;
     margin: 16px;
     width: max-content;
+
+    &:focus-visible {
+        ${theme.shadow.high}
+    }
+
+    &:focus {
+        ${theme.shadow.high}
+    }
 
     &:hover {
         ${theme.shadow.high}
@@ -36,7 +44,7 @@ const ButtonContent = styled.div<ButtonTextProps>`
     margin-left: ${(props: ButtonTextProps): string => (props.hasIcon ? "16px" : "")};
 `;
 
-interface ButtonProps extends React.HTMLAttributes<HTMLAnchorElement> {
+interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
     lower?: boolean;
     icon?: JSX.Element;
 }
