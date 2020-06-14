@@ -9,7 +9,7 @@ const TransactionAddContainer = styled.div`
 const TransactionAddForm = (): JSX.Element => {
     return (
         <TransactionAddContainer>
-            <Input></Input>
+            <Input placeholder={"hello"} />
         </TransactionAddContainer>
     );
 };
