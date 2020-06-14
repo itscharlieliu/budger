@@ -3,7 +3,8 @@ import styled from "styled-components";
 
 import { theme, Z_INDEX_MODAL } from "../../defs/theme";
 import useOutsideClick from "../../utils/useOutsideClick";
-import useMount from "../../utils/useMount";
+
+const FADE_DURATION_MS = 100;
 
 interface ModalProps {
     visible?: boolean;
@@ -28,7 +29,7 @@ const ModalBackground = styled.div<ModalBackgroundProps>`
     background-color: ${theme.palette.modal.background};
     opacity: ${(props: ModalBackgroundProps) => props.opacity};
 
-    transition: opacity 0.2s;
+    transition: opacity ${FADE_DURATION_MS / 1000}s;
 `;
 
 const ModalContainer = styled.div`
@@ -38,14 +39,11 @@ const ModalContainer = styled.div`
 `;
 
 const Modal = (props: ModalProps): JSX.Element | null => {
-    const [fadedIn, setFadedIn] = useState<boolean>(false);
     const [isShowing, setIsShowing] = useState<boolean>(false);
 
     const visible = props.visible === undefined ? true : props.visible;
 
     const modalRef = useRef<HTMLDivElement>(null);
-
-    console.log("rerendered");
 
     useOutsideClick(
         modalRef,
@@ -56,17 +54,16 @@ const Modal = (props: ModalProps): JSX.Element | null => {
     // Initialize opacity at 0, so we fade in when user activates component
     useEffect(() => {
         if (visible) {
+            // We need to add a timeout here because sometimes react sets the state synchronously,
+            // which disables the animation
             const timeout = setTimeout(() => {
                 setIsShowing(true);
-                setFadedIn(true);
-            }, 50);
+            }, 10);
             return () => clearTimeout(timeout);
         }
-        const fadeTimeout = setTimeout(() => setFadedIn(false), 50);
-        const showTimeout = setTimeout(() => setIsShowing(false), 200);
+        const timeout = setTimeout(() => setIsShowing(false), FADE_DURATION_MS);
         return () => {
-            clearTimeout(fadeTimeout);
-            clearTimeout(showTimeout);
+            clearTimeout(timeout);
         };
     }, [visible]);
 
@@ -74,8 +71,12 @@ const Modal = (props: ModalProps): JSX.Element | null => {
         return null;
     }
 
+    if (!visible && !isShowing) {
+        return null;
+    }
+
     return (
-        <ModalBackground opacity={fadedIn ? 1 : 0} onAnimationEnd={() => console.log("test")}>
+        <ModalBackground opacity={visible && isShowing ? 1 : 0} onAnimationEnd={() => console.log("test")}>
             <ModalContainer ref={modalRef}>{props.children}</ModalContainer>
         </ModalBackground>
     );
