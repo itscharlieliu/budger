@@ -9,6 +9,8 @@ import configureStore from "./store/configureStore";
 
 const store = configureStore();
 
+// Reminder: React strict mode may cause multiple re-renders, so comment it out during testing renders
+
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
