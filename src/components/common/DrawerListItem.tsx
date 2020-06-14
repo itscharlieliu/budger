@@ -40,7 +40,7 @@ const ListItemButtonContainer = styled(ListItemContainer)`
         z-index: ${Z_INDEX_ACTIVE};
     }
 
-    transition: box-shadow 0.3s;
+    transition: box-shadow 0.2s;
 `;
 
 const ListItemContent = styled.div`

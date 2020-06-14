@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useLocation, useHistory } from "react-router-dom";
-import styled from "styled-components";
+import { useHistory, useLocation } from "react-router-dom";
 
 import { BUDGET, TRANSACTIONS } from "../defs/routerPaths";
 import { ReactComponent as PlusIcon } from "../resources/images/plusIcon.svg";
@@ -8,15 +7,15 @@ import { ReactComponent as RecieptIcon } from "../resources/images/reciept.svg";
 import { ReactComponent as WalletIcon } from "../resources/images/wallet.svg";
 import t from "../services/i18n/language";
 
+import TransactionAddForm from "./TransactionAddForm";
 import Button from "./common/Button";
 import Drawer from "./common/Drawer";
 import DrawerListItem from "./common/DrawerListItem";
 import Icon from "./common/Icon";
 import Modal from "./common/Modal";
-import TransactionAddForm from "./TransactionAddForm";
 
 const NavigationDrawer = (): JSX.Element => {
-    const [isAddingTransaction, setIsAddingTransaction] = useState(true);
+    const [isAddingTransaction, setIsAddingTransaction] = useState(false);
     const location = useLocation();
     const history = useHistory();
 

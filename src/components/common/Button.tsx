@@ -37,7 +37,7 @@ const RaisedButton = styled.button`
         ${theme.shadow.med};
     }
 
-    transition: box-shadow 0.3s;
+    transition: box-shadow 0.1s ease-in;
 `;
 
 const ButtonContent = styled.div<ButtonTextProps>`
