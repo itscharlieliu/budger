@@ -9,6 +9,7 @@ import { updateBudget } from "../../store/budget/budgetActions";
 import { BudgetCategory, BudgetGroup } from "../../store/budget/budgetInterfaces";
 import Button from "../common/Button";
 import ScreenContainer from "../common/ScreenContainer";
+import Input from "../common/Input";
 
 interface StateProps {
     totalBudget: BudgetGroup[];

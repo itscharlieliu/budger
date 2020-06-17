@@ -1,10 +1,13 @@
-import styled from "styled-components";
-import React, { FormEvent, useState } from "react";
-import Input from "./common/Input";
-import t from "../services/i18n/language";
-import Button from "./common/Button";
-import { addTransaction } from "../store/transactions/transactionActions";
+import React, { useState } from "react";
+import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
 import { connect, ResolveThunks } from "react-redux";
+import styled from "styled-components";
+
+import t from "../services/i18n/language";
+import { addTransaction } from "../store/transactions/transactionActions";
+
+import Button from "./common/Button";
+import Input from "./common/Input";
 
 interface DispatchProps {
     addTransaction: typeof addTransaction;
@@ -12,11 +15,10 @@ interface DispatchProps {
 
 type AllProps = ResolveThunks<DispatchProps>;
 
-const TransactionAddContainer = styled.div`
+const TransactionAddContainer = styled.form`
     padding: 16px;
     display: flex;
     flex-direction: row;
-    align-items: center;
 `;
 
 const TransactionAddForm = (props: AllProps): JSX.Element => {
@@ -32,47 +34,64 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
         props.addTransaction(toFrom, account, category, new Date(date), inflow - outflow, note);
     };
 
+    const handleValidation = (values: { [key: string]: string }) => {
+        const errors: { [key: string]: string } = {};
+        console.log("validating...");
+        console.log(values);
+        if (!values.toFrom) {
+            errors["toFrom"] = t("cannotBeEmpty");
+        }
+
+        return errors;
+    };
+
     return (
-        <TransactionAddContainer>
-            <Input
-                placeholder={t("toFrom")}
-                value={toFrom}
-                onChange={(event: FormEvent) => setToFrom((event.target as HTMLInputElement).value)}
-            />
-            <Input
-                placeholder={t("account")}
-                value={account}
-                onChange={(event: FormEvent) => setAccount((event.target as HTMLInputElement).value)}
-            />
-            <Input
-                placeholder={t("category")}
-                value={category}
-                onChange={(event: FormEvent) => setCategory((event.target as HTMLInputElement).value)}
-            />
-            <Input
-                placeholder={t("date")}
-                value={date}
-                onChange={(event: FormEvent) => setDate((event.target as HTMLInputElement).value)}
-            />
-            <Input
-                placeholder={t("in")}
-                type={"number"}
-                value={inflow}
-                onChange={(event: FormEvent) => setInflow(parseInt((event.target as HTMLInputElement).value))}
-            />
-            <Input
-                placeholder={t("out")}
-                value={outflow}
-                onChange={(event: FormEvent) => setOutflow(parseInt((event.target as HTMLInputElement).value))}
-            />
-            <Input
-                placeholder={t("notes")}
-                value={note}
-                onChange={(event: FormEvent) => setNote((event.target as HTMLInputElement).value)}
-            />
-            <Button onClick={handleAddButtonPress}>add</Button>
-            <Button>cancel</Button>
-        </TransactionAddContainer>
+        <Form
+            onSubmit={(everything) => console.log(everything)}
+            validate={handleValidation}
+            component={({ handleSubmit }: FormRenderProps) => (
+                <TransactionAddContainer onSubmit={handleSubmit}>
+                    <Field name={"toFrom"}>
+                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
+                            <Input helperText={meta.error} error={meta.error} label={t("toFrom")} {...input} />
+                        )}
+                    </Field>
+                    <Field name={"account"}>
+                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
+                            <Input label={t("account")} error={meta.error} {...input} />
+                        )}
+                    </Field>
+                    <Field name={"category"}>
+                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
+                            <Input label={t("category")} error={meta.error} {...input} />
+                        )}
+                    </Field>
+                    <Field name={"date"}>
+                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
+                            <Input label={t("date")} error={meta.error} {...input} />
+                        )}
+                    </Field>
+                    <Field name={"in"}>
+                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
+                            <Input label={t("in")} error={meta.error} {...input} />
+                        )}
+                    </Field>
+                    <Field name={"out"}>
+                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
+                            <Input label={t("out")} error={meta.error} {...input} />
+                        )}
+                    </Field>
+                    <Field name={"notes"}>
+                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
+                            <Input label={t("notes")} error={meta.error} {...input} />
+                        )}
+                    </Field>
+
+                    <Button type={"submit"}>add</Button>
+                    <Button type={"button"}>cancel</Button>
+                </TransactionAddContainer>
+            )}
+        />
     );
 };
 

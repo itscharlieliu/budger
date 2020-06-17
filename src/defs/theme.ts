@@ -1,8 +1,12 @@
 export const UNIT_LENGTH = 64;
 
-export const Z_INDEX_ACTIVE = 5;
-export const Z_INDEX_INACTIVE = 4;
-export const Z_INDEX_MODAL = 6;
+export enum ZIndex {
+    inactive = 10,
+    active,
+    modal,
+    inputLabel,
+    input,
+}
 
 export const theme = {
     palette: {
@@ -25,8 +29,12 @@ export const theme = {
             background: "#00000060",
         },
         input: {
-            inactive: "#00000020",
+            inactive: "#00000080",
             active: "#000000",
+        },
+        error: {
+            main: "#ff0000",
+            light: "#ff000080",
         },
     },
     shadow: {
