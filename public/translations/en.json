@@ -9,6 +9,7 @@
     "account": "Account",
     "date": "Date",
     "fullDate": "{{- date, L}}",
+    "cannotBeEmpty": "This field cannot be empty",
     "in": "In",
     "addTransaction": "Add Transaction",
     "out": "Out",

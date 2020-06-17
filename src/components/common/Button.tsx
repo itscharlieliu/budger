@@ -19,6 +19,7 @@ const RaisedButton = styled.button`
     cursor: pointer;
     margin: 16px;
     width: max-content;
+    font-size: 1em;
 
     &:focus-visible {
         ${theme.shadow.high}
@@ -44,7 +45,7 @@ const ButtonContent = styled.div<ButtonTextProps>`
     margin-left: ${(props: ButtonTextProps): string => (props.hasIcon ? "16px" : "")};
 `;
 
-interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     lower?: boolean;
     icon?: JSX.Element;
 }

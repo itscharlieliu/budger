@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import styled from "styled-components";
 
-import { theme, UNIT_LENGTH, Z_INDEX_ACTIVE, Z_INDEX_INACTIVE } from "../../defs/theme";
+import { theme, UNIT_LENGTH, ZIndex } from "../../defs/theme";
 
 interface ListItemProps {
     isHighlighted?: boolean;
@@ -27,17 +27,17 @@ const ListItemContainer = styled.div<ListItemContainerProps>`
 const ListItemButtonContainer = styled(ListItemContainer)`
     cursor: pointer;
     position: relative;
-    z-index: ${Z_INDEX_INACTIVE};
+    z-index: ${ZIndex.inactive};
 
     &:hover {
         ${theme.shadow.med};
-        z-index: ${Z_INDEX_ACTIVE};
+        z-index: ${ZIndex.active};
     }
 
     &:active {
         transition: box-shadow 0s;
         ${theme.shadow.low};
-        z-index: ${Z_INDEX_ACTIVE};
+        z-index: ${ZIndex.active};
     }
 
     transition: box-shadow 0.2s;

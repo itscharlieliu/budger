@@ -54,7 +54,6 @@ const LabelText = styled.span<LabelTextProps>`
     display: inline-block;
     overflow: visible;
     height: 1em;
-    width: min-content;
     font-weight: ${theme.font.weight.bold};
     color: ${(props: LabelTextProps): string => {
         if (props.error) {
@@ -101,7 +100,7 @@ const Input = (props: InputProps): JSX.Element => {
 
     return (
         <InputContainer error={error}>
-            <LabelText error={error} focused={!!props.helperText || !!inputValue || isFocused}>
+            <LabelText error={error} focused={!!props.placeholder || !!inputValue || isFocused}>
                 {label}
             </LabelText>
             <TextContainer
