@@ -75,10 +75,7 @@ const HelpText = styled.span`
 
 const Input = (props: InputProps): JSX.Element => {
     const [isFocused, setIsFocused] = useState<boolean>(false);
-    const [inputValue, setInputValue] = useState<string | number | string[]>("");
     const { error, helperText, label, onFocus, onBlur, value, ...otherProps } = props;
-
-    useEffect(() => setInputValue(value ? value : ""), [value]);
 
     const onInputFocus = (event: React.FocusEvent<HTMLInputElement>): void => {
         onFocus && onFocus(event);
@@ -90,27 +87,12 @@ const Input = (props: InputProps): JSX.Element => {
         setIsFocused(false);
     };
 
-    const onValueChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        otherProps.onChange && otherProps.onChange(event);
-        if (value) {
-            return;
-        }
-        setInputValue(event.target.value);
-    };
-
     return (
         <InputContainer error={error}>
-            <LabelText error={error} focused={!!props.placeholder || !!inputValue || isFocused}>
+            <LabelText error={error} focused={!!props.placeholder || !!value || isFocused}>
                 {label}
             </LabelText>
-            <TextContainer
-                error={error}
-                onFocus={onInputFocus}
-                onBlur={onInputBlur}
-                value={inputValue}
-                onChange={onValueChange}
-                {...otherProps}
-            />
+            <TextContainer error={error} onFocus={onInputFocus} onBlur={onInputBlur} value={value} {...otherProps} />
             <HelpText>{helperText}</HelpText>
         </InputContainer>
     );
