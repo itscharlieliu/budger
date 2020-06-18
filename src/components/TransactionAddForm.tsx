@@ -79,70 +79,72 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                     <Field name={"toFrom"}>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
                             <Input
+                                {...input}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
                                 label={t("toFrom")}
-                                {...input}
                             />
                         )}
                     </Field>
                     <Field name={"account"}>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
                             <Input
+                                {...input}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
                                 label={t("account")}
-                                {...input}
                             />
                         )}
                     </Field>
                     <Field name={"category"}>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
                             <Input
+                                {...input}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
                                 label={t("category")}
-                                {...input}
                             />
                         )}
                     </Field>
                     <Field name={"date"}>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
                             <Input
+                                {...input}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
                                 label={t("date")}
-                                {...input}
                             />
                         )}
                     </Field>
                     <Field name={"in"} format={(value: string) => formatMoney(value, 2)} formatOnBlur>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
                             <Input
+                                {...input}
+                                value={input.value || ""}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
                                 label={t("in")}
-                                {...input}
                             />
                         )}
                     </Field>
-                    <Field name={"out"}>
+                    <Field name={"out"} format={(value: string) => formatMoney(value, 2)} formatOnBlur>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
                             <Input
+                                {...input}
+                                value={input.value || ""}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
                                 label={t("out")}
-                                {...input}
                             />
                         )}
                     </Field>
                     <Field name={"notes"}>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
                             <Input
+                                {...input}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
                                 label={t("notes")}
-                                {...input}
                             />
                         )}
                     </Field>
