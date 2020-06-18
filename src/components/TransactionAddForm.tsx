@@ -8,9 +8,20 @@ import { addTransaction } from "../store/transactions/transactionActions";
 
 import Button from "./common/Button";
 import Input from "./common/Input";
+import formatMoney from "../utils/formatMoney";
 
 interface DispatchProps {
     addTransaction: typeof addTransaction;
+}
+
+interface FormValues {
+    toFrom?: string;
+    account?: string;
+    category?: string;
+    date?: string;
+    inflow?: string;
+    outflow?: string;
+    note?: string;
 }
 
 type AllProps = ResolveThunks<DispatchProps>;
@@ -18,28 +29,42 @@ type AllProps = ResolveThunks<DispatchProps>;
 const TransactionAddContainer = styled.form`
     padding: 16px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 `;
 
 const TransactionAddForm = (props: AllProps): JSX.Element => {
-    const [toFrom, setToFrom] = useState<string>("");
-    const [account, setAccount] = useState<string>("");
-    const [category, setCategory] = useState<string>("");
-    const [date, setDate] = useState<string>("");
-    const [inflow, setInflow] = useState<number>(0);
-    const [outflow, setOutflow] = useState<number>(0);
-    const [note, setNote] = useState<string>("");
+    const handleSubmit = (values: FormValues) => {
+        if (!values.toFrom || !values.account || !values.category || !values.date) {
+            console.warn(t("didNotProvideAllValues"));
+            return;
+        }
 
-    const handleAddButtonPress = () => {
-        props.addTransaction(toFrom, account, category, new Date(date), inflow - outflow, note);
+        const inflow = parseFloat(values.inflow ? values.inflow : "0");
+        const outflow = parseFloat(values.outflow ? values.outflow : "0");
+
+        props.addTransaction(
+            values.toFrom,
+            values.account,
+            values.category,
+            new Date(values.date),
+            (isNaN(inflow) ? inflow : 0) - (isNaN(outflow) ? outflow : 0),
+            values.note,
+        );
     };
 
-    const handleValidation = (values: { [key: string]: string }) => {
-        const errors: { [key: string]: string } = {};
-        console.log("validating...");
-        console.log(values);
+    const handleValidation = (values: FormValues) => {
+        const errors: FormValues = {};
         if (!values.toFrom) {
-            errors["toFrom"] = t("cannotBeEmpty");
+            errors.toFrom = t("cannotBeEmpty");
+        }
+        if (!values.account) {
+            errors.account = t("cannotBeEmpty");
+        }
+        if (!values.category) {
+            errors.category = t("cannotBeEmpty");
+        }
+        if (!values.date) {
+            errors.date = t("cannotBeEmpty");
         }
 
         return errors;
@@ -47,43 +72,78 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
 
     return (
         <Form
-            onSubmit={(everything) => console.log(everything)}
+            onSubmit={handleSubmit}
             validate={handleValidation}
             component={({ handleSubmit }: FormRenderProps) => (
                 <TransactionAddContainer onSubmit={handleSubmit}>
                     <Field name={"toFrom"}>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input helperText={meta.error} error={meta.error} label={t("toFrom")} {...input} />
+                            <Input
+                                helperText={meta.touched && meta.error}
+                                error={meta.touched && meta.error}
+                                label={t("toFrom")}
+                                {...input}
+                            />
                         )}
                     </Field>
                     <Field name={"account"}>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input label={t("account")} error={meta.error} {...input} />
+                            <Input
+                                helperText={meta.touched && meta.error}
+                                error={meta.touched && meta.error}
+                                label={t("account")}
+                                {...input}
+                            />
                         )}
                     </Field>
                     <Field name={"category"}>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input label={t("category")} error={meta.error} {...input} />
+                            <Input
+                                helperText={meta.touched && meta.error}
+                                error={meta.touched && meta.error}
+                                label={t("category")}
+                                {...input}
+                            />
                         )}
                     </Field>
                     <Field name={"date"}>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input label={t("date")} error={meta.error} {...input} />
+                            <Input
+                                helperText={meta.touched && meta.error}
+                                error={meta.touched && meta.error}
+                                label={t("date")}
+                                {...input}
+                            />
                         )}
                     </Field>
-                    <Field name={"in"}>
+                    <Field name={"in"} format={(value: string) => formatMoney(value, 2)} formatOnBlur>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input label={t("in")} error={meta.error} {...input} />
+                            <Input
+                                helperText={meta.touched && meta.error}
+                                error={meta.touched && meta.error}
+                                label={t("in")}
+                                {...input}
+                            />
                         )}
                     </Field>
                     <Field name={"out"}>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input label={t("out")} error={meta.error} {...input} />
+                            <Input
+                                helperText={meta.touched && meta.error}
+                                error={meta.touched && meta.error}
+                                label={t("out")}
+                                {...input}
+                            />
                         )}
                     </Field>
                     <Field name={"notes"}>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input label={t("notes")} error={meta.error} {...input} />
+                            <Input
+                                helperText={meta.touched && meta.error}
+                                error={meta.touched && meta.error}
+                                label={t("notes")}
+                                {...input}
+                            />
                         )}
                     </Field>
 

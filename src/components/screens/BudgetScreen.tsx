@@ -91,6 +91,7 @@ const BudgetGroupRow = (props: BudgetGroup): JSX.Element => {
 const BudgetScreen = (props: AllProps): JSX.Element => {
     return (
         <ScreenContainer>
+            <Input label={"test"} />
             <Button onClick={() => props.updateBudget(new Date(), "test", "test", 3, 3)}>{t("add")}</Button>
             <BudgetContainer>
                 <BudgetHeader />

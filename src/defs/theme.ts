@@ -3,9 +3,9 @@ export const UNIT_LENGTH = 64;
 export enum ZIndex {
     inactive = 10,
     active,
-    modal,
     inputLabel,
     input,
+    modal,
 }
 
 export const theme = {

@@ -12,6 +12,7 @@
     "cannotBeEmpty": "This field cannot be empty",
     "in": "In",
     "addTransaction": "Add Transaction",
+    "didNotProvideAllValues": "Did not provide all values",
     "out": "Out",
     "notes": "Notes",
     "category": "Category",
