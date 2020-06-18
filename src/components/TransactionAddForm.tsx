@@ -19,8 +19,8 @@ interface FormValues {
     account?: string;
     category?: string;
     date?: string;
-    inflow?: string;
-    outflow?: string;
+    inFlow?: string;
+    outFlow?: string;
     note?: string;
 }
 
@@ -38,16 +38,19 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
             console.warn(t("didNotProvideAllValues"));
             return;
         }
+        console.log(values);
 
-        const inflow = parseFloat(values.inflow ? values.inflow : "0");
-        const outflow = parseFloat(values.outflow ? values.outflow : "0");
+        const inflow = parseFloat(values.inFlow ? values.inFlow : "0");
+        const outflow = parseFloat(values.outFlow ? values.outFlow : "0");
+
+        console.log([inflow, outflow]);
 
         props.addTransaction(
             values.toFrom,
             values.account,
             values.category,
             new Date(values.date),
-            (isNaN(inflow) ? inflow : 0) - (isNaN(outflow) ? outflow : 0),
+            (isNaN(inflow) ? 0 : inflow) - (isNaN(outflow) ? 0 : outflow),
             values.note,
         );
     };
@@ -116,7 +119,7 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                             />
                         )}
                     </Field>
-                    <Field name={"in"} format={(value: string) => formatMoney(value, 2)} formatOnBlur>
+                    <Field name={"inFlow"} format={(value: string) => formatMoney(value, 2)} formatOnBlur>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
                             <Input
                                 {...input}
@@ -127,7 +130,7 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                             />
                         )}
                     </Field>
-                    <Field name={"out"} format={(value: string) => formatMoney(value, 2)} formatOnBlur>
+                    <Field name={"outFlow"} format={(value: string) => formatMoney(value, 2)} formatOnBlur>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
                             <Input
                                 {...input}
