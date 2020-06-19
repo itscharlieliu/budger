@@ -31,6 +31,7 @@ export const theme = {
         input: {
             inactive: "#00000080",
             active: "#000000",
+            background: "#00000000",
         },
         error: {
             main: "#ff0000",
@@ -38,6 +39,7 @@ export const theme = {
         },
     },
     shadow: {
+        none: "-webkit-box-shadow: unset; -moz-box-shadow: unset; box-shadow: unset;",
         low:
             "-webkit-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.5);" +
             "-moz-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.5);" +
