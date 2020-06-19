@@ -8,8 +8,9 @@ import ApplicationState from "../../store";
 import { updateBudget } from "../../store/budget/budgetActions";
 import { BudgetCategory, BudgetGroup } from "../../store/budget/budgetInterfaces";
 import Button from "../common/Button";
+import Calendar from "react-calendar";
 import ScreenContainer from "../common/ScreenContainer";
-import Input from "../common/Input";
+import DateSelector from "../common/DateSelector";
 
 interface StateProps {
     totalBudget: BudgetGroup[];
@@ -91,7 +92,7 @@ const BudgetGroupRow = (props: BudgetGroup): JSX.Element => {
 const BudgetScreen = (props: AllProps): JSX.Element => {
     return (
         <ScreenContainer>
-            <Input label={"test"} />
+            <DateSelector />
             <Button onClick={() => props.updateBudget(new Date(), "test", "test", 3, 3)}>{t("add")}</Button>
             <BudgetContainer>
                 <BudgetHeader />

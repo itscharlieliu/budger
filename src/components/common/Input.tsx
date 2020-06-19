@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import { theme, ZIndex } from "../../defs/theme";
@@ -38,7 +38,7 @@ const TextContainer = styled.input<TextContainerProps>`
     border-style: none none solid none;
     border-color: ${(props: TextContainerProps): string =>
         props.error ? theme.palette.error.light : theme.palette.input.inactive};
-    background-color: #00000000;
+    background-color: ${theme.palette.input.background};
     padding: 8px 0;
     z-index: ${ZIndex.input};
 
