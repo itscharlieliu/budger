@@ -76,12 +76,8 @@ const Modal = (props: ModalProps): JSX.Element | null => {
         return null;
     }
 
-    if (!visible && !isShowing) {
-        return null;
-    }
-
     return (
-        <ModalBackground opacity={visible && isShowing ? 1 : 0} onAnimationEnd={() => console.log("test")}>
+        <ModalBackground opacity={visible && isShowing ? 1 : 0}>
             <ModalContainer ref={modalRef}>{props.children}</ModalContainer>
         </ModalBackground>
     );
