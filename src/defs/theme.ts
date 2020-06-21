@@ -1,10 +1,10 @@
 export const UNIT_LENGTH = 64;
 
 export enum ZIndex {
-    inactive = 10,
-    active,
-    inputLabel,
+    inputLabel = 10,
     input,
+    inactive,
+    active,
     modal,
 }
 

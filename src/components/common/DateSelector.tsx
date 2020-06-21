@@ -1,12 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
-import Calendar, { CalendarProps } from "react-calendar";
+import Calendar, { CalendarProps, OnChangeDateCallback } from "react-calendar";
 import styled from "styled-components";
 
 import "react-calendar/dist/Calendar.css";
 import { theme, ZIndex } from "../../defs/theme";
-
-import Input from "./Input";
+import t from "../../services/i18n/language";
 import useOutsideClick from "../../utils/useOutsideClick";
+
+import Input, { InputProps } from "./Input";
+
+interface DateSelectorProps extends Omit<InputProps, "value" | "onChange"> {
+    value?: Date;
+    onChange?: OnChangeDateCallback;
+}
 
 interface CalendarContainerProps extends CalendarProps {
     onClose: () => void;
@@ -87,7 +93,9 @@ const CalendarContainer = (props: CalendarContainerProps): JSX.Element | null =>
 
     useOutsideClick(calendarRef, onClose ? onClose : () => undefined, isOpen && onClose !== undefined);
 
-    useEffect(() => setIsShowing(isOpen), [isOpen]);
+    useEffect(() => {
+        setIsShowing(isOpen);
+    }, [isOpen]);
 
     if (!isShowing) {
         return null;
@@ -100,13 +108,20 @@ const CalendarContainer = (props: CalendarContainerProps): JSX.Element | null =>
     );
 };
 
-const DateSelector = (): JSX.Element => {
+const DateSelector = (props: DateSelectorProps): JSX.Element => {
     const [isSelectingDate, setIsSelectingDate] = useState(false);
+
+    const { value, onChange, ...otherProps } = props;
 
     return (
         <>
-            <Input onClick={() => setIsSelectingDate(true)} />
-            <CalendarContainer isOpen={isSelectingDate} onClose={() => setIsSelectingDate(false)} />
+            <Input
+                {...otherProps}
+                onClick={() => setIsSelectingDate(true)}
+                value={value ? t("fullDate", { date: value }) : undefined}
+                readOnly
+            />
+            <CalendarContainer isOpen={isSelectingDate} onClose={() => setIsSelectingDate(false)} onChange={onChange} />
         </>
     );
 };

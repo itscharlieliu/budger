@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { theme, ZIndex } from "../../defs/theme";
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     helperText?: string;
     label?: string;
     width?: number;
