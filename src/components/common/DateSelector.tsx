@@ -111,7 +111,15 @@ const CalendarContainer = (props: CalendarContainerProps): JSX.Element | null =>
 const DateSelector = (props: DateSelectorProps): JSX.Element => {
     const [isSelectingDate, setIsSelectingDate] = useState(false);
 
-    const { value, onChange, ...otherProps } = props;
+    // We need to take out onBlur because the input blurs as soon as the calendar opens
+    // eslint-disable-next-line no-unused-vars
+    const { value, onChange, onBlur, ...otherProps } = props;
+
+    const handleCalendarClose = () => {
+        // @ts-ignore
+        onBlur();
+        setIsSelectingDate(false);
+    };
 
     return (
         <>
@@ -121,7 +129,7 @@ const DateSelector = (props: DateSelectorProps): JSX.Element => {
                 value={value ? t("fullDate", { date: value }) : undefined}
                 readOnly
             />
-            <CalendarContainer isOpen={isSelectingDate} onClose={() => setIsSelectingDate(false)} onChange={onChange} />
+            <CalendarContainer isOpen={isSelectingDate} onClose={handleCalendarClose} onChange={onChange} />
         </>
     );
 };
