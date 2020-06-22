@@ -115,7 +115,7 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                         {({ input, meta }: FieldRenderProps<Date, HTMLElement>) => (
                             <DateSelector
                                 {...input}
-                                value={input.value || new Date()}
+                                value={input.value || ""}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
                                 label={t("date")}

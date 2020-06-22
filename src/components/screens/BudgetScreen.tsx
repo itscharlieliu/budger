@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
@@ -90,9 +90,16 @@ const BudgetGroupRow = (props: BudgetGroup): JSX.Element => {
 };
 
 const BudgetScreen = (props: AllProps): JSX.Element => {
+    const [testDate, setTestDate] = useState(new Date());
+
     return (
         <ScreenContainer>
-            <DateSelector value={new Date()} onChange={(newDate: Date | Date[]) => console.log(newDate)} />
+            <DateSelector
+                value={testDate}
+                onChange={(newDate: Date | Date[]) =>
+                    Array.isArray(newDate) ? setTestDate(newDate[0]) : setTestDate(newDate)
+                }
+            />
             <Button onClick={() => props.updateBudget(new Date(), "test", "test", 3, 3)}>{t("add")}</Button>
             <BudgetContainer>
                 <BudgetHeader />
