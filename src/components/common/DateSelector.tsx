@@ -91,7 +91,7 @@ const CalendarContainer = (props: CalendarContainerProps): JSX.Element | null =>
 
     const calendarRef = useRef<HTMLDivElement>(null);
 
-    useOutsideClick(calendarRef, onClose ? onClose : () => undefined, isOpen && onClose !== undefined);
+    useOutsideClick(calendarRef, onClose ? onClose : () => undefined, isShowing && onClose !== undefined);
 
     useEffect(() => {
         setIsShowing(isOpen);
@@ -111,13 +111,9 @@ const CalendarContainer = (props: CalendarContainerProps): JSX.Element | null =>
 const DateSelector = (props: DateSelectorProps): JSX.Element => {
     const [isSelectingDate, setIsSelectingDate] = useState(false);
 
-    // We need to take out onBlur because the input blurs as soon as the calendar opens
-    // eslint-disable-next-line no-unused-vars
-    const { value, onChange, onBlur, ...otherProps } = props;
+    const { value, onChange, ...otherProps } = props;
 
     const handleCalendarClose = () => {
-        // @ts-ignore
-        onBlur();
         setIsSelectingDate(false);
     };
 
@@ -125,7 +121,12 @@ const DateSelector = (props: DateSelectorProps): JSX.Element => {
         <>
             <Input
                 {...otherProps}
-                onClick={() => setIsSelectingDate(true)}
+                onFocus={() => {
+                    if (!isSelectingDate) setIsSelectingDate(true);
+                }}
+                onClick={(event: React.FormEvent) => {
+                    event.preventDefault();
+                }}
                 value={value ? t("fullDate", { date: value }) : undefined}
                 readOnly
             />

@@ -11,6 +11,7 @@ import Button from "../common/Button";
 import Calendar from "react-calendar";
 import ScreenContainer from "../common/ScreenContainer";
 import DateSelector from "../common/DateSelector";
+import Input from "../common/Input";
 
 interface StateProps {
     totalBudget: BudgetGroup[];
@@ -94,12 +95,14 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
 
     return (
         <ScreenContainer>
+            <Input />
             <DateSelector
                 value={testDate}
                 onChange={(newDate: Date | Date[]) =>
                     Array.isArray(newDate) ? setTestDate(newDate[0]) : setTestDate(newDate)
                 }
             />
+            <Input />
             <Button onClick={() => props.updateBudget(new Date(), "test", "test", 3, 3)}>{t("add")}</Button>
             <BudgetContainer>
                 <BudgetHeader />
