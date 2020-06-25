@@ -8,10 +8,10 @@ import ApplicationState from "../../store";
 import { updateBudget } from "../../store/budget/budgetActions";
 import { BudgetCategory, BudgetGroup } from "../../store/budget/budgetInterfaces";
 import Button from "../common/Button";
-import Calendar from "react-calendar";
-import ScreenContainer from "../common/ScreenContainer";
-import DateSelector from "../common/DateSelector";
 import Input from "../common/Input";
+import ScreenContainer from "../common/ScreenContainer";
+import DayPickerInput from "react-day-picker/DayPickerInput";
+import DateSelector from "../common/DateSelector";
 
 interface StateProps {
     totalBudget: BudgetGroup[];
@@ -96,12 +96,7 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
     return (
         <ScreenContainer>
             <Input />
-            <DateSelector
-                value={testDate}
-                onChange={(newDate: Date | Date[]) =>
-                    Array.isArray(newDate) ? setTestDate(newDate[0]) : setTestDate(newDate)
-                }
-            />
+            <DateSelector />
             <Input />
             <Button onClick={() => props.updateBudget(new Date(), "test", "test", 3, 3)}>{t("add")}</Button>
             <BudgetContainer>
