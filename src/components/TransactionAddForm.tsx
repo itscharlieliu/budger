@@ -9,8 +9,6 @@ import formatMoney from "../utils/formatMoney";
 
 import Button from "./common/Button";
 import Input from "./common/Input";
-import DateSelector from "./common/DateSelector";
-import { CalendarProps } from "react-calendar";
 
 interface DispatchProps {
     addTransaction: typeof addTransaction;
@@ -111,17 +109,11 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                             />
                         )}
                     </Field>
-                    <Field name={"date"}>
-                        {({ input, meta }: FieldRenderProps<Date, HTMLElement>) => (
-                            <DateSelector
-                                {...input}
-                                value={input.value || ""}
-                                helperText={meta.touched && meta.error}
-                                error={meta.touched && meta.error}
-                                label={t("date")}
-                            />
-                        )}
-                    </Field>
+                    {/*<Field name={"date"}>*/}
+                    {/*    {({ input, meta }: FieldRenderProps<Date, HTMLElement>) => (*/}
+                    {/*        <DateSelector {...input} value={input.value} />*/}
+                    {/*    )}*/}
+                    {/*</Field>*/}
                     <Field name={"inFlow"} format={(value: string) => formatMoney(value, 2)} formatOnBlur>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
                             <Input
