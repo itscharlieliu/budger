@@ -13,6 +13,11 @@ import Drawer from "./common/Drawer";
 import DrawerListItem from "./common/DrawerListItem";
 import Icon from "./common/Icon";
 import Modal from "./common/Modal";
+import styled from "styled-components";
+
+const DrawerButton = styled(Button)`
+    margin: 16px;
+`;
 
 const NavigationDrawer = (): JSX.Element => {
     const [isAddingTransaction, setIsAddingTransaction] = useState(false);
@@ -30,9 +35,9 @@ const NavigationDrawer = (): JSX.Element => {
                 <TransactionAddForm />
             </Modal>
 
-            <Button onClick={() => setIsAddingTransaction(true)} icon={<PlusIcon />}>
+            <DrawerButton onClick={() => setIsAddingTransaction(true)} icon={<PlusIcon />}>
                 {t("addTransaction")}
-            </Button>
+            </DrawerButton>
             <DrawerListItem isHighlighted={location.pathname === BUDGET} isButton onClick={() => history.push(BUDGET)}>
                 <Icon edge={"left"}>
                     <WalletIcon />

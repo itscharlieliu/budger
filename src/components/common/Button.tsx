@@ -7,19 +7,40 @@ interface ButtonTextProps {
     hasIcon: boolean;
 }
 
-const RaisedButton = styled.button`
+const FlatButton = styled.button`
     padding: 16px;
     outline: none;
     border: none;
     border-radius: 32px;
-    ${theme.shadow.med};
     background-color: ${theme.palette.background.main};
     display: flex;
     align-items: center;
     cursor: pointer;
-    margin: 16px;
     width: max-content;
     font-size: 1em;
+
+    &:focus-visible {
+        ${theme.shadow.med}
+    }
+
+    &:focus {
+        ${theme.shadow.med}
+    }
+
+    &:hover {
+        ${theme.shadow.med}
+    }
+
+    &:active {
+        transition: box-shadow 0s;
+        ${theme.shadow.low};
+    }
+
+    transition: box-shadow 0.1s ease-in;
+`;
+
+const RaisedButton = styled(FlatButton)`
+    ${theme.shadow.med};
 
     &:focus-visible {
         ${theme.shadow.high}
@@ -34,11 +55,8 @@ const RaisedButton = styled.button`
     }
 
     &:active {
-        transition: box-shadow 0s;
         ${theme.shadow.med};
     }
-
-    transition: box-shadow 0.1s ease-in;
 `;
 
 const ButtonContent = styled.div<ButtonTextProps>`
@@ -46,12 +64,21 @@ const ButtonContent = styled.div<ButtonTextProps>`
 `;
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    lower?: boolean;
+    flat?: boolean;
     icon?: JSX.Element;
+    noMargin?: boolean;
 }
 
 const Button = (props: ButtonProps): JSX.Element => {
     const { children, ...otherProps } = props;
+    if (props.flat) {
+        return (
+            <FlatButton {...otherProps}>
+                {props.icon}
+                {children && <ButtonContent hasIcon={!!props.icon}>{children}</ButtonContent>}
+            </FlatButton>
+        );
+    }
     return (
         <RaisedButton {...otherProps}>
             {props.icon}
