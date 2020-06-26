@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import "./styles/DateSelector.css";
-import DayPickerInput from "react-day-picker/DayPickerInput";
 import { DayPickerInputProps } from "react-day-picker";
+import DayPickerInput from "react-day-picker/DayPickerInput";
 import styled from "styled-components";
+
 import { ZIndex } from "../../defs/theme";
 
 const DatePickerContainer = styled.div`

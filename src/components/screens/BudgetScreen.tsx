@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
@@ -8,10 +8,8 @@ import ApplicationState from "../../store";
 import { updateBudget } from "../../store/budget/budgetActions";
 import { BudgetCategory, BudgetGroup } from "../../store/budget/budgetInterfaces";
 import Button from "../common/Button";
-import Input from "../common/Input";
 import ScreenContainer from "../common/ScreenContainer";
-import DayPickerInput from "react-day-picker/DayPickerInput";
-import DateSelector from "../common/DateSelector";
+import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
 
 interface StateProps {
     totalBudget: BudgetGroup[];
@@ -29,11 +27,18 @@ const BudgetContainer = styled.div`
     grid-template-columns: auto 15% 15% 15%;
 `;
 
-const BudgetHeaderText = styled.span`
+const BudgetHeaderContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     font-size: ${theme.font.size.big};
     font-weight: ${theme.font.weight.bold};
     padding: 16px;
     border-bottom: 2px solid ${theme.palette.background.contrast};
+`;
+
+const BudgetHeaderButton = styled(Button)`
+    margin: -16px 16px;
 `;
 
 const BudgetGroupText = styled.span`
@@ -55,10 +60,13 @@ const BudgetCategoryText = styled.span`
 const BudgetHeader = (): JSX.Element => {
     return (
         <>
-            <BudgetHeaderText>{t("category")}</BudgetHeaderText>
-            <BudgetHeaderText>{t("budgeted")}</BudgetHeaderText>
-            <BudgetHeaderText>{t("activity")}</BudgetHeaderText>
-            <BudgetHeaderText>{t("remaining")}</BudgetHeaderText>
+            <BudgetHeaderContainer>
+                <span>{t("category")}</span>
+                <BudgetHeaderButton icon={<PlusIcon />} flat />
+            </BudgetHeaderContainer>
+            <BudgetHeaderContainer>{t("budgeted")}</BudgetHeaderContainer>
+            <BudgetHeaderContainer>{t("activity")}</BudgetHeaderContainer>
+            <BudgetHeaderContainer>{t("remaining")}</BudgetHeaderContainer>
         </>
     );
 };
@@ -91,13 +99,8 @@ const BudgetGroupRow = (props: BudgetGroup): JSX.Element => {
 };
 
 const BudgetScreen = (props: AllProps): JSX.Element => {
-    const [testDate, setTestDate] = useState(new Date());
-
     return (
         <ScreenContainer>
-            <Input />
-            <DateSelector />
-            <Input />
             <Button onClick={() => props.updateBudget(new Date(), "test", "test", 3, 3)}>{t("add")}</Button>
             <BudgetContainer>
                 <BudgetHeader />

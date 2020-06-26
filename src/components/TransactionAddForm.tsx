@@ -69,7 +69,6 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
     const handleValidation = (values: FormValues) => {
         const errors: FormErrors = {};
 
-        console.log(values);
         if (!values.toFrom) {
             errors.toFrom = t("cannotBeEmpty");
         }
@@ -82,8 +81,6 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
         if (!values.date) {
             errors.date = t("cannotBeEmpty");
         }
-
-        console.log(errors);
 
         return errors;
     };
