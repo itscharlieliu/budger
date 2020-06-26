@@ -29,7 +29,6 @@ const ModalBackground = styled.div<ModalBackgroundProps>`
     align-items: center;
     background-color: ${theme.palette.modal.background};
     opacity: ${(props: ModalBackgroundProps) => props.opacity};
-
     transition: opacity ${FADE_DURATION_MS / 1000}s;
 `;
 
