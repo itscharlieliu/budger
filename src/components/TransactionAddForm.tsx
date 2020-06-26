@@ -19,6 +19,16 @@ interface FormValues {
     toFrom?: string;
     account?: string;
     category?: string;
+    date?: Date;
+    inFlow?: string;
+    outFlow?: string;
+    note?: string;
+}
+
+interface FormErrors {
+    toFrom?: string;
+    account?: string;
+    category?: string;
     date?: string;
     inFlow?: string;
     outFlow?: string;
@@ -50,14 +60,16 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
             values.toFrom,
             values.account,
             values.category,
-            new Date(values.date),
+            values.date,
             (isNaN(inflow) ? 0 : inflow) - (isNaN(outflow) ? 0 : outflow),
             values.note,
         );
     };
 
     const handleValidation = (values: FormValues) => {
-        const errors: FormValues = {};
+        const errors: FormErrors = {};
+
+        console.log(values);
         if (!values.toFrom) {
             errors.toFrom = t("cannotBeEmpty");
         }
@@ -70,6 +82,8 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
         if (!values.date) {
             errors.date = t("cannotBeEmpty");
         }
+
+        console.log(errors);
 
         return errors;
     };
@@ -112,6 +126,7 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                     </Field>
                     <Field name={"date"}>
                         {({ input, meta }: FieldRenderProps<Date, HTMLElement>) => (
+                            // TODO Add meta properties
                             <DateSelector {...input} value={input.value} />
                         )}
                     </Field>
