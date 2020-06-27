@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { theme } from "../../defs/theme";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
-import { updateBudget } from "../../store/budget/budgetActions";
+import { addCategory, updateBudget } from "../../store/budget/budgetActions";
 import { BudgetCategory, BudgetGroup } from "../../store/budget/budgetInterfaces";
 import Button from "../common/Button";
 import ScreenContainer from "../common/ScreenContainer";
@@ -17,9 +17,14 @@ interface StateProps {
 
 interface DispatchProps {
     updateBudget: typeof updateBudget;
+    addCategory: typeof addCategory;
 }
 
 type AllProps = StateProps & ResolveThunks<DispatchProps>;
+
+interface BudgetHeaderProps {
+    addCategory: typeof addCategory;
+}
 
 const BudgetContainer = styled.div`
     display: grid;
@@ -57,12 +62,12 @@ const BudgetCategoryText = styled.span`
     border-top: 1px solid ${theme.palette.divider.main};
 `;
 
-const BudgetHeader = (): JSX.Element => {
+const BudgetHeader = (props: ResolveThunks<BudgetHeaderProps>): JSX.Element => {
     return (
         <>
             <BudgetHeaderContainer>
                 <span>{t("category")}</span>
-                <BudgetHeaderButton icon={<PlusIcon />} flat />
+                <BudgetHeaderButton icon={<PlusIcon />} flat onClick={() => props.addCategory("test")} />
             </BudgetHeaderContainer>
             <BudgetHeaderContainer>{t("budgeted")}</BudgetHeaderContainer>
             <BudgetHeaderContainer>{t("activity")}</BudgetHeaderContainer>
@@ -101,9 +106,8 @@ const BudgetGroupRow = (props: BudgetGroup): JSX.Element => {
 const BudgetScreen = (props: AllProps): JSX.Element => {
     return (
         <ScreenContainer>
-            <Button onClick={() => props.updateBudget(new Date(), "test", "test", 3, 3)}>{t("add")}</Button>
             <BudgetContainer>
-                <BudgetHeader />
+                <BudgetHeader addCategory={props.addCategory} />
                 {props.totalBudget.map((budgetGroup: BudgetGroup, index: number) => (
                     <BudgetGroupRow key={"budgetGroup" + index} {...budgetGroup} />
                 ))}
@@ -118,6 +122,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 
 const mapDispatchToProps: DispatchProps = {
     updateBudget,
+    addCategory,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BudgetScreen);
