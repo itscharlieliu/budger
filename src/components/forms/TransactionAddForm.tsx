@@ -3,13 +3,13 @@ import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form
 import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
-import t from "../services/i18n/language";
-import { addTransaction } from "../store/transactions/transactionActions";
-import formatMoney from "../utils/formatMoney";
+import t from "../../services/i18n/language";
+import { addTransaction } from "../../store/transactions/transactionActions";
+import formatMoney from "../../utils/formatMoney";
 
-import Button from "./common/Button";
-import Input from "./common/Input";
-import DateSelector from "./common/DateSelector";
+import Button from "../common/Button";
+import Input from "../common/Input";
+import DateSelector from "../common/DateSelector";
 
 interface DispatchProps {
     addTransaction: typeof addTransaction;
