@@ -7,7 +7,7 @@ import { ReactComponent as RecieptIcon } from "../resources/images/reciept.svg";
 import { ReactComponent as WalletIcon } from "../resources/images/wallet.svg";
 import t from "../services/i18n/language";
 
-import TransactionAddForm from "./TransactionAddForm";
+import TransactionAddForm from "./forms/TransactionAddForm";
 import Button from "./common/Button";
 import Drawer from "./common/Drawer";
 import DrawerListItem from "./common/DrawerListItem";
