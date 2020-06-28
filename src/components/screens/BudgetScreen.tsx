@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
@@ -10,6 +10,7 @@ import { BudgetCategory, BudgetGroup } from "../../store/budget/budgetInterfaces
 import Button from "../common/Button";
 import ScreenContainer from "../common/ScreenContainer";
 import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
+import Modal from "../common/Modal";
 
 interface StateProps {
     totalBudget: BudgetGroup[];
@@ -63,11 +64,16 @@ const BudgetCategoryText = styled.span`
 `;
 
 const BudgetHeader = (props: ResolveThunks<BudgetHeaderProps>): JSX.Element => {
+    const [isAddingCategory, setIsAddingCategory] = useState(false);
+
     return (
         <>
             <BudgetHeaderContainer>
+                <Modal visible={isAddingCategory} onClose={() => setIsAddingCategory(false)}>
+                    <div>test</div>
+                </Modal>
                 <span>{t("category")}</span>
-                <BudgetHeaderButton icon={<PlusIcon />} flat onClick={() => props.addCategory("test")} />
+                <BudgetHeaderButton icon={<PlusIcon />} flat onClick={() => setIsAddingCategory(true)} />
             </BudgetHeaderContainer>
             <BudgetHeaderContainer>{t("budgeted")}</BudgetHeaderContainer>
             <BudgetHeaderContainer>{t("activity")}</BudgetHeaderContainer>
