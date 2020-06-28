@@ -11,6 +11,7 @@ import Button from "../common/Button";
 import ScreenContainer from "../common/ScreenContainer";
 import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
 import Modal from "../common/Modal";
+import CategoryAddForm from "../forms/CategoryAddForm";
 
 interface StateProps {
     totalBudget: BudgetGroup[];
@@ -70,7 +71,7 @@ const BudgetHeader = (props: ResolveThunks<BudgetHeaderProps>): JSX.Element => {
         <>
             <BudgetHeaderContainer>
                 <Modal visible={isAddingCategory} onClose={() => setIsAddingCategory(false)}>
-                    <div>test</div>
+                    <CategoryAddForm />
                 </Modal>
                 <span>{t("category")}</span>
                 <BudgetHeaderButton icon={<PlusIcon />} flat onClick={() => setIsAddingCategory(true)} />
