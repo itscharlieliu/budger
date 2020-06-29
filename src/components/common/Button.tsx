@@ -8,7 +8,7 @@ interface ButtonTextProps {
 }
 
 const FlatButton = styled.button`
-    padding: 16px;
+    padding: 12px;
     outline: none;
     border: none;
     border-radius: 32px;

@@ -1,4 +1,4 @@
-import { addCategory } from "../../store/budget/budgetActions";
+import { addCategoryGroup } from "../../store/budget/budgetActions";
 import { connect, ResolveThunks } from "react-redux";
 import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
 
@@ -7,11 +7,11 @@ import styled from "styled-components";
 import Input from "../common/Input";
 import t from "../../services/i18n/language";
 
-interface DispathProps {
-    addCategory: typeof addCategory;
+interface DispatchProps {
+    addCategoryGroup: typeof addCategoryGroup;
 }
 
-type AllProps = ResolveThunks<DispathProps>;
+type AllProps = ResolveThunks<DispatchProps>;
 
 const CategoryAddContainer = styled.form`
     padding: 16px;
@@ -42,7 +42,7 @@ const CategoryAddForm = (props: AllProps): JSX.Element => {
 };
 
 const mapDispatchToProps = {
-    addCategory,
+    addCategoryGroup,
 };
 
 export default connect(null, mapDispatchToProps)(CategoryAddForm);
