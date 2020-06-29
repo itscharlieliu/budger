@@ -10,7 +10,7 @@ import {
     SETTING_TOTAL_BUDGET,
     GenericBudgetAction,
     GenericSetBudgetAction,
-    GenericAddCategoryAction,
+    GenericAddCategoryGroupAction,
 } from "./budgetInterfaces";
 
 type GenericBudgetThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericBudgetAction>;
@@ -46,8 +46,8 @@ export const updateBudget = (
     // dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newBudget });
 };
 
-export const addCategory = (categoryName: string): GenericBudgetThunkAction => async (
-    dispatch: ThunkDispatch<ApplicationState, null, GenericAddCategoryAction>,
+export const addCategoryGroup = (categoryName: string): GenericBudgetThunkAction => async (
+    dispatch: ThunkDispatch<ApplicationState, null, GenericAddCategoryGroupAction>,
 ): Promise<void> => {
     console.log("adding: " + categoryName);
 };
