@@ -1,7 +1,7 @@
 import {
-    ADD_CATEGORY_GROUP_FAILURE,
-    ADD_CATEGORY_GROUP_SUCCESS,
-    ADDING_CATEGORY_GROUP,
+    ADD_BUDGET_GROUP_FAILURE,
+    ADD_BUDGET_GROUP_SUCCESS,
+    ADDING_BUDGET_GROUP,
     BudgetState,
     GenericBudgetAction,
     SET_TOTAL_BUDGET_FAILURE,
@@ -47,7 +47,7 @@ const mockBudget: TotalBudget = [
 export const defaultBudgetState: BudgetState = {
     totalBudget: mockBudget,
     isSettingBudget: false,
-    isAddingCategoryGroup: false,
+    isAddingBudgetGroup: false,
     error: null,
 };
 
@@ -62,14 +62,14 @@ const budgetReducer = (state: BudgetState = defaultBudgetState, action: GenericB
         case SET_TOTAL_BUDGET_FAILURE: {
             return { ...state, isSettingBudget: false, error: action.error };
         }
-        case ADDING_CATEGORY_GROUP: {
-            return { ...state, isAddingCategoryGroup: true };
+        case ADDING_BUDGET_GROUP: {
+            return { ...state, isAddingBudgetGroup: true };
         }
-        case ADD_CATEGORY_GROUP_SUCCESS: {
-            return { ...state, isAddingCategoryGroup: false, totalBudget: action.totalBudget };
+        case ADD_BUDGET_GROUP_SUCCESS: {
+            return { ...state, isAddingBudgetGroup: false, totalBudget: action.totalBudget };
         }
-        case ADD_CATEGORY_GROUP_FAILURE: {
-            return { ...state, isAddingCategoryGroup: false, error: action.error };
+        case ADD_BUDGET_GROUP_FAILURE: {
+            return { ...state, isAddingBudgetGroup: false, error: action.error };
         }
         default: {
             return { ...state };

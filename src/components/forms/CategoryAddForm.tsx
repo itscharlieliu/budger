@@ -1,4 +1,4 @@
-import { addCategoryGroup } from "../../store/budget/budgetActions";
+import { addBudgetGroup } from "../../store/budget/budgetActions";
 import { connect, ResolveThunks } from "react-redux";
 import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
 
@@ -6,12 +6,17 @@ import React from "react";
 import styled from "styled-components";
 import Input from "../common/Input";
 import t from "../../services/i18n/language";
+import Button from "../common/Button";
 
 interface DispatchProps {
-    addCategoryGroup: typeof addCategoryGroup;
+    addBudgetGroup: typeof addBudgetGroup;
 }
 
 type AllProps = ResolveThunks<DispatchProps>;
+
+interface FormValues {
+    categoryName?: string;
+}
 
 const CategoryAddContainer = styled.form`
     padding: 16px;
@@ -20,9 +25,13 @@ const CategoryAddContainer = styled.form`
 `;
 
 const CategoryAddForm = (props: AllProps): JSX.Element => {
+    const handleAddCategoryGroup = (values: FormValues) => {
+        values.categoryName && props.addBudgetGroup(values.categoryName);
+    };
+
     return (
         <Form
-            onSubmit={() => console.log("submitting")}
+            onSubmit={handleAddCategoryGroup}
             component={({ handleSubmit }: FormRenderProps) => (
                 <CategoryAddContainer onSubmit={handleSubmit}>
                     <Field name={"categoryName"}>
@@ -35,6 +44,7 @@ const CategoryAddForm = (props: AllProps): JSX.Element => {
                             />
                         )}
                     </Field>
+                    <Button type={"submit"}>Add</Button>
                 </CategoryAddContainer>
             )}
         />
@@ -42,7 +52,7 @@ const CategoryAddForm = (props: AllProps): JSX.Element => {
 };
 
 const mapDispatchToProps = {
-    addCategoryGroup,
+    addBudgetGroup,
 };
 
 export default connect(null, mapDispatchToProps)(CategoryAddForm);
