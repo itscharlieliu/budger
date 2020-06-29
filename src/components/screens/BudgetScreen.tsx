@@ -71,7 +71,7 @@ const BudgetHeader = (props: ResolveThunks<BudgetHeaderProps>): JSX.Element => {
         <>
             <BudgetHeaderContainer>
                 <Modal visible={isAddingCategory} onClose={() => setIsAddingCategory(false)}>
-                    <CategoryAddForm />
+                    <CategoryAddForm onSubmit={() => setIsAddingCategory(false)} />
                 </Modal>
                 <span>{t("category")}</span>
                 <BudgetHeaderButton icon={<PlusIcon />} flat onClick={() => setIsAddingCategory(true)} />
