@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { theme } from "../../defs/theme";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
-import { addCategoryGroup, updateBudget } from "../../store/budget/budgetActions";
+import { addBudgetGroup, updateBudget } from "../../store/budget/budgetActions";
 import { BudgetCategory, BudgetGroup } from "../../store/budget/budgetInterfaces";
 import Button from "../common/Button";
 import ScreenContainer from "../common/ScreenContainer";
@@ -19,13 +19,13 @@ interface StateProps {
 
 interface DispatchProps {
     updateBudget: typeof updateBudget;
-    addCategoryGroup: typeof addCategoryGroup;
+    addBudgetGroup: typeof addBudgetGroup;
 }
 
 type AllProps = StateProps & ResolveThunks<DispatchProps>;
 
 interface BudgetHeaderProps {
-    addCategory: typeof addCategoryGroup;
+    addCategory: typeof addBudgetGroup;
 }
 
 const BudgetContainer = styled.div`
@@ -114,7 +114,7 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
     return (
         <ScreenContainer>
             <BudgetContainer>
-                <BudgetHeader addCategory={props.addCategoryGroup} />
+                <BudgetHeader addCategory={props.addBudgetGroup} />
                 {props.totalBudget.map((budgetGroup: BudgetGroup, index: number) => (
                     <BudgetGroupRow key={"budgetGroup" + index} {...budgetGroup} />
                 ))}
@@ -129,7 +129,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 
 const mapDispatchToProps: DispatchProps = {
     updateBudget,
-    addCategoryGroup,
+    addBudgetGroup,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BudgetScreen);

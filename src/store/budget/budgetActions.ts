@@ -10,8 +10,13 @@ import {
     SETTING_TOTAL_BUDGET,
     GenericBudgetAction,
     GenericSetBudgetAction,
-    GenericAddCategoryGroupAction,
+    GenericAddBudgetGroupAction,
+    ADDING_BUDGET_GROUP,
+    BudgetGroup,
+    ADD_BUDGET_GROUP_SUCCESS,
+    ADD_BUDGET_GROUP_FAILURE,
 } from "./budgetInterfaces";
+import ERRORS from "../../defs/errors";
 
 type GenericBudgetThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericBudgetAction>;
 
@@ -46,8 +51,22 @@ export const updateBudget = (
     // dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newBudget });
 };
 
-export const addCategoryGroup = (categoryName: string): GenericBudgetThunkAction => async (
-    dispatch: ThunkDispatch<ApplicationState, null, GenericAddCategoryGroupAction>,
+export const addBudgetGroup = (budgetGroup: string): GenericBudgetThunkAction => async (
+    dispatch: ThunkDispatch<ApplicationState, null, GenericAddBudgetGroupAction>,
+    getState: () => ApplicationState,
 ): Promise<void> => {
-    console.log("adding: " + categoryName);
+    dispatch({ type: ADDING_BUDGET_GROUP });
+
+    const totalBudget = getState().budget.totalBudget;
+
+    if (totalBudget.some((group: BudgetGroup) => group.group === budgetGroup)) {
+        dispatch({ type: ADD_BUDGET_GROUP_FAILURE, error: new Error(ERRORS.groupAlreadyExists) });
+        return;
+    }
+
+    const newBudgetGroup: BudgetGroup = { group: budgetGroup, categories: [] };
+
+    const newTotalBudget = [newBudgetGroup, ...totalBudget];
+
+    dispatch({ type: ADD_BUDGET_GROUP_SUCCESS, totalBudget: newTotalBudget });
 };
