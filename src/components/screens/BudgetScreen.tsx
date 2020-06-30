@@ -19,14 +19,9 @@ interface StateProps {
 
 interface DispatchProps {
     updateBudget: typeof updateBudget;
-    addBudgetGroup: typeof addBudgetGroup;
 }
 
 type AllProps = StateProps & ResolveThunks<DispatchProps>;
-
-interface BudgetHeaderProps {
-    addCategory: typeof addBudgetGroup;
-}
 
 const BudgetContainer = styled.div`
     display: grid;
@@ -44,11 +39,14 @@ const BudgetHeaderContainer = styled.div`
     border-bottom: 2px solid ${theme.palette.background.contrast};
 `;
 
-const BudgetHeaderButton = styled(Button)`
+const BudgetAddButton = styled(Button)`
     margin: -16px 16px;
 `;
 
-const BudgetGroupText = styled.span`
+const BudgetGroupContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     font-size: ${theme.font.size.small};
     font-weight: ${theme.font.weight.bold};
     padding: 16px;
@@ -64,7 +62,7 @@ const BudgetCategoryText = styled.span`
     border-top: 1px solid ${theme.palette.divider.main};
 `;
 
-const BudgetHeader = (props: ResolveThunks<BudgetHeaderProps>): JSX.Element => {
+const BudgetHeader = (): JSX.Element => {
     const [isAddingCategory, setIsAddingCategory] = useState(false);
 
     return (
@@ -74,7 +72,7 @@ const BudgetHeader = (props: ResolveThunks<BudgetHeaderProps>): JSX.Element => {
                     <CategoryAddForm onSubmit={() => setIsAddingCategory(false)} />
                 </Modal>
                 <span>{t("category")}</span>
-                <BudgetHeaderButton icon={<PlusIcon />} flat onClick={() => setIsAddingCategory(true)} />
+                <BudgetAddButton icon={<PlusIcon />} flat onClick={() => setIsAddingCategory(true)} />
             </BudgetHeaderContainer>
             <BudgetHeaderContainer>{t("budgeted")}</BudgetHeaderContainer>
             <BudgetHeaderContainer>{t("activity")}</BudgetHeaderContainer>
@@ -97,7 +95,10 @@ const BudgetCategoryRow = (props: BudgetCategory): JSX.Element => {
 const BudgetGroupRow = (props: BudgetGroup): JSX.Element => {
     return (
         <>
-            <BudgetGroupText>{props.group}</BudgetGroupText>
+            <BudgetGroupContainer>
+                {props.group}
+                <BudgetAddButton icon={<PlusIcon />} flat />
+            </BudgetGroupContainer>
             {props.categories.map((category: BudgetCategory) => (
                 <BudgetCategoryRow
                     key={category.category}
@@ -114,7 +115,7 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
     return (
         <ScreenContainer>
             <BudgetContainer>
-                <BudgetHeader addCategory={props.addBudgetGroup} />
+                <BudgetHeader />
                 {props.totalBudget.map((budgetGroup: BudgetGroup, index: number) => (
                     <BudgetGroupRow key={"budgetGroup" + index} {...budgetGroup} />
                 ))}
@@ -129,7 +130,6 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 
 const mapDispatchToProps: DispatchProps = {
     updateBudget,
-    addBudgetGroup,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BudgetScreen);
