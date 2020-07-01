@@ -8,6 +8,10 @@ export const ADDING_BUDGET_GROUP = "ADDING_BUDGET_GROUP";
 export const ADD_BUDGET_GROUP_SUCCESS = "ADD_BUDGET_GROUP_SUCCESS";
 export const ADD_BUDGET_GROUP_FAILURE = "ADD_BUDGET_GROUP_FAILURE";
 
+export const ADDING_BUDGET_CATEGORY = "ADDING_BUDGET_CATEGORY";
+export const ADD_BUDGET_CATEGORY_SUCCESS = "ADD_BUDGET_CATEGORY_SUCCESS";
+export const ADD_BUDGET_CATEGORY_FAILURE = "ADD_BUDGET_CATEGORY_FAILURE";
+
 export interface BudgetCategory {
     category: string;
     budgeted: number;
@@ -25,6 +29,7 @@ export interface BudgetState {
     totalBudget: BudgetGroup[];
     isSettingBudget: boolean;
     isAddingBudgetGroup: boolean;
+    isAddingBudgetCategory: boolean;
     error: Error | null;
 }
 
@@ -48,6 +53,16 @@ export interface AddBudgetGroupFailureAction extends Action<typeof ADD_BUDGET_GR
     error: Error;
 }
 
+export interface AddingBudgetCategoryAction extends Action<typeof ADDING_BUDGET_CATEGORY> {}
+
+export interface AddBudgetCategorySuccessAction extends Action<typeof ADD_BUDGET_CATEGORY_SUCCESS> {
+    totalBudget: BudgetGroup[];
+}
+
+export interface AddBudgetCategoryFailureAction extends Action<typeof ADD_BUDGET_CATEGORY_FAILURE> {
+    error: Error;
+}
+
 export type GenericSetBudgetAction =
     | SettingTotalBudgetAction
     | SetTotalBudgetSuccessAction
@@ -58,4 +73,9 @@ export type GenericAddBudgetGroupAction =
     | AddBudgetGroupSuccessAction
     | AddBudgetGroupFailureAction;
 
-export type GenericBudgetAction = GenericSetBudgetAction | GenericAddBudgetGroupAction;
+export type GenericAddBudgetCategoryAction =
+    | AddingBudgetCategoryAction
+    | AddBudgetCategorySuccessAction
+    | AddBudgetCategoryFailureAction;
+
+export type GenericBudgetAction = GenericSetBudgetAction | GenericAddBudgetGroupAction | GenericAddBudgetCategoryAction;
