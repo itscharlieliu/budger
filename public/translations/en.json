@@ -9,6 +9,8 @@
     "account": "Account",
     "date": "Date",
     "fullDate": "{{- date, L}}",
+    "newCategory": "New Category",
+    "newGroup": "New Group",
     "cannotBeEmpty": "This field cannot be empty",
     "in": "In",
     "addTransaction": "Add Transaction",

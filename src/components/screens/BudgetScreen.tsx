@@ -11,7 +11,8 @@ import Button from "../common/Button";
 import ScreenContainer from "../common/ScreenContainer";
 import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
 import Modal from "../common/Modal";
-import CategoryAddForm from "../forms/CategoryAddForm";
+import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
+import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
 
 interface StateProps {
     totalBudget: BudgetGroup[];
@@ -63,16 +64,16 @@ const BudgetCategoryText = styled.span`
 `;
 
 const BudgetHeader = (): JSX.Element => {
-    const [isAddingCategory, setIsAddingCategory] = useState(false);
+    const [isAddingGroup, setIsAddingGroup] = useState(false);
 
     return (
         <>
             <BudgetHeaderContainer>
-                <Modal visible={isAddingCategory} onClose={() => setIsAddingCategory(false)}>
-                    <CategoryAddForm onSubmit={() => setIsAddingCategory(false)} />
+                <Modal visible={isAddingGroup} onClose={() => setIsAddingGroup(false)}>
+                    <BudgetGroupAddForm onSubmit={() => setIsAddingGroup(false)} />
                 </Modal>
                 <span>{t("category")}</span>
-                <BudgetAddButton icon={<PlusIcon />} flat onClick={() => setIsAddingCategory(true)} />
+                <BudgetAddButton icon={<PlusIcon />} flat onClick={() => setIsAddingGroup(true)} />
             </BudgetHeaderContainer>
             <BudgetHeaderContainer>{t("budgeted")}</BudgetHeaderContainer>
             <BudgetHeaderContainer>{t("activity")}</BudgetHeaderContainer>
@@ -93,11 +94,16 @@ const BudgetCategoryRow = (props: BudgetCategory): JSX.Element => {
 };
 
 const BudgetGroupRow = (props: BudgetGroup): JSX.Element => {
+    const [isAddingCategory, setIsAddingCategory] = useState(false);
+
     return (
         <>
             <BudgetGroupContainer>
+                <Modal visible={isAddingCategory} onClose={() => setIsAddingCategory(false)}>
+                    <BudgetCategoryAddForm onSubmit={() => setIsAddingCategory(false)} group={props.group} />
+                </Modal>
                 {props.group}
-                <BudgetAddButton icon={<PlusIcon />} flat />
+                <BudgetAddButton icon={<PlusIcon />} onClick={() => setIsAddingCategory(true)} flat />
             </BudgetGroupContainer>
             {props.categories.map((category: BudgetCategory) => (
                 <BudgetCategoryRow
