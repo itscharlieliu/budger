@@ -3,16 +3,16 @@ import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
 import { theme } from "../../defs/theme";
+import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
-import { addBudgetGroup, updateBudget } from "../../store/budget/budgetActions";
+import { updateBudget } from "../../store/budget/budgetActions";
 import { BudgetCategory, BudgetGroup } from "../../store/budget/budgetInterfaces";
 import Button from "../common/Button";
-import ScreenContainer from "../common/ScreenContainer";
-import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
 import Modal from "../common/Modal";
-import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
+import ScreenContainer from "../common/ScreenContainer";
 import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
+import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
 
 interface StateProps {
     totalBudget: BudgetGroup[];
