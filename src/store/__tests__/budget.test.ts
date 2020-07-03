@@ -1,35 +1,36 @@
+import { AnyAction } from "redux";
 import configureMockStore, { MockStoreEnhanced } from "redux-mock-store";
 import thunk, { ThunkDispatch } from "redux-thunk";
 
-import { updateBudget } from "../budget/budgetActions";
-import { SET_TOTAL_BUDGET_SUCCESS, SETTING_TOTAL_BUDGET, GenericBudgetAction } from "../budget/budgetInterfaces";
-import budgetReducer, { defaultBudgetState } from "../budget/budgetReducer";
+import { addBudgetGroup } from "../budget/budgetActions";
+import { ADD_BUDGET_GROUP_SUCCESS, ADDING_BUDGET_GROUP } from "../budget/budgetInterfaces";
+import budgetReducer from "../budget/budgetReducer";
 import ApplicationState from "../index";
+import rootReducer from "../rootReducer";
 
-type Dispatch = ThunkDispatch<ApplicationState, null, GenericBudgetAction>;
+type Dispatch = ThunkDispatch<ApplicationState, null, AnyAction>;
 
 const mockStore = configureMockStore<ApplicationState, Dispatch>([thunk]);
 
-// describe("budget actions", () => {
-//     let store: MockStoreEnhanced<ApplicationState, Dispatch>;
-//
-//     beforeEach(() => {
-//         store = mockStore({ budget: defaultBudgetState });
-//     });
-//
-//     it("successfully updates budget", async () => {
-//         const currDate = new Date();
-//         await store.dispatch(updateBudget(currDate, "testGroup", "testCategory", 5, -3));
-//         const actions = store.getActions();
-//
-//         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
-//         expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
-//     });
-// });
+describe("budget actions", () => {
+    let budgetStore: MockStoreEnhanced<ApplicationState, Dispatch>;
+
+    beforeEach(() => {
+        budgetStore = mockStore(rootReducer(undefined, { type: undefined }));
+    });
+
+    it("successfully adds budget group", async () => {
+        await budgetStore.dispatch(addBudgetGroup("test group"));
+        const actions = budgetStore.getActions();
+
+        expect(actions[0].type).toBe(ADDING_BUDGET_GROUP);
+        expect(actions[1].type).toBe(ADD_BUDGET_GROUP_SUCCESS);
+    });
+});
 
 describe("budget reducer", () => {
-    it("starts setting budget", async () => {
-        const budgetState = budgetReducer(undefined, { type: SETTING_TOTAL_BUDGET });
-        expect(budgetState.isSettingBudget).toEqual(true);
+    it("adds budget group", async () => {
+        const budgetState = budgetReducer(undefined, { type: ADDING_BUDGET_GROUP });
+        expect(budgetState.isAddingBudgetGroup).toEqual(true);
     });
 });
