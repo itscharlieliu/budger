@@ -1,12 +1,12 @@
-import { addBudgetGroup } from "../../store/budget/budgetActions";
-import { connect, ResolveThunks } from "react-redux";
-import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
-
 import React from "react";
+import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
+import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
-import Input from "../common/Input";
+
 import t from "../../services/i18n/language";
+import { addBudgetGroup } from "../../store/budget/budgetActions";
 import Button from "../common/Button";
+import Input from "../common/Input";
 
 interface OwnProps {
     onSubmit?: () => void;

@@ -16,6 +16,7 @@ const DateSelector = (props: DayPickerInputProps): JSX.Element => {
     const handleDayChange = (day: Date) => {
         // We need to be able to pass the date to react final form by doing this.
         // TODO possibly move this to the form component?
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         onChange && onChange({ target: { value: day } });
     };

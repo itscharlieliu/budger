@@ -2,6 +2,7 @@ import { ThunkAction, ThunkDispatch } from "redux-thunk";
 
 import { GenericBudgetAction } from "../budget/budgetInterfaces";
 import ApplicationState from "../index";
+
 import {
     GenericTransactionAction,
     Transaction,
