@@ -98,6 +98,7 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
                                 label={t("toFrom")}
+                                autoFocus
                             />
                         )}
                     </Field>
