@@ -14,6 +14,7 @@ import {
 } from "../budget/budgetInterfaces";
 import budgetReducer from "../budget/budgetReducer";
 import ApplicationState from "../index";
+import ERRORS from "../../defs/errors";
 
 type Dispatch = ThunkDispatch<ApplicationState, null, AnyAction>;
 
@@ -50,6 +51,7 @@ describe("budget actions", () => {
 
         expect(actions[0].type).toBe(ADDING_BUDGET_GROUP);
         expect(actions[1].type).toBe(ADD_BUDGET_GROUP_FAILURE);
+        expect(actions[1].error.message).toBe(ERRORS.groupAlreadyExists);
     });
 
     it("successfully adds category", async () => {
@@ -81,6 +83,7 @@ describe("budget actions", () => {
 
         expect(actions[0].type).toBe(ADDING_BUDGET_CATEGORY);
         expect(actions[1].type).toBe(ADD_BUDGET_CATEGORY_FAILURE);
+        expect(actions[1].error.message).toBe(ERRORS.groupDoesNotExist);
     });
 
     it("does not add budget category if budget category already exists", async () => {
@@ -103,6 +106,7 @@ describe("budget actions", () => {
 
         expect(actions[0].type).toBe(ADDING_BUDGET_CATEGORY);
         expect(actions[1].type).toBe(ADD_BUDGET_CATEGORY_FAILURE);
+        expect(actions[1].error.message).toBe(ERRORS.categoryAlreadyExists);
     });
 });
 

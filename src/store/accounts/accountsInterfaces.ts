@@ -15,10 +15,10 @@ export interface BankAccount {
     balance: number;
 }
 
-export type AllAcounts = BankAccount[];
+export type AllAccounts = BankAccount[];
 
 export interface AccountsState {
-    allAcounts: AllAcounts;
+    allAccounts: AllAccounts;
     isAddingAccount: boolean;
     error: Error | null;
 }
@@ -26,7 +26,7 @@ export interface AccountsState {
 export interface AddingAccountAction extends Action<typeof ADDING_ACCOUNT> {}
 
 export interface AddAccountSuccessAction extends Action<typeof ADD_ACCOUNT_SUCCESS> {
-    allAccounts: AllAcounts;
+    allAccounts: AllAccounts;
 }
 
 export interface AddAccountFailureAction extends Action<typeof ADD_ACCOUNT_FAILURE> {
