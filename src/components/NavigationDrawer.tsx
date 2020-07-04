@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
-import { BUDGET, TRANSACTIONS } from "../defs/routerPaths";
+import { ACCOUNTS, BUDGET, TRANSACTIONS } from "../defs/routerPaths";
 import { ReactComponent as PlusIcon } from "../resources/images/plusIcon.svg";
 import { ReactComponent as RecieptIcon } from "../resources/images/reciept.svg";
 import { ReactComponent as WalletIcon } from "../resources/images/wallet.svg";
@@ -53,6 +53,17 @@ const NavigationDrawer = (): JSX.Element => {
                     <RecieptIcon />
                 </Icon>
                 {t("transactions")}
+            </DrawerListItem>
+
+            <DrawerListItem
+                isHighlighted={location.pathname === ACCOUNTS}
+                isButton
+                onClick={() => history.push(ACCOUNTS)}
+            >
+                <Icon edge={"left"}>
+                    <RecieptIcon />
+                </Icon>
+                {t("accounts")}
             </DrawerListItem>
         </Drawer>
     );

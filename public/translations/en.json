@@ -1,24 +1,28 @@
 {
   "translation": {
+    "account": "Account",
+    "accountName": "Account Name",
+    "accounts": "Accounts",
     "activity": "Activity",
-    "budger": "Budger",
     "add": "Add",
+    "addTransaction": "Add Transaction",
+    "balance": "Balance",
+    "budger": "Budger",
     "budget": "Budget",
     "budgeted": "Budgeted",
-    "toFrom": "To / From",
-    "account": "Account",
+    "cannotBeEmpty": "This field cannot be empty",
+    "category": "Category",
     "date": "Date",
+    "didNotProvideAllValues": "Did not provide all values",
     "fullDate": "{{- date, L}}",
+    "in": "In",
     "newCategory": "New Category",
     "newGroup": "New Group",
-    "cannotBeEmpty": "This field cannot be empty",
-    "in": "In",
-    "addTransaction": "Add Transaction",
-    "didNotProvideAllValues": "Did not provide all values",
-    "out": "Out",
     "notes": "Notes",
-    "category": "Category",
+    "out": "Out",
     "remaining": "Remaining",
-    "transactions": "Transactions"
+    "toFrom": "To / From",
+    "transactions": "Transactions",
+    "type": "Type"
   }
 }

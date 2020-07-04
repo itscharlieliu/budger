@@ -15,7 +15,7 @@ interface StateProps {
 const TransactionsContainer = styled.div`
     display: grid;
     width: auto;
-    grid-template-columns: 15% 10% 10% 10% 10% 10% auto;
+    grid-template-columns: auto 10% 10% 10% 10% 10% 15%;
 `;
 
 const TransactionsHeaderText = styled.span`
