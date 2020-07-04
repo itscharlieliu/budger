@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { theme } from "../../defs/theme";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
-import { AllAcounts, BankAccount } from "../../store/accounts/accountsInterfaces";
+import { AccountType, AllAcounts, BankAccount } from "../../store/accounts/accountsInterfaces";
 import ScreenContainer from "../common/ScreenContainer";
 
 interface StateProps {
@@ -42,10 +42,23 @@ const AccountsHeader = (): JSX.Element => {
 };
 
 const AccountsRow = (props: BankAccount): JSX.Element => {
+    let accountType = "";
+
+    switch (props.type) {
+        case AccountType.budgeted:
+            accountType = t("budgeted");
+            break;
+        case AccountType.unbudgeted:
+            accountType = t("unbudgeted");
+            break;
+        default:
+            accountType = t("unknown");
+    }
+
     return (
         <>
             <AccountsRowText>{props.name}</AccountsRowText>
-            <AccountsRowText>{props.type}</AccountsRowText>
+            <AccountsRowText>{accountType}</AccountsRowText>
             <AccountsRowText>{props.balance}</AccountsRowText>
         </>
     );
@@ -56,14 +69,16 @@ const AccountScreens = (props: StateProps): JSX.Element => {
         <ScreenContainer>
             <AccountsContainer>
                 <AccountsHeader />
-                {props.allAccounts.map((bankAccount: BankAccount, index: number) => (
-                    <AccountsRow
-                        key={"bankAccount" + index}
-                        name={bankAccount.name}
-                        type={bankAccount.type}
-                        balance={bankAccount.balance}
-                    />
-                ))}
+                {props.allAccounts.map((bankAccount: BankAccount, index: number) => {
+                    return (
+                        <AccountsRow
+                            key={"bankAccount" + index}
+                            name={bankAccount.name}
+                            type={bankAccount.type}
+                            balance={bankAccount.balance}
+                        />
+                    );
+                })}
             </AccountsContainer>
         </ScreenContainer>
     );

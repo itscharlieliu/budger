@@ -15,6 +15,8 @@
     "date": "Date",
     "didNotProvideAllValues": "Did not provide all values",
     "fullDate": "{{- date, L}}",
+    "unknown": "Unknown",
+    "unbudgeted": "Unbudgeted",
     "in": "In",
     "newCategory": "New Category",
     "newGroup": "New Group",
