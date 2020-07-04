@@ -5,11 +5,11 @@ import styled from "styled-components";
 import { theme } from "../../defs/theme";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
-import { AccountType, AllAcounts, BankAccount } from "../../store/accounts/accountsInterfaces";
+import { AccountType, AllAccounts, BankAccount } from "../../store/accounts/accountsInterfaces";
 import ScreenContainer from "../common/ScreenContainer";
 
 interface StateProps {
-    allAccounts: AllAcounts;
+    allAccounts: AllAccounts;
 }
 
 const AccountsContainer = styled.div`
@@ -85,7 +85,7 @@ const AccountScreens = (props: StateProps): JSX.Element => {
 };
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
-    allAccounts: state.accounts.allAcounts,
+    allAccounts: state.accounts.allAccounts,
 });
 
 export default connect(mapStateToProps)(AccountScreens);
