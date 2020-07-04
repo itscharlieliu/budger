@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { UNIT_LENGTH } from "../../defs/theme";
+import { UNIT_LENGTH } from "../../../defs/theme";
 
 const ScreenContainer = styled.div`
     flex-grow: 1;

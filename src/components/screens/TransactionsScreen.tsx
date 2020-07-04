@@ -6,7 +6,8 @@ import { theme } from "../../defs/theme";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
 import { Transaction } from "../../store/transactions/transactionInterfaces";
-import ScreenContainer from "../common/ScreenContainer";
+import ScreenContainer from "../common/containers/ScreenContainer";
+import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 
 interface StateProps {
     transactions: Transaction[];
@@ -18,13 +19,6 @@ const TransactionsContainer = styled.div`
     grid-template-columns: auto 10% 10% 10% 10% 10% 15%;
 `;
 
-const TransactionsHeaderText = styled.span`
-    font-size: ${theme.font.size.big};
-    font-weight: ${theme.font.weight.bold};
-    padding: 16px;
-    border-bottom: 2px solid ${theme.palette.background.contrast};
-`;
-
 const TransactionsRowText = styled.span`
     font-size: ${theme.font.size.small};
     padding: 16px;
@@ -34,13 +28,13 @@ const TransactionsRowText = styled.span`
 const TransactionsHeader = (): JSX.Element => {
     return (
         <>
-            <TransactionsHeaderText>{t("toFrom")}</TransactionsHeaderText>
-            <TransactionsHeaderText>{t("account")}</TransactionsHeaderText>
-            <TransactionsHeaderText>{t("category")}</TransactionsHeaderText>
-            <TransactionsHeaderText>{t("date")}</TransactionsHeaderText>
-            <TransactionsHeaderText>{t("in")}</TransactionsHeaderText>
-            <TransactionsHeaderText>{t("out")}</TransactionsHeaderText>
-            <TransactionsHeaderText>{t("notes")}</TransactionsHeaderText>
+            <GridHeaderContainer>{t("toFrom")}</GridHeaderContainer>
+            <GridHeaderContainer>{t("account")}</GridHeaderContainer>
+            <GridHeaderContainer>{t("category")}</GridHeaderContainer>
+            <GridHeaderContainer>{t("date")}</GridHeaderContainer>
+            <GridHeaderContainer>{t("in")}</GridHeaderContainer>
+            <GridHeaderContainer>{t("out")}</GridHeaderContainer>
+            <GridHeaderContainer>{t("notes")}</GridHeaderContainer>
         </>
     );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 
@@ -6,7 +6,10 @@ import { theme } from "../../defs/theme";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
 import { AccountType, AllAccounts, BankAccount } from "../../store/accounts/accountsInterfaces";
-import ScreenContainer from "../common/ScreenContainer";
+import ScreenContainer from "../common/containers/ScreenContainer";
+import Button from "../common/Button";
+import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
+import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 
 interface StateProps {
     allAccounts: AllAccounts;
@@ -18,11 +21,8 @@ const AccountsContainer = styled.div`
     grid-template-columns: auto 15% 15%;
 `;
 
-const AccountsHeaderText = styled.span`
-    font-size: ${theme.font.size.big};
-    font-weight: ${theme.font.weight.bold};
-    padding: 16px;
-    border-bottom: 2px solid ${theme.palette.background.contrast};
+const AccountAddButton = styled(Button)`
+    margin: -16px 16px;
 `;
 
 const AccountsRowText = styled.span`
@@ -32,11 +32,15 @@ const AccountsRowText = styled.span`
 `;
 
 const AccountsHeader = (): JSX.Element => {
+    const [isAddingAccount, setIsAddingAccount] = useState(false);
     return (
         <>
-            <AccountsHeaderText>{t("accountName")}</AccountsHeaderText>
-            <AccountsHeaderText>{t("type")}</AccountsHeaderText>
-            <AccountsHeaderText>{t("balance")}</AccountsHeaderText>
+            <GridHeaderContainer>
+                {t("accountName")}
+                <AccountAddButton icon={<PlusIcon />} flat onClick={() => setIsAddingAccount(true)} />
+            </GridHeaderContainer>
+            <GridHeaderContainer>{t("type")}</GridHeaderContainer>
+            <GridHeaderContainer>{t("balance")}</GridHeaderContainer>
         </>
     );
 };
