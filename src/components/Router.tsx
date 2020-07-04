@@ -3,9 +3,9 @@ import { Redirect, Route, Switch } from "react-router-dom";
 
 import { ACCOUNTS, BUDGET, TRANSACTIONS } from "../defs/routerPaths";
 
+import AccountScreens from "./screens/AccountsScreen";
 import BudgetScreen from "./screens/BudgetScreen";
 import TransactionsScreen from "./screens/TransactionsScreen";
-import AccountScreens from "./screens/AccountsScreen";
 
 const Router = (): JSX.Element => {
     return (

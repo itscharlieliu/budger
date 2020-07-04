@@ -1,11 +1,12 @@
 import React from "react";
-import t from "../../services/i18n/language";
-import styled from "styled-components";
-import { theme } from "../../defs/theme";
-import ScreenContainer from "../common/ScreenContainer";
 import { connect } from "react-redux";
-import { AllAcounts, BankAccount } from "../../store/accounts/accountsInterfaces";
+import styled from "styled-components";
+
+import { theme } from "../../defs/theme";
+import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
+import { AllAcounts, BankAccount } from "../../store/accounts/accountsInterfaces";
+import ScreenContainer from "../common/ScreenContainer";
 
 interface StateProps {
     allAccounts: AllAcounts;
