@@ -7,7 +7,7 @@ import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg"
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
 import { updateBudget } from "../../store/budget/budgetActions";
-import { BudgetCategory, BudgetGroup } from "../../store/budget/budgetInterfaces";
+import { BudgetCategory, BudgetGroup, TotalBudget } from "../../store/budget/budgetInterfaces";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
 import ScreenContainer from "../common/ScreenContainer";
@@ -15,7 +15,7 @@ import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
 import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
 
 interface StateProps {
-    totalBudget: BudgetGroup[];
+    totalBudget: TotalBudget;
 }
 
 interface DispatchProps {

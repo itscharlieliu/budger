@@ -26,7 +26,7 @@ export interface BudgetGroup {
 export type TotalBudget = BudgetGroup[];
 
 export interface BudgetState {
-    totalBudget: BudgetGroup[];
+    totalBudget: TotalBudget;
     isSettingBudget: boolean;
     isAddingBudgetGroup: boolean;
     isAddingBudgetCategory: boolean;
@@ -36,7 +36,7 @@ export interface BudgetState {
 export interface SettingTotalBudgetAction extends Action<typeof SETTING_TOTAL_BUDGET> {}
 
 export interface SetTotalBudgetSuccessAction extends Action<typeof SET_TOTAL_BUDGET_SUCCESS> {
-    totalBudget: BudgetGroup[];
+    totalBudget: TotalBudget;
 }
 
 export interface SetTotalBudgetFailureAction extends Action<typeof SET_TOTAL_BUDGET_FAILURE> {
@@ -46,7 +46,7 @@ export interface SetTotalBudgetFailureAction extends Action<typeof SET_TOTAL_BUD
 export interface AddingBudgetGroupAction extends Action<typeof ADDING_BUDGET_GROUP> {}
 
 export interface AddBudgetGroupSuccessAction extends Action<typeof ADD_BUDGET_GROUP_SUCCESS> {
-    totalBudget: BudgetGroup[];
+    totalBudget: TotalBudget;
 }
 
 export interface AddBudgetGroupFailureAction extends Action<typeof ADD_BUDGET_GROUP_FAILURE> {
@@ -56,7 +56,7 @@ export interface AddBudgetGroupFailureAction extends Action<typeof ADD_BUDGET_GR
 export interface AddingBudgetCategoryAction extends Action<typeof ADDING_BUDGET_CATEGORY> {}
 
 export interface AddBudgetCategorySuccessAction extends Action<typeof ADD_BUDGET_CATEGORY_SUCCESS> {
-    totalBudget: BudgetGroup[];
+    totalBudget: TotalBudget;
 }
 
 export interface AddBudgetCategoryFailureAction extends Action<typeof ADD_BUDGET_CATEGORY_FAILURE> {

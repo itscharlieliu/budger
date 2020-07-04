@@ -3,6 +3,13 @@ import t from "../../services/i18n/language";
 import styled from "styled-components";
 import { theme } from "../../defs/theme";
 import ScreenContainer from "../common/ScreenContainer";
+import { connect } from "react-redux";
+import { AllAcounts, BankAccount } from "../../store/accounts/accountsInterfaces";
+import ApplicationState from "../../store";
+
+interface StateProps {
+    allAccounts: AllAcounts;
+}
 
 const AccountsContainer = styled.div`
     display: grid;
@@ -33,25 +40,36 @@ const AccountsHeader = (): JSX.Element => {
     );
 };
 
-const AccountsRow = (): JSX.Element => {
+const AccountsRow = (props: BankAccount): JSX.Element => {
     return (
         <>
-            <AccountsRowText>test</AccountsRowText>
-            <AccountsRowText>test1</AccountsRowText>
-            <AccountsRowText>test2</AccountsRowText>
+            <AccountsRowText>{props.name}</AccountsRowText>
+            <AccountsRowText>{props.type}</AccountsRowText>
+            <AccountsRowText>{props.balance}</AccountsRowText>
         </>
     );
 };
 
-const AccountScreens = (): JSX.Element => {
+const AccountScreens = (props: StateProps): JSX.Element => {
     return (
         <ScreenContainer>
             <AccountsContainer>
                 <AccountsHeader />
-                <AccountsRow />
+                {props.allAccounts.map((bankAccount: BankAccount, index: number) => (
+                    <AccountsRow
+                        key={"bankAccount" + index}
+                        name={bankAccount.name}
+                        type={bankAccount.type}
+                        balance={bankAccount.balance}
+                    />
+                ))}
             </AccountsContainer>
         </ScreenContainer>
     );
 };
 
-export default AccountScreens;
+const mapStateToProps = (state: ApplicationState): StateProps => ({
+    allAccounts: state.accounts.allAcounts,
+});
+
+export default connect(mapStateToProps)(AccountScreens);
