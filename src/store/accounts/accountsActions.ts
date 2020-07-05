@@ -16,7 +16,11 @@ import {
 
 type GenericAccountsThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericAccountsAction>;
 
-export const addAccount = (name: string, type: AccountType, balance: number = 0): GenericAccountsThunkAction => async (
+export const addAccount = (
+    name: string,
+    type: AccountType = AccountType.unbudgeted,
+    balance: number = 0,
+): GenericAccountsThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericAddAccountAction>,
     getState: () => ApplicationState,
 ): Promise<void> => {

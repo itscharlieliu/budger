@@ -9,6 +9,7 @@ import formatMoney from "../../utils/formatMoney";
 import Button from "../common/Button";
 import DateSelector from "../common/DateSelector";
 import Input from "../common/Input";
+import ModalFormContainer from "../common/containers/ModalFormContainer";
 
 interface DispatchProps {
     addTransaction: typeof addTransaction;
@@ -35,12 +36,6 @@ interface FormErrors {
 }
 
 type AllProps = ResolveThunks<DispatchProps>;
-
-const TransactionAddContainer = styled.form`
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-`;
 
 const TransactionAddForm = (props: AllProps): JSX.Element => {
     const handleSubmit = (values: FormValues) => {
@@ -89,7 +84,7 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
             onSubmit={handleSubmit}
             validate={handleValidation}
             component={({ handleSubmit }: FormRenderProps) => (
-                <TransactionAddContainer onSubmit={handleSubmit}>
+                <ModalFormContainer onSubmit={handleSubmit}>
                     <Field name={"toFrom"}>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
                             <Input
@@ -162,7 +157,7 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
 
                     <Button type={"submit"}>add</Button>
                     <Button type={"button"}>cancel</Button>
-                </TransactionAddContainer>
+                </ModalFormContainer>
             )}
         />
     );
