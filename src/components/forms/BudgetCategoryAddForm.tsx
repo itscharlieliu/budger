@@ -7,6 +7,7 @@ import t from "../../services/i18n/language";
 import { addBudgetCategory } from "../../store/budget/budgetActions";
 import Button from "../common/Button";
 import Input from "../common/Input";
+import ModalFormContainer from "../common/containers/ModalFormContainer";
 
 interface OwnProps {
     onSubmit?: () => void;
@@ -23,12 +24,6 @@ interface FormValues {
     categoryName?: string;
 }
 
-const CategoryAddContainer = styled.form`
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-`;
-
 const BudgetCategoryAddForm = (props: AllProps): JSX.Element => {
     const handleAddCategoryGroup = (values: FormValues) => {
         values.categoryName && props.addBudgetCategory(props.group, values.categoryName);
@@ -39,7 +34,7 @@ const BudgetCategoryAddForm = (props: AllProps): JSX.Element => {
         <Form
             onSubmit={handleAddCategoryGroup}
             component={({ handleSubmit }: FormRenderProps) => (
-                <CategoryAddContainer onSubmit={handleSubmit}>
+                <ModalFormContainer onSubmit={handleSubmit}>
                     <Field name={"categoryName"}>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
                             <Input
@@ -52,7 +47,7 @@ const BudgetCategoryAddForm = (props: AllProps): JSX.Element => {
                         )}
                     </Field>
                     <Button type={"submit"}>Add</Button>
-                </CategoryAddContainer>
+                </ModalFormContainer>
             )}
         />
     );

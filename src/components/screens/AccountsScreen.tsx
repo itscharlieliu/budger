@@ -10,6 +10,9 @@ import ScreenContainer from "../common/containers/ScreenContainer";
 import Button from "../common/Button";
 import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
+import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
+import Modal from "../common/Modal";
+import AccountAddForm from "../forms/AccountAddForm";
 
 interface StateProps {
     allAccounts: AllAccounts;
@@ -35,6 +38,9 @@ const AccountsHeader = (): JSX.Element => {
     const [isAddingAccount, setIsAddingAccount] = useState(false);
     return (
         <>
+            <Modal visible={isAddingAccount} onClose={() => setIsAddingAccount(false)}>
+                <AccountAddForm onSubmit={() => setIsAddingAccount(false)} />
+            </Modal>
             <GridHeaderContainer>
                 {t("accountName")}
                 <AccountAddButton icon={<PlusIcon />} flat onClick={() => setIsAddingAccount(true)} />

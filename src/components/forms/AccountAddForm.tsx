@@ -1,10 +1,9 @@
 import React from "react";
 import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
 import { connect, ResolveThunks } from "react-redux";
-import styled from "styled-components";
 
 import t from "../../services/i18n/language";
-import { addBudgetGroup } from "../../store/budget/budgetActions";
+import { addAccount } from "../../store/accounts/accountsActions";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
@@ -14,33 +13,32 @@ interface OwnProps {
 }
 
 interface DispatchProps {
-    addBudgetGroup: typeof addBudgetGroup;
+    addAccount: typeof addAccount;
 }
 
 type AllProps = OwnProps & ResolveThunks<DispatchProps>;
 
 interface FormValues {
-    groupName?: string;
+    accountName?: string;
 }
 
-const BudgetGroupAddForm = (props: AllProps): JSX.Element => {
-    const handleAddCategoryGroup = (values: FormValues) => {
-        values.groupName && props.addBudgetGroup(values.groupName);
+const AccountAddForm = (props: AllProps): JSX.Element => {
+    const handleAddAccount = (values: FormValues) => {
+        values.accountName && props.addAccount(values.accountName);
         props.onSubmit && props.onSubmit();
     };
-
     return (
         <Form
-            onSubmit={handleAddCategoryGroup}
+            onSubmit={handleAddAccount}
             component={({ handleSubmit }: FormRenderProps) => (
                 <ModalFormContainer onSubmit={handleSubmit}>
-                    <Field name={"groupName"}>
+                    <Field name={"accountName"}>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
                             <Input
                                 {...input}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
-                                label={t("newGroup")}
+                                label={t("accountName")}
                                 autoFocus
                             />
                         )}
@@ -53,7 +51,7 @@ const BudgetGroupAddForm = (props: AllProps): JSX.Element => {
 };
 
 const mapDispatchToProps = {
-    addBudgetGroup,
+    addAccount,
 };
 
-export default connect(null, mapDispatchToProps)(BudgetGroupAddForm);
+export default connect(null, mapDispatchToProps)(AccountAddForm);
