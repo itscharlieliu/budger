@@ -45,18 +45,9 @@ export const theme = {
     },
     shadow: {
         none: "-webkit-box-shadow: unset; -moz-box-shadow: unset; box-shadow: unset;",
-        low:
-            "-webkit-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.5);" +
-            "-moz-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.5);" +
-            "box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.5);",
-        med:
-            "-webkit-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);" +
-            "-moz-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);" +
-            "box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);",
-        high:
-            "-webkit-box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.5);" +
-            "-moz-box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.5);" +
-            "box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.5);",
+        low: "box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.5);",
+        med: "box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.5);",
+        high: "box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.5);",
     },
     font: {
         size: {
