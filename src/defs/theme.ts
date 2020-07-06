@@ -34,6 +34,10 @@ export const theme = {
             active: "#000000",
             background: "#00000000",
         },
+        switch: {
+            thumb: "#FFFFFF",
+            inactive: "#CCC",
+        },
         error: {
             main: "#ff0000",
             light: "#ff000080",
