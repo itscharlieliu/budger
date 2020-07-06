@@ -7,7 +7,29 @@ const SWITCH_WIDTH = "54px";
 const THUMB_DIAMETER = "20px";
 const SWITCH_RADIUS = "28px";
 
+interface SwitchProps extends React.InputHTMLAttributes<HTMLInputElement> {
+    error?: boolean;
+    label?: string;
+    spaced?: boolean;
+}
+
 const SwitchContainer = styled.label`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: ${(props: SwitchProps) => (props.spaced ? "space-between" : "unset")};
+    width: ${(props: SwitchProps) => (props.spaced ? "unset" : "min-content")};
+    margin: 4px;
+    cursor: pointer;
+`;
+
+const LabelContainer = styled.span`
+    color: ${(props: SwitchProps): string =>
+        props.error ? theme.palette.error.main : theme.palette.background.contrast};
+    margin-right: 8px;
+`;
+
+const SliderContainer = styled.div`
     position: relative;
     display: inline-block;
     width: ${SWITCH_WIDTH};
@@ -20,7 +42,8 @@ const SwitchInput = styled.input`
     height: 0;
 
     &:checked + span {
-        background-color: ${theme.palette.primary.main};
+        background-color: ${(props: SwitchProps): string =>
+            props.error ? theme.palette.error.light : theme.palette.primary.main};
     }
 
     &:checked + span:before {
@@ -28,11 +51,11 @@ const SwitchInput = styled.input`
     }
 
     &:focus-visible + span {
-        ${theme.shadow.med}
+        ${theme.shadow.low}
     }
 
     &:focus + span {
-        ${theme.shadow.med};
+        ${theme.shadow.low};
     }
 
     &:hover + span {
@@ -42,13 +65,13 @@ const SwitchInput = styled.input`
 
 const SwitchSlider = styled.span`
     position: absolute;
-    cursor: pointer;
     border-radius: ${SWITCH_RADIUS};
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: ${theme.palette.switch.inactive};
+    background-color: ${(props: SwitchProps): string =>
+        props.error ? theme.palette.error.light : theme.palette.switch.inactive};
     -webkit-transition: 0.4s;
     transition: background-color 0.2s ease, box-shadow 0.1s ease-in;
 
@@ -65,11 +88,16 @@ const SwitchSlider = styled.span`
     }
 `;
 
-const Switch = (props: React.InputHTMLAttributes<HTMLInputElement>): JSX.Element => {
+const Switch = (props: SwitchProps): JSX.Element => {
+    const { spaced, error, label, ...otherProps } = props;
+
     return (
-        <SwitchContainer>
-            <SwitchInput {...props} type={"checkbox"} />
-            <SwitchSlider />
+        <SwitchContainer spaced={spaced}>
+            {label && <LabelContainer error={error}>{label}</LabelContainer>}
+            <SliderContainer>
+                <SwitchInput {...otherProps} type={"checkbox"} error={error} />
+                <SwitchSlider error={error} />
+            </SliderContainer>
         </SwitchContainer>
     );
 };
