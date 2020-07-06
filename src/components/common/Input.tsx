@@ -71,6 +71,8 @@ const LabelText = styled.span<LabelTextProps>`
 const HelpText = styled.span`
     font-size: 0.75em;
     word-wrap: break-word;
+    height: 1em;
+    overflow: visible;
 `;
 
 const Input = (props: InputProps): JSX.Element => {
