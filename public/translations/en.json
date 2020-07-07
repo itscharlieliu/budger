@@ -15,6 +15,7 @@
     "date": "Date",
     "didNotProvideAllValues": "Did not provide all values",
     "fullDate": "{{- date, L}}",
+    "startingBalance": "Starting Balance",
     "unknown": "Unknown",
     "unbudgeted": "Unbudgeted",
     "in": "In",
