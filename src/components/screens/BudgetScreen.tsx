@@ -14,6 +14,7 @@ import ScreenContainer from "../common/containers/ScreenContainer";
 import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
 import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
+import Switch from "../common/Switch";
 
 interface StateProps {
     totalBudget: TotalBudget;
