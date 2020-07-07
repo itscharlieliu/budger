@@ -9,6 +9,7 @@ import Button from "../common/Button";
 import Input from "../common/Input";
 import Switch from "../common/Switch";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
+import formatMoney from "../../utils/formatMoney";
 
 interface OwnProps {
     onSubmit?: () => void;
@@ -77,7 +78,7 @@ const AccountAddForm = (props: AllProps): JSX.Element => {
                             <Switch {...input} spaced error={meta.touched && meta.error} label={t("budgeted")} />
                         )}
                     </Field>
-                    <Field name={"startingBalance"}>
+                    <Field name={"startingBalance"} format={(value: string) => formatMoney(value, 2)} formatOnBlur>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
                             <Input
                                 {...input}
