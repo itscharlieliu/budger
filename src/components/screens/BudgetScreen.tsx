@@ -15,6 +15,8 @@ import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
 import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 import Switch from "../common/Switch";
+import Input from "../common/Input";
+import Autocomplete from "../common/Autocomplete";
 
 interface StateProps {
     totalBudget: TotalBudget;
@@ -110,8 +112,20 @@ const BudgetGroupRow = (props: BudgetGroup): JSX.Element => {
 };
 
 const BudgetScreen = (props: AllProps): JSX.Element => {
+    const testOptions = [
+        {
+            value: "test1",
+            label: "test1",
+        },
+        {
+            value: "test2",
+            label: "test2",
+        },
+    ];
+
     return (
         <ScreenContainer>
+            <Autocomplete options={testOptions} />
             <BudgetContainer>
                 <BudgetHeader />
                 {props.totalBudget.map((budgetGroup: BudgetGroup, index: number) => (
