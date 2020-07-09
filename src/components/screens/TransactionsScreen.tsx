@@ -6,8 +6,8 @@ import { theme } from "../../defs/theme";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
 import { Transaction } from "../../store/transactions/transactionInterfaces";
-import ScreenContainer from "../common/containers/ScreenContainer";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
+import ScreenContainer from "../common/containers/ScreenContainer";
 
 interface StateProps {
     transactions: Transaction[];

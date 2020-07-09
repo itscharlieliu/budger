@@ -8,15 +8,13 @@ import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
 import { updateBudget } from "../../store/budget/budgetActions";
 import { BudgetCategory, BudgetGroup, TotalBudget } from "../../store/budget/budgetInterfaces";
+import Autocomplete from "../common/Autocomplete";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
+import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 import ScreenContainer from "../common/containers/ScreenContainer";
 import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
 import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
-import GridHeaderContainer from "../common/containers/GridHeaderContainer";
-import Switch from "../common/Switch";
-import Input from "../common/Input";
-import Autocomplete from "../common/Autocomplete";
 
 interface StateProps {
     totalBudget: TotalBudget;

@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import Input from "./Input";
 import { useCombobox } from "downshift";
-// import Dropdown from "react-dropdown";
-// import "react-dropdown/style.css";
+import React from "react";
+
+import Input from "./Input";
 
 interface AutocompleteOption {
     value: string;

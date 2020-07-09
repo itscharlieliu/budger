@@ -3,15 +3,14 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 
 import { theme } from "../../defs/theme";
+import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
 import { AccountType, AllAccounts, BankAccount } from "../../store/accounts/accountsInterfaces";
-import ScreenContainer from "../common/containers/ScreenContainer";
 import Button from "../common/Button";
-import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
-import GridHeaderContainer from "../common/containers/GridHeaderContainer";
-import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
 import Modal from "../common/Modal";
+import GridHeaderContainer from "../common/containers/GridHeaderContainer";
+import ScreenContainer from "../common/containers/ScreenContainer";
 import AccountAddForm from "../forms/AccountAddForm";
 
 interface StateProps {

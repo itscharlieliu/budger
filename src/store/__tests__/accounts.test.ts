@@ -1,7 +1,8 @@
-import thunk, { ThunkDispatch } from "redux-thunk";
-import ApplicationState from "../index";
 import { AnyAction } from "redux";
 import configureMockStore from "redux-mock-store";
+import thunk, { ThunkDispatch } from "redux-thunk";
+
+import ERRORS from "../../defs/errors";
 import { addAccount } from "../accounts/accountsActions";
 import {
     AccountType,
@@ -10,8 +11,8 @@ import {
     ADDING_ACCOUNT,
     AllAccounts,
 } from "../accounts/accountsInterfaces";
-import ERRORS from "../../defs/errors";
 import accountsReducer from "../accounts/accountsReducer";
+import ApplicationState from "../index";
 
 type Dispatch = ThunkDispatch<ApplicationState, null, AnyAction>;
 

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+
 import { theme } from "../../defs/theme";
 
 const SWITCH_HEIGHT = "28px";
