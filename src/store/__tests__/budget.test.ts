@@ -2,6 +2,7 @@ import { AnyAction } from "redux";
 import configureMockStore from "redux-mock-store";
 import thunk, { ThunkDispatch } from "redux-thunk";
 
+import ERRORS from "../../defs/errors";
 import { addBudgetCategory, addBudgetGroup } from "../budget/budgetActions";
 import {
     ADD_BUDGET_CATEGORY_FAILURE,
@@ -14,7 +15,6 @@ import {
 } from "../budget/budgetInterfaces";
 import budgetReducer from "../budget/budgetReducer";
 import ApplicationState from "../index";
-import ERRORS from "../../defs/errors";
 
 type Dispatch = ThunkDispatch<ApplicationState, null, AnyAction>;
 

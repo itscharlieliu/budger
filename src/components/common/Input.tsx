@@ -1,4 +1,4 @@
-import React, { Ref, RefObject, useState } from "react";
+import React, { Ref, useState } from "react";
 import styled from "styled-components";
 
 import { theme, ZIndex } from "../../defs/theme";

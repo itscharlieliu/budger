@@ -5,11 +5,11 @@ import { connect, ResolveThunks } from "react-redux";
 import t from "../../services/i18n/language";
 import { addAccount } from "../../store/accounts/accountsActions";
 import { AccountType } from "../../store/accounts/accountsInterfaces";
+import formatMoney from "../../utils/formatMoney";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import Switch from "../common/Switch";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
-import formatMoney from "../../utils/formatMoney";
 
 interface OwnProps {
     onSubmit?: () => void;

@@ -1,7 +1,6 @@
 import React from "react";
 import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
 import { connect, ResolveThunks } from "react-redux";
-import styled from "styled-components";
 
 import t from "../../services/i18n/language";
 import { addBudgetCategory } from "../../store/budget/budgetActions";
