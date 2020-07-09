@@ -1,6 +1,8 @@
 import React from "react";
 import Input from "./Input";
-import Select from "react-select";
+import Downshift, { useSelect } from "downshift";
+// import Dropdown from "react-dropdown";
+// import "react-dropdown/style.css";
 
 interface AutocompleteOption {
     value: string;
@@ -17,17 +19,27 @@ interface AutocompleteProps {
 }
 
 const Autocomplete = (props: AutocompleteProps): JSX.Element => {
+    const {
+        isOpen,
+        selectedItem,
+        getToggleButtonProps,
+        getLabelProps,
+        getMenuProps,
+        highlightedIndex,
+        getItemProps,
+    } = useSelect({ items: props.options });
+
     return (
-        <Select
-            {...props}
-            // components={{Control, Menu, Option, MultiValue}}
-            // isMulti={props.isMulti}
-            // onChange={props.onChange}
-            // loadOptions={props.loadOptions}
-            // placeholder={props.placeholder}
-            // value={props.value}
-            // defaultOptions
-        />
+        <Downshift onChange={console.log} itemToString={(item: AutocompleteOption) => item.label}>
+            {}
+            {/*// components={{Control, Menu, Option, MultiValue}}*/}
+            {/*// isMulti={props.isMulti}*/}
+            {/*// onChange={props.onChange}*/}
+            {/*// loadOptions={props.loadOptions}*/}
+            {/*// placeholder={props.placeholder}*/}
+            {/*// value={props.value}*/}
+            {/*// defaultOptions*/}
+        </Downshift>
     );
 };
 
