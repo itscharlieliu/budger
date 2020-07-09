@@ -6,6 +6,7 @@ export enum ZIndex {
     inactive,
     active,
     calendar,
+    dropdown,
     modal,
 }
 
