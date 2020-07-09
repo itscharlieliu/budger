@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Input from "./Input";
 import { useCombobox } from "downshift";
 // import Dropdown from "react-dropdown";
@@ -11,29 +11,29 @@ interface AutocompleteOption {
 
 interface AutocompleteProps {
     options: AutocompleteOption[];
-    // isMulti?: boolean;
-    // onChange?: () => void;
-    // placeholder?: string;
-    // value?: AutocompleteOption | AutocompleteOption[];
-    // loadOptions?: () => void;
 }
 
 const Autocomplete = (props: AutocompleteProps): JSX.Element => {
-    const { isOpen, getMenuProps, getInputProps, getItemProps, getComboboxProps } = useCombobox({
+    const { isOpen, getMenuProps, getInputProps, getItemProps, getComboboxProps, inputValue, openMenu } = useCombobox({
         items: props.options,
     });
 
     return (
         <div {...getComboboxProps()}>
-            <Input {...getInputProps()} />
-            <ul {...getMenuProps()}>
+            <Input {...getInputProps({ onFocus: openMenu })} />
+            <div {...getMenuProps()}>
                 {isOpen &&
-                    props.options.map((option: AutocompleteOption, index: number) => (
-                        <li key={option.value + option.label + index} {...getItemProps}>
-                            {option.label}
-                        </li>
-                    ))}
-            </ul>
+                    props.options.reduce((render: JSX.Element[], option: AutocompleteOption) => {
+                        if (option.label.toLowerCase().includes(inputValue))
+                            render.push(
+                                <div key={option.value + option.label + render.length} {...getItemProps}>
+                                    {option.label}
+                                </div>,
+                            );
+
+                        return render;
+                    }, [])}
+            </div>
         </div>
     );
 };
