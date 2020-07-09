@@ -75,7 +75,6 @@ const HelpText = styled.span`
     overflow: visible;
 `;
 
-// eslint-disable-next-line @typescript-eslint/typedef
 const Input = React.forwardRef(function Input(props: InputProps, ref: Ref<HTMLInputElement>): JSX.Element {
     const [isFocused, setIsFocused] = useState<boolean>(false);
     const { error, helperText, label, onFocus, onBlur, value, ...otherProps } = props;
