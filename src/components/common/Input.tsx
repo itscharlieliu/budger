@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Ref, RefObject, useState } from "react";
 import styled from "styled-components";
 
 import { theme, ZIndex } from "../../defs/theme";
@@ -75,7 +75,8 @@ const HelpText = styled.span`
     overflow: visible;
 `;
 
-const Input = (props: InputProps): JSX.Element => {
+// eslint-disable-next-line @typescript-eslint/typedef
+const Input = React.forwardRef(function Input(props: InputProps, ref: Ref<HTMLInputElement>): JSX.Element {
     const [isFocused, setIsFocused] = useState<boolean>(false);
     const { error, helperText, label, onFocus, onBlur, value, ...otherProps } = props;
 
@@ -94,10 +95,17 @@ const Input = (props: InputProps): JSX.Element => {
             <LabelText error={error} focused={!!props.placeholder || !!value || isFocused}>
                 {label}
             </LabelText>
-            <TextContainer error={error} onFocus={onInputFocus} onBlur={onInputBlur} value={value} {...otherProps} />
+            <TextContainer
+                ref={ref}
+                error={error}
+                onFocus={onInputFocus}
+                onBlur={onInputBlur}
+                value={value}
+                {...otherProps}
+            />
             <HelpText>{helperText}</HelpText>
         </InputContainer>
     );
-};
+});
 
 export default Input;
