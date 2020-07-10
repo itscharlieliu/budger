@@ -1,9 +1,10 @@
 import { useCombobox } from "downshift";
 import React from "react";
+import styled from "styled-components";
+
+import { theme, ZIndex } from "../../defs/theme";
 
 import Input from "./Input";
-import styled from "styled-components";
-import { theme, ZIndex } from "../../defs/theme";
 
 interface AutocompleteOption {
     value: string;
@@ -64,13 +65,13 @@ const Autocomplete = (props: AutocompleteProps): JSX.Element => {
             <Input {...getInputProps({ onFocus: openMenu })} />
             <DropDown {...getMenuProps()}>
                 {isOpen &&
-                    props.options.reduce((render: JSX.Element[], option: AutocompleteOption) => {
+                    props.options.reduce((render: JSX.Element[], option: AutocompleteOption, index: number) => {
                         if (option.label.toLowerCase().includes(inputValue.toLowerCase()))
                             render.push(
                                 <DropDownOption
-                                    key={option.value + option.label + render.length}
-                                    highlight={highlightedIndex === render.length}
-                                    {...getItemProps({ item: option, index: render.length })}
+                                    key={option.value + option.label + index}
+                                    highlight={highlightedIndex === index}
+                                    {...getItemProps({ item: option, index: index })}
                                 >
                                     {option.label}
                                 </DropDownOption>,
