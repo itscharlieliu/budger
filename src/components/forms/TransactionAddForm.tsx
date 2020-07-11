@@ -9,13 +9,14 @@ import Button from "../common/Button";
 import DateSelector from "../common/DateSelector";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
+import Autocomplete, { AutocompleteOption, AutocompleteProps } from "../common/Autocomplete";
 
 interface DispatchProps {
     addTransaction: typeof addTransaction;
 }
 
 interface FormValues {
-    toFrom?: string;
+    toFrom?: AutocompleteOption;
     account?: string;
     category?: string;
     date?: Date;
@@ -50,7 +51,7 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
         console.log([inflow, outflow]);
 
         props.addTransaction(
-            values.toFrom,
+            values.toFrom.value,
             values.account,
             values.category,
             values.date,
@@ -62,7 +63,7 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
     const handleValidation = (values: FormValues) => {
         const errors: FormErrors = {};
 
-        if (!values.toFrom) {
+        if (!values.toFrom || (values.toFrom.label === "" && values.toFrom.value === "")) {
             errors.toFrom = t("cannotBeEmpty");
         }
         if (!values.account) {
@@ -85,13 +86,18 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
             component={({ handleSubmit }: FormRenderProps) => (
                 <ModalFormContainer onSubmit={handleSubmit}>
                     <Field name={"toFrom"}>
-                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input
+                        {({ input, meta }: FieldRenderProps<AutocompleteOption, HTMLElement>) => (
+                            <Autocomplete
                                 {...input}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
                                 label={t("toFrom")}
                                 autoFocus
+                                value={input.value || { value: "", label: "" }}
+                                options={[
+                                    { value: "test1", label: "hello" },
+                                    { value: "test2", label: "world" },
+                                ]}
                             />
                         )}
                     </Field>

@@ -110,52 +110,8 @@ const BudgetGroupRow = (props: BudgetGroup): JSX.Element => {
 };
 
 const BudgetScreen = (props: AllProps): JSX.Element => {
-    const testOptions = [
-        {
-            value: "test1",
-            label: "test1",
-        },
-        {
-            value: "test2",
-            label: "test2",
-        },
-        {
-            value: "test3",
-            label: "test3",
-        },
-        {
-            value: "test4",
-            label: "test4",
-        },
-        {
-            value: "test5",
-            label: "test5",
-        },
-        {
-            value: "test6",
-            label: "test6",
-        },
-        {
-            value: "test7",
-            label: "test7",
-        },
-        {
-            value: "test8",
-            label: "test8",
-        },
-        {
-            value: "test9",
-            label: "test9",
-        },
-        {
-            value: "test10",
-            label: "test10",
-        },
-    ];
-
     return (
         <ScreenContainer>
-            <Autocomplete options={testOptions} />
             <BudgetContainer>
                 <BudgetHeader />
                 {props.totalBudget.map((budgetGroup: BudgetGroup, index: number) => (

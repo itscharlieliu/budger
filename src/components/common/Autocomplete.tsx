@@ -1,18 +1,23 @@
-import { useCombobox } from "downshift";
+import { useCombobox, UseComboboxState } from "downshift";
 import React from "react";
 import styled from "styled-components";
 
 import { theme, ZIndex } from "../../defs/theme";
 
-import Input from "./Input";
+import Input, { InputProps } from "./Input";
+import { Omit } from "react-redux";
 
-interface AutocompleteOption {
+export interface AutocompleteOption {
     value: string;
     label: string;
 }
 
-interface AutocompleteProps {
+type AutocompleteInputProps = Omit<InputProps, "onChange" | "value">;
+
+export interface AutocompleteProps extends AutocompleteInputProps {
     options: AutocompleteOption[];
+    onChange: (event: React.ChangeEvent<HTMLInputElement> | AutocompleteOption) => void;
+    value: AutocompleteOption;
 }
 
 interface DropDownOptionProps {
@@ -38,6 +43,8 @@ const DropDownOption = styled.div<DropDownOptionProps>`
 `;
 
 const Autocomplete = (props: AutocompleteProps): JSX.Element => {
+    const { options, value, onFocus, onChange, ...otherProps } = props;
+
     const itemToString = (item: AutocompleteOption | null): string => {
         if (!item) {
             return "";
@@ -56,13 +63,32 @@ const Autocomplete = (props: AutocompleteProps): JSX.Element => {
         inputValue,
         openMenu,
     } = useCombobox({
-        items: props.options,
+        items: options,
         itemToString,
+        onSelectedItemChange: (changes: Partial<UseComboboxState<AutocompleteOption>>) =>
+            onChange && changes.selectedItem && onChange(changes.selectedItem),
     });
+
+    const onInputFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+        openMenu();
+        onFocus && onFocus(event);
+    };
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        onChange && onChange({ value, label: value });
+    };
 
     return (
         <div {...getComboboxProps()}>
-            <Input {...getInputProps({ onFocus: openMenu })} />
+            <Input
+                {...getInputProps({
+                    onFocus: onInputFocus,
+                    value: value.label,
+                    onChange: handleInputChange,
+                    ...otherProps,
+                })}
+            />
             <DropDown {...getMenuProps()}>
                 {isOpen &&
                     props.options.reduce((render: JSX.Element[], option: AutocompleteOption, index: number) => {
