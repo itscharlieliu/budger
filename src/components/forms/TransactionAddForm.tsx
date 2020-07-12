@@ -10,6 +10,12 @@ import DateSelector from "../common/DateSelector";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
 import Autocomplete, { AutocompleteOption, AutocompleteProps } from "../common/Autocomplete";
+import { AllAccounts, BankAccount } from "../../store/accounts/accountsInterfaces";
+import ApplicationState from "../../store";
+
+interface StateProps {
+    allAccounts: AllAccounts;
+}
 
 interface DispatchProps {
     addTransaction: typeof addTransaction;
@@ -35,7 +41,7 @@ interface FormErrors {
     note?: string;
 }
 
-type AllProps = ResolveThunks<DispatchProps>;
+type AllProps = StateProps & ResolveThunks<DispatchProps>;
 
 const TransactionAddForm = (props: AllProps): JSX.Element => {
     const handleSubmit = (values: FormValues) => {
@@ -43,12 +49,9 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
             console.warn(t("didNotProvideAllValues"));
             return;
         }
-        console.log(values);
 
         const inflow = parseFloat(values.inFlow ? values.inFlow : "0");
         const outflow = parseFloat(values.outFlow ? values.outFlow : "0");
-
-        console.log([inflow, outflow]);
 
         props.addTransaction(
             values.toFrom.value,
@@ -102,12 +105,17 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                         )}
                     </Field>
                     <Field name={"account"}>
-                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input
+                        {({ input, meta }: FieldRenderProps<AutocompleteOption, HTMLElement>) => (
+                            <Autocomplete
                                 {...input}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
                                 label={t("account")}
+                                value={input.value || { value: "", label: "" }}
+                                options={props.allAccounts.map((account: BankAccount) => ({
+                                    value: account.name,
+                                    label: account.name,
+                                }))}
                             />
                         )}
                     </Field>
@@ -168,8 +176,12 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
     );
 };
 
+const mapStateToProps = (state: ApplicationState): StateProps => ({
+    allAccounts: state.accounts.allAccounts,
+});
+
 const mapDispatchToProps = {
     addTransaction,
 };
 
-export default connect(null, mapDispatchToProps)(TransactionAddForm);
+export default connect(mapStateToProps, mapDispatchToProps)(TransactionAddForm);
