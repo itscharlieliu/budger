@@ -12,9 +12,11 @@ import ModalFormContainer from "../common/containers/ModalFormContainer";
 import Autocomplete, { AutocompleteOption, AutocompleteProps } from "../common/Autocomplete";
 import { AllAccounts, BankAccount } from "../../store/accounts/accountsInterfaces";
 import ApplicationState from "../../store";
+import { BudgetCategory, BudgetGroup, TotalBudget } from "../../store/budget/budgetInterfaces";
 
 interface StateProps {
     allAccounts: AllAccounts;
+    totalBudget: TotalBudget;
 }
 
 interface DispatchProps {
@@ -23,8 +25,8 @@ interface DispatchProps {
 
 interface FormValues {
     toFrom?: AutocompleteOption;
-    account?: string;
-    category?: string;
+    account?: AutocompleteOption;
+    category?: AutocompleteOption;
     date?: Date;
     inFlow?: string;
     outFlow?: string;
@@ -55,8 +57,8 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
 
         props.addTransaction(
             values.toFrom.value,
-            values.account,
-            values.category,
+            values.account.value,
+            values.category.value,
             values.date,
             (isNaN(inflow) ? 0 : inflow) - (isNaN(outflow) ? 0 : outflow),
             values.note,
@@ -120,12 +122,22 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                         )}
                     </Field>
                     <Field name={"category"}>
-                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input
+                        {({ input, meta }: FieldRenderProps<AutocompleteOption, HTMLElement>) => (
+                            <Autocomplete
                                 {...input}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
                                 label={t("category")}
+                                value={input.value || { value: "", label: "" }}
+                                options={props.totalBudget.reduce(
+                                    (categories: AutocompleteOption[], budgetGroup: BudgetGroup) => {
+                                        for (const category of budgetGroup.categories) {
+                                            categories.push({ value: category.category, label: category.category });
+                                        }
+                                        return categories;
+                                    },
+                                    [],
+                                )}
                             />
                         )}
                     </Field>
@@ -178,6 +190,7 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
     allAccounts: state.accounts.allAccounts,
+    totalBudget: state.budget.totalBudget,
 });
 
 const mapDispatchToProps = {
