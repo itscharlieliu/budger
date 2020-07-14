@@ -8,7 +8,6 @@ import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
 import { updateBudget } from "../../store/budget/budgetActions";
 import { BudgetCategory, BudgetGroup, TotalBudget } from "../../store/budget/budgetInterfaces";
-import Autocomplete from "../common/Autocomplete";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";

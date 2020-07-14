@@ -10,45 +10,10 @@ import {
     SET_TOTAL_BUDGET_FAILURE,
     SET_TOTAL_BUDGET_SUCCESS,
     SETTING_TOTAL_BUDGET,
-    TotalBudget,
 } from "./budgetInterfaces";
 
-// TODO Remove this when done
-const mockBudget: TotalBudget = [
-    {
-        group: "Group 1",
-        categories: [
-            {
-                category: "Category 1",
-                budgeted: 1000,
-                activity: -320,
-            },
-            {
-                category: "Category 2",
-                budgeted: 2000,
-                activity: -420,
-            },
-        ],
-    },
-    {
-        group: "Group 2",
-        categories: [
-            {
-                category: "Category 3",
-                budgeted: 2500,
-                activity: -320,
-            },
-            {
-                category: "Category 4",
-                budgeted: 20623,
-                activity: -1420,
-            },
-        ],
-    },
-];
-
 export const defaultBudgetState: BudgetState = {
-    totalBudget: mockBudget,
+    totalBudget: [],
     isSettingBudget: false,
     isAddingBudgetGroup: false,
     isAddingBudgetCategory: false,

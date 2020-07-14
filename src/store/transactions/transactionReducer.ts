@@ -1,33 +1,13 @@
 import {
     GenericTransactionAction,
-    Transaction,
     TransactionState,
     UPDATE_TRANSACTIONS_FAILURE,
     UPDATE_TRANSACTIONS_SUCCESS,
     UPDATING_TRANSACTIONS,
 } from "./transactionInterfaces";
 
-const mockTransactions: Transaction[] = [
-    {
-        account: "checkings 1",
-        date: new Date(),
-        payee: "testPayee",
-        category: "groceries",
-        note: "test",
-        activity: 5,
-    },
-    {
-        account: "checkings 2",
-        date: new Date(),
-        payee: "testPayee2",
-        category: "fun",
-        note: "test2",
-        activity: -5,
-    },
-];
-
 export const defaultTransactionState: TransactionState = {
-    transactions: mockTransactions,
+    transactions: [],
     isUpdatingTransactions: false,
     error: null,
 };
