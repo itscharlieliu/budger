@@ -1,29 +1,13 @@
 import {
     AccountsState,
-    AccountType,
     ADD_ACCOUNT_FAILURE,
     ADD_ACCOUNT_SUCCESS,
     ADDING_ACCOUNT,
-    AllAccounts,
     GenericAccountsAction,
 } from "./accountsInterfaces";
 
-// TODO remove this when done
-const mockAccounts: AllAccounts = [
-    {
-        name: "Test Account 1",
-        type: AccountType.budgeted,
-        balance: 100,
-    },
-    {
-        name: "Test Account 2",
-        type: AccountType.unbudgeted,
-        balance: 100,
-    },
-];
-
 export const defaultAccountsState: AccountsState = {
-    allAccounts: mockAccounts,
+    allAccounts: [],
     isAddingAccount: false,
     error: null,
 };

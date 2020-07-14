@@ -1,11 +1,11 @@
 import { useCombobox, UseComboboxState } from "downshift";
 import React from "react";
+import { Omit } from "react-redux";
 import styled from "styled-components";
 
 import { theme, ZIndex } from "../../defs/theme";
 
 import Input, { InputProps } from "./Input";
-import { Omit } from "react-redux";
 
 export interface AutocompleteOption {
     value: string;

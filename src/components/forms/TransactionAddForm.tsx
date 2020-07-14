@@ -3,16 +3,16 @@ import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form
 import { connect, ResolveThunks } from "react-redux";
 
 import t from "../../services/i18n/language";
+import ApplicationState from "../../store";
+import { AllAccounts, BankAccount } from "../../store/accounts/accountsInterfaces";
+import { BudgetGroup, TotalBudget } from "../../store/budget/budgetInterfaces";
 import { addTransaction } from "../../store/transactions/transactionActions";
 import formatMoney from "../../utils/formatMoney";
+import Autocomplete, { AutocompleteOption } from "../common/Autocomplete";
 import Button from "../common/Button";
 import DateSelector from "../common/DateSelector";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
-import Autocomplete, { AutocompleteOption, AutocompleteProps } from "../common/Autocomplete";
-import { AllAccounts, BankAccount } from "../../store/accounts/accountsInterfaces";
-import ApplicationState from "../../store";
-import { BudgetCategory, BudgetGroup, TotalBudget } from "../../store/budget/budgetInterfaces";
 
 interface StateProps {
     allAccounts: AllAccounts;
@@ -99,10 +99,7 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                                 label={t("toFrom")}
                                 autoFocus
                                 value={input.value || { value: "", label: "" }}
-                                options={[
-                                    { value: "test1", label: "hello" },
-                                    { value: "test2", label: "world" },
-                                ]}
+                                options={[]}
                             />
                         )}
                     </Field>
