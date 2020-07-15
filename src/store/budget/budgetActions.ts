@@ -22,6 +22,7 @@ import {
     ADD_BUDGET_CATEGORY_SUCCESS,
 } from "./budgetInterfaces";
 import ERRORS from "../../defs/errors";
+import { BUDGET } from "../../defs/storageKeys";
 
 type GenericBudgetThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericBudgetAction>;
 
@@ -73,6 +74,9 @@ export const addBudgetGroup = (budgetGroup: string): GenericBudgetThunkAction =>
 
     const newTotalBudget = [newBudgetGroup, ...totalBudget];
 
+    // Save budget to local storage
+    localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
+
     dispatch({ type: ADD_BUDGET_GROUP_SUCCESS, totalBudget: newTotalBudget });
 };
 
@@ -102,6 +106,9 @@ export const addBudgetCategory = (budgetGroup: string, budgetCategory: string): 
     const newBudgetCategory: BudgetCategory = { category: budgetCategory, activity: 0, budgeted: 0 };
     const newTotalBudget = [...totalBudget];
     newTotalBudget[groupIndex].categories = [newBudgetCategory, ...newTotalBudget[groupIndex].categories];
+
+    // Save budget to local storage
+    localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
 
     dispatch({ type: ADD_BUDGET_CATEGORY_SUCCESS, totalBudget: newTotalBudget });
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import { connect } from "react-redux";
+import { connect, ResolveThunks } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import styled from "styled-components";
 
@@ -9,7 +9,7 @@ import Router from "./components/Router";
 import { I18N_DEFAULT_OPTIONS } from "./defs/i18n";
 import { language } from "./services/i18n/language";
 import ApplicationState from "./store";
-import { setLanguageInitialized } from "./store/initialization/initializationActions";
+import { initBudget, setLanguageInitialized } from "./store/initialization/initializationActions";
 import useMount from "./utils/useMount";
 
 interface StateProps {
@@ -18,9 +18,10 @@ interface StateProps {
 
 interface DispatchProps {
     setLanguageInitialized: typeof setLanguageInitialized;
+    initBudget: typeof initBudget;
 }
 
-type AllProps = StateProps & DispatchProps;
+type AllProps = StateProps & ResolveThunks<DispatchProps>;
 
 const AppContainer = styled.div`
     width: 100vw;
@@ -43,6 +44,7 @@ function App(props: AllProps): JSX.Element {
             .init(I18N_DEFAULT_OPTIONS)
             .then(() => props.setLanguageInitialized(true))
             .catch((e: Error) => console.error(e));
+        props.initBudget();
     });
 
     if (!props.translationInitialized) {
@@ -69,6 +71,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 
 const mapDispatchToProps: DispatchProps = {
     setLanguageInitialized,
+    initBudget,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
