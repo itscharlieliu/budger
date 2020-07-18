@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import { theme } from "../../defs/theme";
 import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
+import { ReactComponent as Trash } from "../../resources/images/trash.svg";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
 import { updateBudget } from "../../store/budget/budgetActions";
@@ -32,7 +33,7 @@ const BudgetContainer = styled.div`
 `;
 
 const BudgetAddButton = styled(Button)`
-    margin: -16px 16px;
+    margin: -16px 0 -16px 16px;
 `;
 
 const BudgetGroupContainer = styled.div`
@@ -95,6 +96,7 @@ const BudgetGroupRow = (props: BudgetGroup): JSX.Element => {
                 </Modal>
                 {props.group}
                 <BudgetAddButton icon={<PlusIcon />} onClick={() => setIsAddingCategory(true)} flat />
+                <BudgetAddButton icon={<Trash />} onClick={() => setIsAddingCategory(true)} flat />
             </BudgetGroupContainer>
             {props.categories.map((category: BudgetCategory) => (
                 <BudgetCategoryRow
