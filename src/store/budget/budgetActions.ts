@@ -13,6 +13,7 @@ import {
     BudgetGroup,
     BudgetCategory,
     SET_TOTAL_BUDGET_FAILURE,
+    TotalBudget,
 } from "./budgetInterfaces";
 import ERRORS from "../../defs/errors";
 import { BUDGET } from "../../defs/storageKeys";
@@ -58,6 +59,7 @@ export const addBudgetCategory = (budgetGroup: string, budgetCategory: string): 
         return;
     }
 
+    // TODO Check if category exists in any group
     // Check if category already exists in the group
     if (totalBudget[groupIndex].categories.some((value: BudgetCategory) => value.category === budgetCategory)) {
         dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.categoryAlreadyExists) });
@@ -71,6 +73,32 @@ export const addBudgetCategory = (budgetGroup: string, budgetCategory: string): 
 
     // Save budget to local storage
     localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
+
+    dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
+};
+
+export const deleteBudgetCategory = (budgetCategory: string): GenericBudgetThunkAction => async (
+    dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
+    getState: () => ApplicationState,
+): Promise<void> => {
+    dispatch({ type: SETTING_TOTAL_BUDGET });
+
+    const totalBudget = getState().budget.totalBudget;
+
+    const newTotalBudget: TotalBudget = [];
+
+    // Generate new total budget
+    for (const group of totalBudget) {
+        // Push empty group with same name
+        newTotalBudget.push({ group: group.group, categories: [] });
+        for (const category of group.categories) {
+            if (category.category === budgetCategory) {
+                continue;
+            }
+            // Push remaining categories to group
+            newTotalBudget[newTotalBudget.length - 1].categories.push(category);
+        }
+    }
 
     dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
 };
