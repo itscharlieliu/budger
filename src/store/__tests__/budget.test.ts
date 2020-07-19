@@ -3,7 +3,7 @@ import configureMockStore from "redux-mock-store";
 import thunk, { ThunkDispatch } from "redux-thunk";
 
 import ERRORS from "../../defs/errors";
-import { addBudgetCategory, addBudgetGroup, deleteBudgetCategory } from "../budget/budgetActions";
+import { addBudgetCategory, addBudgetGroup, deleteBudgetCategory, deleteBudgetGroup } from "../budget/budgetActions";
 import {
     SET_TOTAL_BUDGET_FAILURE,
     SET_TOTAL_BUDGET_SUCCESS,
@@ -130,7 +130,7 @@ describe("budget actions", () => {
         expect(actions[1].totalBudget[0].categories[0]).toBe(undefined);
     });
 
-    it("sets error delete category does not exist", async () => {
+    it("sets error if delete category does not exist", async () => {
         const store = mockStore({
             budget: {
                 totalBudget: [
@@ -151,6 +151,29 @@ describe("budget actions", () => {
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
         expect(actions[1].type).toBe(SET_TOTAL_BUDGET_FAILURE);
         expect(actions[1].error.message).toBe(ERRORS.categoryDoesNotExist);
+    });
+
+    it("successfully deletes group", async () => {
+        const store = mockStore({
+            budget: {
+                totalBudget: [
+                    {
+                        group: "test group",
+                        categories: [
+                            {
+                                category: "test category",
+                            },
+                        ],
+                    },
+                ],
+            },
+        });
+        await store.dispatch(deleteBudgetGroup("test group"));
+        const actions = store.getActions();
+
+        expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
+        expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
+        expect(actions[1].totalBudget[0]).toBe(undefined);
     });
 });
 

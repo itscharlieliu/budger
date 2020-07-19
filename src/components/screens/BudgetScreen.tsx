@@ -14,7 +14,7 @@ import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 import ScreenContainer from "../common/containers/ScreenContainer";
 import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
 import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
-import { deleteBudgetCategory } from "../../store/budget/budgetActions";
+import { deleteBudgetCategory, deleteBudgetGroup } from "../../store/budget/budgetActions";
 
 interface StateProps {
     totalBudget: TotalBudget;
@@ -22,6 +22,7 @@ interface StateProps {
 
 interface DispatchProps {
     deleteBudgetCategory: typeof deleteBudgetCategory;
+    deleteBudgetGroup: typeof deleteBudgetGroup;
 }
 
 type AllProps = StateProps & ResolveThunks<DispatchProps>;
@@ -32,7 +33,7 @@ interface BudgetCategoryRowProps extends BudgetCategory {
 
 interface BudgetGroupRowProps extends BudgetGroup {
     onDeleteCategory: (category: string) => void;
-    // onDeleteGroup: () => void;
+    onDeleteGroup: (group: string) => void;
 }
 
 const BudgetContainer = styled.div`
@@ -103,8 +104,6 @@ const BudgetCategoryRow = (props: BudgetCategoryRowProps): JSX.Element => {
 const BudgetGroupRow = (props: BudgetGroupRowProps): JSX.Element => {
     const [isAddingCategory, setIsAddingCategory] = useState(false);
 
-    console.log(props.categories);
-
     return (
         <>
             <BudgetGroupContainer>
@@ -113,6 +112,7 @@ const BudgetGroupRow = (props: BudgetGroupRowProps): JSX.Element => {
                 </Modal>
                 {props.group}
                 <BudgetAddButton icon={<PlusIcon />} onClick={() => setIsAddingCategory(true)} flat />
+                <BudgetAddButton icon={<Trash />} onClick={() => props.onDeleteGroup(props.group)} flat />
             </BudgetGroupContainer>
             {props.categories.map((category: BudgetCategory) => (
                 <BudgetCategoryRow
@@ -137,6 +137,7 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
                         key={"budgetGroup" + index}
                         {...budgetGroup}
                         onDeleteCategory={props.deleteBudgetCategory}
+                        onDeleteGroup={props.deleteBudgetGroup}
                     />
                 ))}
             </BudgetContainer>
@@ -150,6 +151,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 
 const mapDispatchToProps: DispatchProps = {
     deleteBudgetCategory,
+    deleteBudgetGroup,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BudgetScreen);
