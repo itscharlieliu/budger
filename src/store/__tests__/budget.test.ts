@@ -5,12 +5,9 @@ import thunk, { ThunkDispatch } from "redux-thunk";
 import ERRORS from "../../defs/errors";
 import { addBudgetCategory, addBudgetGroup } from "../budget/budgetActions";
 import {
-    ADD_BUDGET_CATEGORY_FAILURE,
-    ADD_BUDGET_CATEGORY_SUCCESS,
-    ADD_BUDGET_GROUP_FAILURE,
-    ADD_BUDGET_GROUP_SUCCESS,
-    ADDING_BUDGET_CATEGORY,
-    ADDING_BUDGET_GROUP,
+    SET_TOTAL_BUDGET_FAILURE,
+    SET_TOTAL_BUDGET_SUCCESS,
+    SETTING_TOTAL_BUDGET,
     TotalBudget,
 } from "../budget/budgetInterfaces";
 import budgetReducer from "../budget/budgetReducer";
@@ -30,8 +27,8 @@ describe("budget actions", () => {
         await store.dispatch(addBudgetGroup("test group"));
         const actions = store.getActions();
 
-        expect(actions[0].type).toBe(ADDING_BUDGET_GROUP);
-        expect(actions[1].type).toBe(ADD_BUDGET_GROUP_SUCCESS);
+        expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
+        expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
     });
 
     it("does not add duplicate budget group", async () => {
@@ -49,8 +46,8 @@ describe("budget actions", () => {
 
         const actions = store.getActions();
 
-        expect(actions[0].type).toBe(ADDING_BUDGET_GROUP);
-        expect(actions[1].type).toBe(ADD_BUDGET_GROUP_FAILURE);
+        expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
+        expect(actions[1].type).toBe(SET_TOTAL_BUDGET_FAILURE);
         expect(actions[1].error.message).toBe(ERRORS.groupAlreadyExists);
     });
 
@@ -68,8 +65,8 @@ describe("budget actions", () => {
         await store.dispatch(addBudgetCategory("test group", "test category"));
         const actions = store.getActions();
 
-        expect(actions[0].type).toBe(ADDING_BUDGET_CATEGORY);
-        expect(actions[1].type).toBe(ADD_BUDGET_CATEGORY_SUCCESS);
+        expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
+        expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
     });
 
     it("does not add budget category if budget group does not exist", async () => {
@@ -81,8 +78,8 @@ describe("budget actions", () => {
         await store.dispatch(addBudgetCategory("test group", "test category"));
         const actions = store.getActions();
 
-        expect(actions[0].type).toBe(ADDING_BUDGET_CATEGORY);
-        expect(actions[1].type).toBe(ADD_BUDGET_CATEGORY_FAILURE);
+        expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
+        expect(actions[1].type).toBe(SET_TOTAL_BUDGET_FAILURE);
         expect(actions[1].error.message).toBe(ERRORS.groupDoesNotExist);
     });
 
@@ -104,16 +101,16 @@ describe("budget actions", () => {
         await store.dispatch(addBudgetCategory("test group", "test category"));
         const actions = store.getActions();
 
-        expect(actions[0].type).toBe(ADDING_BUDGET_CATEGORY);
-        expect(actions[1].type).toBe(ADD_BUDGET_CATEGORY_FAILURE);
+        expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
+        expect(actions[1].type).toBe(SET_TOTAL_BUDGET_FAILURE);
         expect(actions[1].error.message).toBe(ERRORS.categoryAlreadyExists);
     });
 });
 
 describe("budget reducer", () => {
     it("adds budget group", () => {
-        const budgetState = budgetReducer(undefined, { type: ADDING_BUDGET_GROUP });
-        expect(budgetState.isAddingBudgetGroup).toEqual(true);
+        const budgetState = budgetReducer(undefined, { type: SETTING_TOTAL_BUDGET });
+        expect(budgetState.isSettingBudget).toEqual(true);
 
         const totalBudget: TotalBudget = [
             {
@@ -128,19 +125,19 @@ describe("budget reducer", () => {
             },
         ];
 
-        const successBudgetState = budgetReducer(budgetState, { type: ADD_BUDGET_GROUP_SUCCESS, totalBudget });
-        expect(successBudgetState.isAddingBudgetGroup).toEqual(false);
+        const successBudgetState = budgetReducer(budgetState, { type: SET_TOTAL_BUDGET_SUCCESS, totalBudget });
+        expect(successBudgetState.isSettingBudget).toEqual(false);
         expect(successBudgetState.totalBudget).toEqual(totalBudget);
 
         const error = new Error("test group error");
-        const failureBudgetState = budgetReducer(budgetState, { type: ADD_BUDGET_GROUP_FAILURE, error });
-        expect(failureBudgetState.isAddingBudgetGroup).toEqual(false);
+        const failureBudgetState = budgetReducer(budgetState, { type: SET_TOTAL_BUDGET_FAILURE, error });
+        expect(failureBudgetState.isSettingBudget).toEqual(false);
         expect(failureBudgetState.error).toEqual(error);
     });
 
     it("adds budget category", () => {
-        const budgetState = budgetReducer(undefined, { type: ADDING_BUDGET_CATEGORY });
-        expect(budgetState.isAddingBudgetCategory).toEqual(true);
+        const budgetState = budgetReducer(undefined, { type: SETTING_TOTAL_BUDGET });
+        expect(budgetState.isSettingBudget).toEqual(true);
 
         const totalBudget: TotalBudget = [
             {
@@ -155,13 +152,13 @@ describe("budget reducer", () => {
             },
         ];
 
-        const successBudgetState = budgetReducer(budgetState, { type: ADD_BUDGET_CATEGORY_SUCCESS, totalBudget });
-        expect(successBudgetState.isAddingBudgetCategory).toEqual(false);
+        const successBudgetState = budgetReducer(budgetState, { type: SET_TOTAL_BUDGET_SUCCESS, totalBudget });
+        expect(successBudgetState.isSettingBudget).toEqual(false);
         expect(successBudgetState.totalBudget).toEqual(totalBudget);
 
         const error = new Error("test category error");
-        const failureBudgetState = budgetReducer(budgetState, { type: ADD_BUDGET_CATEGORY_FAILURE, error });
-        expect(failureBudgetState.isAddingBudgetCategory).toEqual(false);
+        const failureBudgetState = budgetReducer(budgetState, { type: SET_TOTAL_BUDGET_FAILURE, error });
+        expect(failureBudgetState.isSettingBudget).toEqual(false);
         expect(failureBudgetState.error).toEqual(error);
     });
 });
