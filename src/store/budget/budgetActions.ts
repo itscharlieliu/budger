@@ -87,18 +87,28 @@ export const deleteBudgetCategory = (budgetCategory: string): GenericBudgetThunk
 
     const newTotalBudget: TotalBudget = [];
 
+    let numCategoriesDeleted = 0;
+
     // Generate new total budget
     for (const group of totalBudget) {
         // Push empty group with same name
         newTotalBudget.push({ group: group.group, categories: [] });
         for (const category of group.categories) {
             if (category.category === budgetCategory) {
+                ++numCategoriesDeleted;
                 continue;
             }
             // Push remaining categories to group
             newTotalBudget[newTotalBudget.length - 1].categories.push(category);
         }
     }
+
+    if (numCategoriesDeleted === 0) {
+        dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.categoryDoesNotExist) });
+        return;
+    }
+
+    // TODO update local storage
 
     dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
 };
