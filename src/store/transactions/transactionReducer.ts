@@ -5,6 +5,10 @@ import {
     UPDATE_TRANSACTIONS_SUCCESS,
     UPDATING_TRANSACTIONS,
 } from "./transactionInterfaces";
+import {
+    SET_TRANSACTIONS_INITIALIZED_SUCCESS,
+    SetTransactionsInitializedSuccessAction,
+} from "../initialization/initializationInterfaces";
 
 export const defaultTransactionState: TransactionState = {
     transactions: [],
@@ -14,9 +18,12 @@ export const defaultTransactionState: TransactionState = {
 
 const transactionReducer = (
     state: TransactionState = defaultTransactionState,
-    action: GenericTransactionAction,
+    action: GenericTransactionAction | SetTransactionsInitializedSuccessAction,
 ): TransactionState => {
     switch (action.type) {
+        case SET_TRANSACTIONS_INITIALIZED_SUCCESS: {
+            return { ...state, transactions: action.transactions };
+        }
         case UPDATING_TRANSACTIONS: {
             return { ...state, isUpdatingTransactions: true, error: null };
         }

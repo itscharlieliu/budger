@@ -10,7 +10,7 @@ import {
     UPDATE_TRANSACTIONS_SUCCESS,
     UPDATING_TRANSACTIONS,
 } from "./transactionInterfaces";
-import { BUDGET, TRANSACTIONS } from "../../defs/storageKeys";
+import { TRANSACTIONS } from "../../defs/storageKeys";
 
 export type GenericTransactionThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericBudgetAction>;
 
@@ -43,7 +43,7 @@ export const addTransaction = (
                 },
             ];
 
-            // Save budget to local storage
+            // Save transaction to local storage
             localStorage.setItem(TRANSACTIONS, JSON.stringify(newTransactions));
 
             dispatch({ type: UPDATE_TRANSACTIONS_SUCCESS, transactions: newTransactions });

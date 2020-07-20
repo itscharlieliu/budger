@@ -5,6 +5,7 @@ const ERRORS = {
     categoryDoesNotExist: "This category does not exist",
     accountAlreadyExists: "This account already exists",
     invalidTotalBudget: "Invalid total budget",
+    invalidTransactions: "Invalid transactions",
 };
 
 export default ERRORS;
