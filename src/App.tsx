@@ -9,7 +9,7 @@ import Router from "./components/Router";
 import { I18N_DEFAULT_OPTIONS } from "./defs/i18n";
 import { language } from "./services/i18n/language";
 import ApplicationState from "./store";
-import { initBudget, setLanguageInitialized } from "./store/initialization/initializationActions";
+import { initBudget, initTransactions, setLanguageInitialized } from "./store/initialization/initializationActions";
 import useMount from "./utils/useMount";
 
 interface StateProps {
@@ -19,6 +19,7 @@ interface StateProps {
 interface DispatchProps {
     setLanguageInitialized: typeof setLanguageInitialized;
     initBudget: typeof initBudget;
+    initTransactions: typeof initTransactions;
 }
 
 type AllProps = StateProps & ResolveThunks<DispatchProps>;
@@ -45,6 +46,7 @@ function App(props: AllProps): JSX.Element {
             .then(() => props.setLanguageInitialized(true))
             .catch((e: Error) => console.error(e));
         props.initBudget();
+        props.initTransactions();
     });
 
     if (!props.translationInitialized) {
@@ -72,6 +74,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 const mapDispatchToProps: DispatchProps = {
     setLanguageInitialized,
     initBudget,
+    initTransactions,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

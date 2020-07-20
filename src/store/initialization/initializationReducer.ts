@@ -3,14 +3,19 @@ import {
     InitializationState,
     SET_BUDGET_INITIALIZED_FAILURE,
     SET_BUDGET_INITIALIZED_SUCCESS,
+    SET_TRANSACTIONS_INITIALIZED_FAILURE,
+    SET_TRANSACTIONS_INITIALIZED_SUCCESS,
     SET_TRANSLATION_INITIALIZED,
     SETTING_BUDGET_INITIALIZED,
+    SETTING_TRANSACTIONS_INITIALIZED,
 } from "./initializationInterfaces";
 
 export const defaultInitializationState: InitializationState = {
     translationInitialized: false,
     budgetInitialized: false,
+    transactionsInitialized: false,
     isSettingBudgetInitialized: false,
+    isSettingTransactionsInitialized: false,
     error: null,
 };
 
@@ -30,6 +35,15 @@ const initializationReducer = (
         }
         case SET_BUDGET_INITIALIZED_FAILURE: {
             return { ...state, isSettingBudgetInitialized: false, error: action.error };
+        }
+        case SETTING_TRANSACTIONS_INITIALIZED: {
+            return { ...state, isSettingTransactionsInitialized: true, transactionsInitialized: false };
+        }
+        case SET_TRANSACTIONS_INITIALIZED_SUCCESS: {
+            return { ...state, isSettingTransactionsInitialized: false };
+        }
+        case SET_TRANSACTIONS_INITIALIZED_FAILURE: {
+            return { ...state, error: action.error };
         }
         default: {
             return { ...state };
