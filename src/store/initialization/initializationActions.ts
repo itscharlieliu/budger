@@ -20,6 +20,7 @@ import { TotalBudget } from "../budget/budgetInterfaces";
 import validateTotalBudget from "../../utils/validateTotalBudget";
 import ERRORS from "../../defs/errors";
 import { GenericUpdateTransactionAction, Transaction } from "../transactions/transactionInterfaces";
+import validateTransactions from "../../utils/validateTransactions";
 
 type GenericInitializationThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericInitializationAction>;
 
@@ -53,15 +54,26 @@ export const initTransactions = (): GenericInitializationThunkAction => async (
 ): Promise<void> => {
     dispatch({ type: SETTING_TRANSACTIONS_INITIALIZED });
 
+    const dateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/;
+
+    const dateParser = (key: string, value: unknown) => {
+        if (typeof value === "string" && dateFormat.test(value)) {
+            return new Date(value);
+        }
+
+        return value;
+    };
+
     try {
         const totalTransactionsJson = localStorage.getItem(TRANSACTIONS);
-        const transactions: Transaction[] = totalTransactionsJson ? JSON.parse(totalTransactionsJson) : [];
+        const transactions: Transaction[] = totalTransactionsJson ? JSON.parse(totalTransactionsJson, dateParser) : [];
 
         // TODO Validate transactions
-        // if (!validateTotalBudget(totalBudget)) {
-        //     dispatch({ type: SET_TRANSACTIONS_INITIALIZED_FAILURE, error: new Error(ERRORS.invalidTotalBudget) });
-        //     return;
-        // }
+        if (!validateTransactions(transactions)) {
+            console.warn(ERRORS.invalidTransactions, transactions);
+            dispatch({ type: SET_TRANSACTIONS_INITIALIZED_FAILURE, error: new Error(ERRORS.invalidTransactions) });
+            return;
+        }
 
         dispatch({ type: SET_TRANSACTIONS_INITIALIZED_SUCCESS, transactions });
     } catch (error) {
