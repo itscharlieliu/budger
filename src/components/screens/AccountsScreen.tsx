@@ -17,6 +17,10 @@ interface StateProps {
     allAccounts: AllAccounts;
 }
 
+interface AccountsRowProps extends BankAccount {
+    balance: string;
+}
+
 const AccountsContainer = styled.div`
     display: grid;
     width: auto;
@@ -50,7 +54,7 @@ const AccountsHeader = (): JSX.Element => {
     );
 };
 
-const AccountsRow = (props: BankAccount): JSX.Element => {
+const AccountsRow = (props: AccountsRowProps): JSX.Element => {
     let accountType = "";
 
     switch (props.type) {
@@ -84,7 +88,7 @@ const AccountScreens = (props: StateProps): JSX.Element => {
                             key={"bankAccount" + index}
                             name={bankAccount.name}
                             type={bankAccount.type}
-                            balance={bankAccount.balance}
+                            balance={"TODO Derive this from transactions"}
                         />
                     );
                 })}

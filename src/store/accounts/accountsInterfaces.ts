@@ -12,7 +12,7 @@ export enum AccountType {
 export interface BankAccount {
     name: string;
     type: AccountType;
-    balance: number;
+    // balance: number; // This should be derived from transactions
 }
 
 export type AllAccounts = BankAccount[];
