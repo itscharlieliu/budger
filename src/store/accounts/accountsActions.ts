@@ -13,13 +13,14 @@ import {
     GenericAccountsAction,
     GenericAddAccountAction,
 } from "./accountsInterfaces";
+import { ACCOUNTS, TRANSACTIONS } from "../../defs/storageKeys";
 
 type GenericAccountsThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericAccountsAction>;
 
 export const addAccount = (
     name: string,
     type: AccountType = AccountType.unbudgeted,
-    balance: number = 0,
+    startingBalance: number = 0,
 ): GenericAccountsThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericAddAccountAction>,
     getState: () => ApplicationState,
@@ -28,19 +29,24 @@ export const addAccount = (
 
     const allAccounts = getState().accounts.allAccounts;
 
+    // Return if account already exists
     if (allAccounts.some((bankAccount: BankAccount) => bankAccount.name === name)) {
         dispatch({ type: ADD_ACCOUNT_FAILURE, error: new Error(ERRORS.accountAlreadyExists) });
         return;
     }
 
+    // TODO dispatch add transaction for starting balance
+
     const updatedAccounts: AllAccounts = [
         {
             name,
             type,
-            balance,
         },
         ...allAccounts,
     ];
+
+    // Save account to local storage
+    localStorage.setItem(ACCOUNTS, JSON.stringify(updatedAccounts));
 
     dispatch({ type: ADD_ACCOUNT_SUCCESS, allAccounts: updatedAccounts });
 };
