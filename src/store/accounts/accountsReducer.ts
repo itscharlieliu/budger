@@ -5,6 +5,10 @@ import {
     ADDING_ACCOUNT,
     GenericAccountsAction,
 } from "./accountsInterfaces";
+import {
+    SET_ACCOUNTS_INITIALIZED_SUCCESS,
+    SetAccountsInitializedSuccessAction,
+} from "../initialization/initializationInterfaces";
 
 export const defaultAccountsState: AccountsState = {
     allAccounts: [],
@@ -12,7 +16,10 @@ export const defaultAccountsState: AccountsState = {
     error: null,
 };
 
-const accountsReducer = (state: AccountsState = defaultAccountsState, action: GenericAccountsAction): AccountsState => {
+const accountsReducer = (
+    state: AccountsState = defaultAccountsState,
+    action: GenericAccountsAction | SetAccountsInitializedSuccessAction,
+): AccountsState => {
     switch (action.type) {
         case ADDING_ACCOUNT: {
             return { ...state, isAddingAccount: true };
@@ -22,6 +29,9 @@ const accountsReducer = (state: AccountsState = defaultAccountsState, action: Ge
         }
         case ADD_ACCOUNT_FAILURE: {
             return { ...state, isAddingAccount: false, error: action.error };
+        }
+        case SET_ACCOUNTS_INITIALIZED_SUCCESS: {
+            return { ...state, allAccounts: action.accounts };
         }
         default: {
             return { ...state };

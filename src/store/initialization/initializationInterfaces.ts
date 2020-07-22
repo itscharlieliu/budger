@@ -1,6 +1,7 @@
 import { Action } from "redux";
 import { TotalBudget } from "../budget/budgetInterfaces";
 import { Transaction } from "../transactions/transactionInterfaces";
+import { BankAccount } from "../accounts/accountsInterfaces";
 
 export const SET_TRANSLATION_INITIALIZED = "SET_TRANSLATION_INITIALIZED";
 
@@ -12,12 +13,18 @@ export const SETTING_TRANSACTIONS_INITIALIZED = "SETTING_TRANSACTIONS_INITIALIZE
 export const SET_TRANSACTIONS_INITIALIZED_SUCCESS = "SET_TRANSACTIONS_INITIALIZED_SUCCESS";
 export const SET_TRANSACTIONS_INITIALIZED_FAILURE = "SET_TRANSACTIONS_INITIALIZED_FAILURE";
 
+export const SETTING_ACCOUNTS_INITIALIZED = "SETTING_ACCOUNTS_INITIALIZED";
+export const SET_ACCOUNTS_INITIALIZED_SUCCESS = "SET_ACCOUNTS_INITIALIZED_SUCCESS";
+export const SET_ACCOUNTS_INITIALIZED_FAILURE = "SET_ACCOUNTS_INITIALIZED_FAILURE";
+
 export interface InitializationState {
     translationInitialized: boolean;
     budgetInitialized: boolean;
     transactionsInitialized: boolean;
+    accountsInitialized: boolean;
     isSettingBudgetInitialized: boolean;
     isSettingTransactionsInitialized: boolean;
+    isSettingAccountsInitialized: boolean;
     error: Error | null;
 }
 
@@ -46,16 +53,32 @@ export interface SetTransactionsInitializedSuccessAction extends Action<typeof S
     transactions: Transaction[];
 }
 
-export interface SetTransactionInitializedFailureAction extends Action<typeof SET_TRANSACTIONS_INITIALIZED_FAILURE> {
+export interface SetTransactionsInitializedFailureAction extends Action<typeof SET_TRANSACTIONS_INITIALIZED_FAILURE> {
     error: Error;
 }
 
-export type GenericSetTransactionInitializedAction =
+export type GenericSetTransactionsInitializedAction =
     | SettingTransactionsInitializedAction
     | SetTransactionsInitializedSuccessAction
-    | SetTransactionInitializedFailureAction;
+    | SetTransactionsInitializedFailureAction;
+
+export interface SettingAccountsInitializedAction extends Action<typeof SETTING_ACCOUNTS_INITIALIZED> {}
+
+export interface SetAccountsInitializedSuccessAction extends Action<typeof SET_ACCOUNTS_INITIALIZED_SUCCESS> {
+    accounts: BankAccount[];
+}
+
+export interface SetAccountsInitializedFailureAction extends Action<typeof SET_ACCOUNTS_INITIALIZED_FAILURE> {
+    error: Error;
+}
+
+export type GenericSetAccountsInitializedAction =
+    | SettingAccountsInitializedAction
+    | SetAccountsInitializedSuccessAction
+    | SetAccountsInitializedFailureAction;
 
 export type GenericInitializationAction =
     | SetTranslationInitializedAction
     | GenericSetBudgetInitializedAction
-    | GenericSetTransactionInitializedAction;
+    | GenericSetTransactionsInitializedAction
+    | GenericSetAccountsInitializedAction;
