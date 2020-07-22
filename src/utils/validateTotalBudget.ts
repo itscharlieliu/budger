@@ -13,9 +13,6 @@ const validateTotalBudget = (totalBudget: unknown): boolean => {
                 if (typeof category.budgeted !== "number") {
                     return false;
                 }
-                if (typeof category.activity !== "number") {
-                    return false;
-                }
             }
         }
         return true;

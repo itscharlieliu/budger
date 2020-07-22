@@ -7,7 +7,6 @@ export const SET_TOTAL_BUDGET_FAILURE = "SET_TOTAL_BUDGET_FAILURE";
 export interface BudgetCategory {
     category: string;
     budgeted: number;
-    activity: number;
 }
 
 export interface BudgetGroup {

@@ -29,6 +29,7 @@ type AllProps = StateProps & ResolveThunks<DispatchProps>;
 
 interface BudgetCategoryRowProps extends BudgetCategory {
     onDelete: (category: string) => void;
+    activity: string;
 }
 
 interface BudgetGroupRowProps extends BudgetGroup {
@@ -119,7 +120,7 @@ const BudgetGroupRow = (props: BudgetGroupRowProps): JSX.Element => {
                     key={category.category}
                     category={category.category}
                     budgeted={category.budgeted}
-                    activity={category.activity}
+                    activity={"Derive this from transactions"}
                     onDelete={props.onDeleteCategory}
                 />
             ))}
