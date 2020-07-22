@@ -1,11 +1,14 @@
 import {
     GenericInitializationAction,
     InitializationState,
+    SET_ACCOUNTS_INITIALIZED_FAILURE,
+    SET_ACCOUNTS_INITIALIZED_SUCCESS,
     SET_BUDGET_INITIALIZED_FAILURE,
     SET_BUDGET_INITIALIZED_SUCCESS,
     SET_TRANSACTIONS_INITIALIZED_FAILURE,
     SET_TRANSACTIONS_INITIALIZED_SUCCESS,
     SET_TRANSLATION_INITIALIZED,
+    SETTING_ACCOUNTS_INITIALIZED,
     SETTING_BUDGET_INITIALIZED,
     SETTING_TRANSACTIONS_INITIALIZED,
 } from "./initializationInterfaces";
@@ -14,8 +17,10 @@ export const defaultInitializationState: InitializationState = {
     translationInitialized: false,
     budgetInitialized: false,
     transactionsInitialized: false,
+    accountsInitialized: false,
     isSettingBudgetInitialized: false,
     isSettingTransactionsInitialized: false,
+    isSettingAccountsInitialized: false,
     error: null,
 };
 
@@ -43,6 +48,15 @@ const initializationReducer = (
             return { ...state, isSettingTransactionsInitialized: false };
         }
         case SET_TRANSACTIONS_INITIALIZED_FAILURE: {
+            return { ...state, error: action.error };
+        }
+        case SETTING_ACCOUNTS_INITIALIZED: {
+            return { ...state, isSettingAccountsInitialized: true, accountsInitialized: false };
+        }
+        case SET_ACCOUNTS_INITIALIZED_SUCCESS: {
+            return { ...state, isSettingAccountsInitialized: false };
+        }
+        case SET_ACCOUNTS_INITIALIZED_FAILURE: {
             return { ...state, error: action.error };
         }
         default: {
