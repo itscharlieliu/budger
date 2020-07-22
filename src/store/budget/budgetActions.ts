@@ -67,7 +67,7 @@ export const addBudgetCategory = (budgetGroup: string, budgetCategory: string): 
     }
 
     // Add new category to total budget
-    const newBudgetCategory: BudgetCategory = { category: budgetCategory, activity: 0, budgeted: 0 };
+    const newBudgetCategory: BudgetCategory = { category: budgetCategory, budgeted: 0 };
     const newTotalBudget = [...totalBudget];
     newTotalBudget[groupIndex].categories = [newBudgetCategory, ...newTotalBudget[groupIndex].categories];
 
