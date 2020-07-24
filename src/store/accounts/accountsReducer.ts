@@ -4,6 +4,8 @@ import {
     ADD_ACCOUNT_SUCCESS,
     ADDING_ACCOUNT,
     GenericAccountsAction,
+    SET_CACHED_BALANCE_FAILURE,
+    SET_CACHED_BALANCE_SUCCESS,
 } from "./accountsInterfaces";
 import {
     SET_ACCOUNTS_INITIALIZED_SUCCESS,
@@ -21,6 +23,12 @@ const accountsReducer = (
     action: GenericAccountsAction | SetAccountsInitializedSuccessAction,
 ): AccountsState => {
     switch (action.type) {
+        case SET_CACHED_BALANCE_SUCCESS: {
+            return {...state, allAccounts: action.allAccounts}
+        }
+        case SET_CACHED_BALANCE_FAILURE: {
+            return {...state, error: action.error}
+        }
         case ADDING_ACCOUNT: {
             return { ...state, isAddingAccount: true };
         }
