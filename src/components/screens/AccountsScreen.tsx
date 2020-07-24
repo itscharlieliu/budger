@@ -12,9 +12,11 @@ import Modal from "../common/Modal";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 import ScreenContainer from "../common/containers/ScreenContainer";
 import AccountAddForm from "../forms/AccountAddForm";
+import { Transaction } from "../../store/transactions/transactionInterfaces";
 
 interface StateProps {
     allAccounts: AllAccounts;
+    transactions: Transaction[];
 }
 
 interface AccountsRowProps extends BankAccount {
@@ -83,12 +85,18 @@ const AccountScreens = (props: StateProps): JSX.Element => {
             <AccountsContainer>
                 <AccountsHeader />
                 {props.allAccounts.map((bankAccount: BankAccount, index: number) => {
+                    // TODO THIS ABSOLUTELY NEEDS TO BE OPTIMIZED. It's currently O(n^2).
                     return (
                         <AccountsRow
                             key={"bankAccount" + index}
                             name={bankAccount.name}
                             type={bankAccount.type}
-                            balance={"TODO Derive this from transactions"}
+                            balance={props.transactions.reduce((totalBalance: number, transaction: Transaction) => {
+                                if (transaction.account !== bankAccount.name){
+                                    return totalBalance
+                                }
+                                return totalBalance + transaction.activity;
+                            }, 0).toString()}
                         />
                     );
                 })}
@@ -99,6 +107,7 @@ const AccountScreens = (props: StateProps): JSX.Element => {
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
     allAccounts: state.accounts.allAccounts,
+    transactions: state.transaction.transactions,
 });
 
 export default connect(mapStateToProps)(AccountScreens);
