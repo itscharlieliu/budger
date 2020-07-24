@@ -32,7 +32,7 @@ const NavigationDrawer = (): JSX.Element => {
                     setIsAddingTransaction(false);
                 }}
             >
-                <TransactionAddForm />
+                <TransactionAddForm onSubmit={() => setIsAddingTransaction(false)} />
             </Modal>
 
             <DrawerButton onClick={() => setIsAddingTransaction(true)} icon={<PlusIcon />}>

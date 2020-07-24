@@ -23,6 +23,10 @@ interface DispatchProps {
     addTransaction: typeof addTransaction;
 }
 
+interface OwnProps {
+    onSubmit: () => void;
+}
+
 interface FormValues {
     toFrom?: AutocompleteOption;
     account?: AutocompleteOption;
@@ -43,7 +47,7 @@ interface FormErrors {
     note?: string;
 }
 
-type AllProps = StateProps & ResolveThunks<DispatchProps>;
+type AllProps = OwnProps & StateProps & ResolveThunks<DispatchProps>;
 
 const TransactionAddForm = (props: AllProps): JSX.Element => {
     const handleSubmit = (values: FormValues) => {
@@ -63,6 +67,7 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
             (isNaN(inflow) ? 0 : inflow) - (isNaN(outflow) ? 0 : outflow),
             values.note,
         );
+        props.onSubmit();
     };
 
     const handleValidation = (values: FormValues) => {
