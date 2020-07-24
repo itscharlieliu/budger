@@ -1,5 +1,8 @@
 import { Action } from "redux";
 
+export const SET_CACHED_BALANCE_SUCCESS = "SET_CACHED_BALANCE_SUCCESS";
+export const SET_CACHED_BALANCE_FAILURE = "SET_CACHED_BALANCE_FAILURE";
+
 export const ADDING_ACCOUNT = "ADDING_ACCOUNT";
 export const ADD_ACCOUNT_SUCCESS = "ADD_ACCOUNT_SUCCESS";
 export const ADD_ACCOUNT_FAILURE = "ADD_ACCOUNT_FAILURE";
@@ -13,6 +16,7 @@ export interface BankAccount {
     name: string;
     type: AccountType;
     // balance: number; // This should be derived from transactions
+    cachedBalance: number;
 }
 
 export type AllAccounts = BankAccount[];
@@ -22,6 +26,16 @@ export interface AccountsState {
     isAddingAccount: boolean;
     error: Error | null;
 }
+
+export interface SetCachedBalanceSuccessAction extends Action<typeof SET_CACHED_BALANCE_SUCCESS> {
+    allAccounts: AllAccounts;
+}
+
+export interface SetCachedBalanceFailureAction extends Action<typeof SET_CACHED_BALANCE_FAILURE>{
+    error: Error;
+}
+
+export type GenericSetCachedBalanceAction = SetCachedBalanceSuccessAction | SetCachedBalanceFailureAction;
 
 export interface AddingAccountAction extends Action<typeof ADDING_ACCOUNT> {}
 
@@ -35,4 +49,4 @@ export interface AddAccountFailureAction extends Action<typeof ADD_ACCOUNT_FAILU
 
 export type GenericAddAccountAction = AddingAccountAction | AddAccountSuccessAction | AddAccountFailureAction;
 
-export type GenericAccountsAction = GenericAddAccountAction;
+export type GenericAccountsAction = GenericAddAccountAction | GenericSetCachedBalanceAction;
