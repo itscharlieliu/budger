@@ -56,7 +56,7 @@ const AccountsHeader = (): JSX.Element => {
     );
 };
 
-const AccountsRow = (props: AccountsRowProps): JSX.Element => {
+const AccountsRow = (props: BankAccount): JSX.Element => {
     let accountType = "";
 
     switch (props.type) {
@@ -74,7 +74,7 @@ const AccountsRow = (props: AccountsRowProps): JSX.Element => {
         <>
             <AccountsRowText>{props.name}</AccountsRowText>
             <AccountsRowText>{accountType}</AccountsRowText>
-            <AccountsRowText>{props.balance}</AccountsRowText>
+            <AccountsRowText>{props.cachedBalance}</AccountsRowText>
         </>
     );
 };
@@ -91,12 +91,15 @@ const AccountScreens = (props: StateProps): JSX.Element => {
                             key={"bankAccount" + index}
                             name={bankAccount.name}
                             type={bankAccount.type}
-                            balance={props.transactions.reduce((totalBalance: number, transaction: Transaction) => {
-                                if (transaction.account !== bankAccount.name){
-                                    return totalBalance
-                                }
-                                return totalBalance + transaction.activity;
-                            }, 0).toString()}
+                            cachedBalance={props.transactions.reduce(
+                                (totalBalance: number, transaction: Transaction) => {
+                                    if (transaction.account !== bankAccount.name) {
+                                        return totalBalance;
+                                    }
+                                    return totalBalance + transaction.activity;
+                                },
+                                0,
+                            )}
                         />
                     );
                 })}
