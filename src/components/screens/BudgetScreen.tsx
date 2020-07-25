@@ -15,9 +15,11 @@ import ScreenContainer from "../common/containers/ScreenContainer";
 import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
 import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
 import { deleteBudgetCategory, deleteBudgetGroup } from "../../store/budget/budgetActions";
+import { Transaction } from "../../store/transactions/transactionInterfaces";
 
 interface StateProps {
     totalBudget: TotalBudget;
+    transactions: Transaction[];
 }
 
 interface DispatchProps {
@@ -29,12 +31,13 @@ type AllProps = StateProps & ResolveThunks<DispatchProps>;
 
 interface BudgetCategoryRowProps extends BudgetCategory {
     onDelete: (category: string) => void;
-    activity: string;
+    activity: number;
 }
 
 interface BudgetGroupRowProps extends BudgetGroup {
     onDeleteCategory: (category: string) => void;
     onDeleteGroup: (group: string) => void;
+    transactions: Transaction[];
 }
 
 const BudgetContainer = styled.div`
@@ -120,7 +123,12 @@ const BudgetGroupRow = (props: BudgetGroupRowProps): JSX.Element => {
                     key={category.category}
                     category={category.category}
                     budgeted={category.budgeted}
-                    activity={"Derive this from transactions"}
+                    activity={props.transactions.reduce((totalBalance: number, transaction: Transaction) => {
+                        if (transaction.category !== category.category) {
+                            return totalBalance;
+                        }
+                        return totalBalance + transaction.activity;
+                    }, 0)}
                     onDelete={props.onDeleteCategory}
                 />
             ))}
@@ -139,6 +147,7 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
                         {...budgetGroup}
                         onDeleteCategory={props.deleteBudgetCategory}
                         onDeleteGroup={props.deleteBudgetGroup}
+                        transactions={props.transactions}
                     />
                 ))}
             </BudgetContainer>
@@ -148,6 +157,7 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
     totalBudget: state.budget.totalBudget,
+    transactions: state.transaction.transactions,
 });
 
 const mapDispatchToProps: DispatchProps = {
