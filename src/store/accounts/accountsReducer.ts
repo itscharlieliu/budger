@@ -24,10 +24,10 @@ const accountsReducer = (
 ): AccountsState => {
     switch (action.type) {
         case SET_CACHED_BALANCE_SUCCESS: {
-            return {...state, allAccounts: action.allAccounts}
+            return { ...state, allAccounts: action.allAccounts };
         }
         case SET_CACHED_BALANCE_FAILURE: {
-            return {...state, error: action.error}
+            return { ...state, error: action.error };
         }
         case ADDING_ACCOUNT: {
             return { ...state, isAddingAccount: true };

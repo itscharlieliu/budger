@@ -15,7 +15,6 @@ export enum AccountType {
 export interface BankAccount {
     name: string;
     type: AccountType;
-    // balance: number; // This should be derived from transactions
     cachedBalance: number;
 }
 
@@ -31,7 +30,7 @@ export interface SetCachedBalanceSuccessAction extends Action<typeof SET_CACHED_
     allAccounts: AllAccounts;
 }
 
-export interface SetCachedBalanceFailureAction extends Action<typeof SET_CACHED_BALANCE_FAILURE>{
+export interface SetCachedBalanceFailureAction extends Action<typeof SET_CACHED_BALANCE_FAILURE> {
     error: Error;
 }
 
