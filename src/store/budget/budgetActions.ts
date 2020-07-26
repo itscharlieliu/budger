@@ -137,3 +137,31 @@ export const deleteBudgetGroup = (budgetGroup: string): GenericBudgetThunkAction
 
     dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
 };
+
+export const editBudgetedAmount = (budgetCategory: string, budgeted: number): GenericBudgetThunkAction => async (
+    dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
+    getState: () => ApplicationState,
+): Promise<void> => {
+    dispatch({ type: SETTING_TOTAL_BUDGET });
+
+    const totalBudget = getState().budget.totalBudget;
+
+    const newTotalBudget: TotalBudget = [];
+
+    // Generate new total budget
+    for (const group of totalBudget) {
+        // Push empty group with same name
+        newTotalBudget.push({ group: group.group, categories: [] });
+        for (const category of group.categories) {
+            if (category.category === budgetCategory) {
+                category.budgeted = budgeted;
+            }
+            newTotalBudget[newTotalBudget.length - 1].categories.push(category);
+        }
+    }
+
+    // Save budget to local storage
+    localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
+
+    dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
+};
