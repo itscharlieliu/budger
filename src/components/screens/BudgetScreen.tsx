@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { theme } from "../../defs/theme";
 import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
 import { ReactComponent as Trash } from "../../resources/images/trash.svg";
+import { ReactComponent as Edit } from "../../resources/images/edit.svg";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
 import { BudgetCategory, BudgetGroup, TotalBudget } from "../../store/budget/budgetInterfaces";
@@ -105,7 +106,7 @@ const BudgetCategoryRow = (props: BudgetCategoryRowProps): JSX.Element => {
                     />
                 </Modal>
                 {props.category}
-                <BudgetAddButton icon={<Trash />} onClick={() => setIsEditingCategory(true)} flat />
+                <BudgetAddButton icon={<Edit />} onClick={() => setIsEditingCategory(true)} flat />
                 <BudgetAddButton icon={<Trash />} onClick={() => props.onDelete(props.category)} flat />
             </BudgetCategoryContainer>
             <BudgetCategoryContainer>{props.budgeted}</BudgetCategoryContainer>
