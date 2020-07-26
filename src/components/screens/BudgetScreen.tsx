@@ -16,6 +16,7 @@ import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
 import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
 import { deleteBudgetCategory, deleteBudgetGroup } from "../../store/budget/budgetActions";
 import { Transaction } from "../../store/transactions/transactionInterfaces";
+import BudgetCategoryEditForm from "../forms/BudgetCategoryEditForm";
 
 interface StateProps {
     totalBudget: TotalBudget;
@@ -92,10 +93,19 @@ const BudgetHeader = (): JSX.Element => {
 };
 
 const BudgetCategoryRow = (props: BudgetCategoryRowProps): JSX.Element => {
+    const [isEditingCategory, setIsEditingCategory] = useState(false);
+
     return (
         <>
             <BudgetCategoryContainer>
+                <Modal visible={isEditingCategory} onClose={() => setIsEditingCategory(false)}>
+                    <BudgetCategoryEditForm
+                        onSubmit={() => setIsEditingCategory(false)}
+                        budgetCategory={props.category}
+                    />
+                </Modal>
                 {props.category}
+                <BudgetAddButton icon={<Trash />} onClick={() => setIsEditingCategory(true)} flat />
                 <BudgetAddButton icon={<Trash />} onClick={() => props.onDelete(props.category)} flat />
             </BudgetCategoryContainer>
             <BudgetCategoryContainer>{props.budgeted}</BudgetCategoryContainer>
@@ -119,6 +129,7 @@ const BudgetGroupRow = (props: BudgetGroupRowProps): JSX.Element => {
                 <BudgetAddButton icon={<Trash />} onClick={() => props.onDeleteGroup(props.group)} flat />
             </BudgetGroupContainer>
             {props.categories.map((category: BudgetCategory) => (
+                // TODO This needs to be optimized. It's currently O(n^2).
                 <BudgetCategoryRow
                     key={category.category}
                     category={category.category}
