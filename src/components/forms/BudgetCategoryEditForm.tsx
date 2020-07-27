@@ -11,6 +11,7 @@ import formatMoney from "../../utils/formatMoney";
 interface OwnProps {
     onSubmit?: () => void;
     budgetCategory: string;
+    defaultValue?: string;
 }
 
 interface DispatchProps {
@@ -34,13 +35,18 @@ const BudgetCategoryEditForm = (props: AllProps): JSX.Element => {
             onSubmit={handleAddCategoryGroup}
             component={({ handleSubmit }: FormRenderProps) => (
                 <ModalFormContainer onSubmit={handleSubmit}>
-                    <Field name={"budgeted"} format={(value: string) => formatMoney(value, 2)} formatOnBlur>
+                    <Field
+                        name={"budgeted"}
+                        defaultValue={props.defaultValue}
+                        format={(value: string) => formatMoney(value, 2)}
+                        formatOnBlur
+                    >
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
                             <Input
                                 {...input}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
-                                label={t("newCategory")}
+                                label={t("budgeted")}
                                 autoFocus
                             />
                         )}

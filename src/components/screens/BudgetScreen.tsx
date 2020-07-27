@@ -18,6 +18,7 @@ import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
 import { deleteBudgetCategory, deleteBudgetGroup } from "../../store/budget/budgetActions";
 import { Transaction } from "../../store/transactions/transactionInterfaces";
 import BudgetCategoryEditForm from "../forms/BudgetCategoryEditForm";
+import formatMoney from "../../utils/formatMoney";
 
 interface StateProps {
     totalBudget: TotalBudget;
@@ -103,6 +104,7 @@ const BudgetCategoryRow = (props: BudgetCategoryRowProps): JSX.Element => {
                     <BudgetCategoryEditForm
                         onSubmit={() => setIsEditingCategory(false)}
                         budgetCategory={props.category}
+                        defaultValue={formatMoney(props.budgeted.toString(), 2)}
                     />
                 </Modal>
                 {props.category}
