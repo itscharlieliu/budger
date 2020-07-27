@@ -59,11 +59,12 @@ export const addBudgetCategory = (budgetGroup: string, budgetCategory: string): 
         return;
     }
 
-    // TODO Check if category exists in any group
-    // Check if category already exists in the group
-    if (totalBudget[groupIndex].categories.some((value: BudgetCategory) => value.category === budgetCategory)) {
-        dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.categoryAlreadyExists) });
-        return;
+    // Check if category already exists in any group
+    for (const group of totalBudget) {
+        if (group.categories.some((value: BudgetCategory) => value.category === budgetCategory)) {
+            dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.categoryAlreadyExists) });
+            return;
+        }
     }
 
     // Add new category to total budget
