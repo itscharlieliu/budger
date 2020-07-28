@@ -156,11 +156,11 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                         )}
                     </Field>
                     <Field name={"date"}>
-                        {({ input }: FieldRenderProps<Date, HTMLElement>) => (
+                        {({ input, meta }: FieldRenderProps<Date, HTMLElement>) => {
                             // TODO Add meta properties
                             // TODO add ref
-                            <DateSelector {...input} value={input.value} />
-                        )}
+                            return <DateSelector {...input} value={input.value} error={meta.touched && meta.error} />;
+                        }}
                     </Field>
                     <Field name={"outFlow"} format={(value: string) => formatMoney(value, 2)} formatOnBlur>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
