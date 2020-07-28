@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Ref, useRef } from "react";
 import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
 import { connect, ResolveThunks } from "react-redux";
 
@@ -50,6 +50,11 @@ interface FormErrors {
 type AllProps = OwnProps & StateProps & ResolveThunks<DispatchProps>;
 
 const TransactionAddForm = (props: AllProps): JSX.Element => {
+    const accountInputRef = useRef<HTMLInputElement>(null);
+    const categoryInputRef = useRef<HTMLInputElement>(null);
+    const dateInputRef = useRef<HTMLInputElement>(null);
+    const outInputRef = useRef<HTMLInputElement>(null);
+
     const handleSubmit = (values: FormValues) => {
         if (!values.toFrom || !values.account || !values.category || !values.date) {
             console.warn(t("didNotProvideAllValues"));
@@ -104,7 +109,8 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                                 label={t("toFrom")}
                                 autoFocus
                                 value={input.value || { value: "", label: "" }}
-                                options={[]}
+                                options={[{ value: "hello", label: "hello" }]}
+                                onSelectedItemChange={() => accountInputRef.current && accountInputRef.current.focus()}
                             />
                         )}
                     </Field>
@@ -120,6 +126,10 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                                     value: account.name,
                                     label: account.name,
                                 }))}
+                                onSelectedItemChange={() =>
+                                    categoryInputRef.current && categoryInputRef.current.focus()
+                                }
+                                ref={accountInputRef}
                             />
                         )}
                     </Field>
@@ -140,24 +150,16 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                                     },
                                     [],
                                 )}
+                                onSelectedItemChange={() => outInputRef.current && outInputRef.current.focus()}
+                                ref={categoryInputRef}
                             />
                         )}
                     </Field>
                     <Field name={"date"}>
                         {({ input }: FieldRenderProps<Date, HTMLElement>) => (
                             // TODO Add meta properties
+                            // TODO add ref
                             <DateSelector {...input} value={input.value} />
-                        )}
-                    </Field>
-                    <Field name={"inFlow"} format={(value: string) => formatMoney(value, 2)} formatOnBlur>
-                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input
-                                {...input}
-                                value={input.value || ""}
-                                helperText={meta.touched && meta.error}
-                                error={meta.touched && meta.error}
-                                label={t("in")}
-                            />
                         )}
                     </Field>
                     <Field name={"outFlow"} format={(value: string) => formatMoney(value, 2)} formatOnBlur>
@@ -168,6 +170,18 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
                                 label={t("out")}
+                                ref={outInputRef}
+                            />
+                        )}
+                    </Field>
+                    <Field name={"inFlow"} format={(value: string) => formatMoney(value, 2)} formatOnBlur>
+                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
+                            <Input
+                                {...input}
+                                value={input.value || ""}
+                                helperText={meta.touched && meta.error}
+                                error={meta.touched && meta.error}
+                                label={t("in")}
                             />
                         )}
                     </Field>
