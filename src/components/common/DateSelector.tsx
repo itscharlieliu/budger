@@ -12,6 +12,7 @@ import moment from "moment";
 
 interface DateSelectorProps extends DayPickerInputProps {
     error?: boolean;
+    helperText?: string;
 }
 
 const DatePickerContainer = styled.div`
@@ -21,7 +22,7 @@ const DatePickerContainer = styled.div`
 // eslint-disable-next-line react/display-name
 const DateSelector = React.forwardRef(
     (props: DateSelectorProps, ref: Ref<DayPickerInput>): JSX.Element => {
-        const { onChange, error, onBlur, ...otherProps } = props;
+        const { onChange, error, helperText, onBlur, onDayPickerHide, ...otherProps } = props;
 
         const handleDayChange = (day: Date) => {
             // We need to be able to pass the date to react final form by doing this.
@@ -35,6 +36,7 @@ const DateSelector = React.forwardRef(
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             onBlur && onBlur();
+            onDayPickerHide && onDayPickerHide();
         };
 
         return (
@@ -42,7 +44,9 @@ const DateSelector = React.forwardRef(
                 <DayPickerInput
                     ref={ref}
                     component={forwardRef(function DateInput(inputProps: InputProps, ref: Ref<HTMLInputElement>) {
-                        return <Input ref={ref} label={t("date")} error={error} {...inputProps} />;
+                        return (
+                            <Input ref={ref} label={t("date")} error={error} helperText={helperText} {...inputProps} />
+                        );
                     })}
                     onDayChange={handleDayChange}
                     placeholder={""}
