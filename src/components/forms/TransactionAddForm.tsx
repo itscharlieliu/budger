@@ -13,6 +13,7 @@ import Button from "../common/Button";
 import DateSelector from "../common/DateSelector";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
+import DayPickerInput from "react-day-picker/DayPickerInput";
 
 interface StateProps {
     allAccounts: AllAccounts;
@@ -52,7 +53,7 @@ type AllProps = OwnProps & StateProps & ResolveThunks<DispatchProps>;
 const TransactionAddForm = (props: AllProps): JSX.Element => {
     const accountInputRef = useRef<HTMLInputElement>(null);
     const categoryInputRef = useRef<HTMLInputElement>(null);
-    const dateInputRef = useRef<HTMLInputElement>(null);
+    const dateInputRef = useRef<DayPickerInput>(null);
     const outInputRef = useRef<HTMLInputElement>(null);
 
     const handleSubmit = (values: FormValues) => {
@@ -88,7 +89,7 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
             errors.category = t("cannotBeEmpty");
         }
         if (!values.date) {
-            errors.date = t("cannotBeEmpty");
+            errors.date = t("invalidDate");
         }
 
         return errors;
@@ -150,16 +151,25 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                                     },
                                     [],
                                 )}
-                                onSelectedItemChange={() => outInputRef.current && outInputRef.current.focus()}
+                                onSelectedItemChange={() =>
+                                    dateInputRef.current && dateInputRef.current.getInput().focus()
+                                }
                                 ref={categoryInputRef}
                             />
                         )}
                     </Field>
                     <Field name={"date"}>
                         {({ input, meta }: FieldRenderProps<Date, HTMLElement>) => {
-                            // TODO Add meta properties
-                            // TODO add ref
-                            return <DateSelector {...input} value={input.value} error={meta.touched && meta.error} />;
+                            return (
+                                <DateSelector
+                                    {...input}
+                                    value={input.value}
+                                    error={meta.touched && meta.error}
+                                    helperText={meta.touched && meta.error}
+                                    onDayPickerHide={() => outInputRef.current && outInputRef.current.focus()}
+                                    ref={dateInputRef}
+                                />
+                            );
                         }}
                     </Field>
                     <Field name={"outFlow"} format={(value: string) => formatMoney(value, 2)} formatOnBlur>
