@@ -37,8 +37,6 @@ const DateSelector = React.forwardRef(
             onBlur && onBlur();
         };
 
-        console.log(error);
-
         return (
             <DatePickerContainer>
                 <DayPickerInput
@@ -48,13 +46,12 @@ const DateSelector = React.forwardRef(
                     })}
                     onDayChange={handleDayChange}
                     placeholder={""}
-                    format={language.locale}
+                    format={moment.localeData().longDateFormat("L")}
                     formatDate={(date: Date) => t("fullDate", { date })}
-                    // TODO Fix date parse
                     parseDate={(dateString: string, format: string) => {
-                        const date = moment(dateString, format);
-                        if (date.isValid()) {
-                            return date.toDate();
+                        const newDate = moment(dateString, format, true);
+                        if (newDate.isValid()) {
+                            return newDate.toDate();
                         }
                     }}
                     onDayPickerHide={handleDayPickerHide}
