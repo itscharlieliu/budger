@@ -1,8 +1,8 @@
 import {
     AccountsState,
-    ADD_ACCOUNT_FAILURE,
-    ADD_ACCOUNT_SUCCESS,
-    ADDING_ACCOUNT,
+    UPDATE_ACCOUNT_FAILURE,
+    UPDATE_ACCOUNT_SUCCESS,
+    UPDATING_ACCOUNT,
     GenericAccountsAction,
     SET_CACHED_BALANCE_FAILURE,
     SET_CACHED_BALANCE_SUCCESS,
@@ -29,13 +29,13 @@ const accountsReducer = (
         case SET_CACHED_BALANCE_FAILURE: {
             return { ...state, error: action.error };
         }
-        case ADDING_ACCOUNT: {
+        case UPDATING_ACCOUNT: {
             return { ...state, isAddingAccount: true };
         }
-        case ADD_ACCOUNT_SUCCESS: {
+        case UPDATE_ACCOUNT_SUCCESS: {
             return { ...state, isAddingAccount: false, allAccounts: action.allAccounts };
         }
-        case ADD_ACCOUNT_FAILURE: {
+        case UPDATE_ACCOUNT_FAILURE: {
             return { ...state, isAddingAccount: false, error: action.error };
         }
         case SET_ACCOUNTS_INITIALIZED_SUCCESS: {

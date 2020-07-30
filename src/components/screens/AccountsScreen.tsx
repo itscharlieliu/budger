@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
+import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
 import { theme } from "../../defs/theme";
@@ -13,14 +13,23 @@ import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 import ScreenContainer from "../common/containers/ScreenContainer";
 import AccountAddForm from "../forms/AccountAddForm";
 import { Transaction } from "../../store/transactions/transactionInterfaces";
+import { deleteAccount } from "../../store/accounts/accountsActions";
+import { deleteTransaction } from "../../store/transactions/transactionActions";
+import { ReactComponent as Trash } from "../../resources/images/trash.svg";
 
 interface StateProps {
     allAccounts: AllAccounts;
     transactions: Transaction[];
 }
 
+interface DispatchProps {
+    deleteAccount: typeof deleteAccount;
+}
+
+type AllProps = StateProps & ResolveThunks<DispatchProps>;
+
 interface AccountsRowProps extends BankAccount {
-    balance: string;
+    onDelete: () => void;
 }
 
 const AccountsContainer = styled.div`
@@ -33,10 +42,17 @@ const AccountAddButton = styled(Button)`
     margin: -16px 16px;
 `;
 
-const AccountsRowText = styled.span`
+const AccountContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     font-size: ${theme.font.size.small};
     padding: 16px;
     border-top: 1px solid ${theme.palette.divider.main};
+`;
+
+const AccountRowButton = styled(Button)`
+    margin: -16px 0 -16px 16px;
 `;
 
 const AccountsHeader = (): JSX.Element => {
@@ -56,7 +72,7 @@ const AccountsHeader = (): JSX.Element => {
     );
 };
 
-const AccountsRow = (props: BankAccount): JSX.Element => {
+const AccountsRow = (props: AccountsRowProps): JSX.Element => {
     let accountType = "";
 
     switch (props.type) {
@@ -72,14 +88,17 @@ const AccountsRow = (props: BankAccount): JSX.Element => {
 
     return (
         <>
-            <AccountsRowText>{props.name}</AccountsRowText>
-            <AccountsRowText>{accountType}</AccountsRowText>
-            <AccountsRowText>{props.cachedBalance}</AccountsRowText>
+            <AccountContainer>
+                {props.name}
+                <AccountRowButton icon={<Trash />} onClick={() => props.onDelete()} flat />
+            </AccountContainer>
+            <AccountContainer>{accountType}</AccountContainer>
+            <AccountContainer>{props.cachedBalance}</AccountContainer>
         </>
     );
 };
 
-const AccountScreens = (props: StateProps): JSX.Element => {
+const AccountScreens = (props: AllProps): JSX.Element => {
     return (
         <ScreenContainer>
             <AccountsContainer>
@@ -91,6 +110,7 @@ const AccountScreens = (props: StateProps): JSX.Element => {
                             key={"bankAccount" + index}
                             name={bankAccount.name}
                             type={bankAccount.type}
+                            onDelete={() => props.deleteAccount(bankAccount.name)}
                             cachedBalance={props.transactions.reduce(
                                 (totalBalance: number, transaction: Transaction) => {
                                     if (transaction.account !== bankAccount.name) {
@@ -113,4 +133,8 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
     transactions: state.transaction.transactions,
 });
 
-export default connect(mapStateToProps)(AccountScreens);
+const mapDispatchToProps: DispatchProps = {
+    deleteAccount,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AccountScreens);
