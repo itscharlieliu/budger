@@ -53,3 +53,28 @@ export const addTransaction = (
         }
     };
 };
+
+export const deleteTransaction = (index: number): GenericTransactionThunkAction => {
+    return async (
+        dispatch: ThunkDispatch<ApplicationState, null, GenericTransactionAction>,
+        getState: () => ApplicationState,
+    ): Promise<void> => {
+        dispatch({ type: UPDATING_TRANSACTIONS });
+        const transactions = getState().transaction.transactions;
+
+        try {
+            // update transactions
+            const newTransactions: Transaction[] = [...transactions];
+
+            newTransactions.splice(index, 1);
+
+            // Save transaction to local storage
+            localStorage.setItem(TRANSACTIONS, JSON.stringify(newTransactions));
+
+            dispatch({ type: UPDATE_TRANSACTIONS_SUCCESS, transactions: newTransactions });
+        } catch (error) {
+            console.warn(error);
+            dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error });
+        }
+    };
+};

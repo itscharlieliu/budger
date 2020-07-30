@@ -110,7 +110,7 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                                 label={t("toFrom")}
                                 autoFocus
                                 value={input.value || { value: "", label: "" }}
-                                options={[{ value: "hello", label: "hello" }]}
+                                options={[]}
                                 onSelectedItemChange={() => accountInputRef.current && accountInputRef.current.focus()}
                             />
                         )}
