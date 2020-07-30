@@ -35,7 +35,7 @@ export const addBudgetGroup = (budgetGroup: string): GenericBudgetThunkAction =>
 
     const newBudgetGroup: BudgetGroup = { group: budgetGroup, categories: [] };
 
-    const newTotalBudget = [newBudgetGroup, ...totalBudget];
+    const newTotalBudget = [...totalBudget, newBudgetGroup];
 
     // Save budget to local storage
     localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
@@ -70,7 +70,7 @@ export const addBudgetCategory = (budgetGroup: string, budgetCategory: string): 
     // Add new category to total budget
     const newBudgetCategory: BudgetCategory = { category: budgetCategory, budgeted: 0 };
     const newTotalBudget = [...totalBudget];
-    newTotalBudget[groupIndex].categories = [newBudgetCategory, ...newTotalBudget[groupIndex].categories];
+    newTotalBudget[groupIndex].categories = [...newTotalBudget[groupIndex].categories, newBudgetCategory];
 
     // Save budget to local storage
     localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
