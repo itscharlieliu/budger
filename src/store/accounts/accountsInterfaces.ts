@@ -3,9 +3,9 @@ import { Action } from "redux";
 export const SET_CACHED_BALANCE_SUCCESS = "SET_CACHED_BALANCE_SUCCESS";
 export const SET_CACHED_BALANCE_FAILURE = "SET_CACHED_BALANCE_FAILURE";
 
-export const ADDING_ACCOUNT = "ADDING_ACCOUNT";
-export const ADD_ACCOUNT_SUCCESS = "ADD_ACCOUNT_SUCCESS";
-export const ADD_ACCOUNT_FAILURE = "ADD_ACCOUNT_FAILURE";
+export const UPDATING_ACCOUNT = "UPDATING_ACCOUNT";
+export const UPDATE_ACCOUNT_SUCCESS = "UPDATE_ACCOUNT_SUCCESS";
+export const UPDATE_ACCOUNT_FAILURE = "UPDATE_ACCOUNT_FAILURE";
 
 export enum AccountType {
     budgeted,
@@ -36,16 +36,16 @@ export interface SetCachedBalanceFailureAction extends Action<typeof SET_CACHED_
 
 export type GenericSetCachedBalanceAction = SetCachedBalanceSuccessAction | SetCachedBalanceFailureAction;
 
-export interface AddingAccountAction extends Action<typeof ADDING_ACCOUNT> {}
+export interface UpdateAccountAction extends Action<typeof UPDATING_ACCOUNT> {}
 
-export interface AddAccountSuccessAction extends Action<typeof ADD_ACCOUNT_SUCCESS> {
+export interface UpdateAccountSuccessAction extends Action<typeof UPDATE_ACCOUNT_SUCCESS> {
     allAccounts: AllAccounts;
 }
 
-export interface AddAccountFailureAction extends Action<typeof ADD_ACCOUNT_FAILURE> {
+export interface UpdateAccountFailureAction extends Action<typeof UPDATE_ACCOUNT_FAILURE> {
     error: Error;
 }
 
-export type GenericAddAccountAction = AddingAccountAction | AddAccountSuccessAction | AddAccountFailureAction;
+export type GenericUpdateAccountAction = UpdateAccountAction | UpdateAccountSuccessAction | UpdateAccountFailureAction;
 
-export type GenericAccountsAction = GenericAddAccountAction | GenericSetCachedBalanceAction;
+export type GenericAccountsAction = GenericUpdateAccountAction | GenericSetCachedBalanceAction;

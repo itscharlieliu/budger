@@ -1,5 +1,10 @@
 import { addAccount } from "../accounts/accountsActions";
-import { AccountType, ADD_ACCOUNT_FAILURE, ADD_ACCOUNT_SUCCESS, ADDING_ACCOUNT } from "../accounts/accountsInterfaces";
+import {
+    AccountType,
+    UPDATE_ACCOUNT_FAILURE,
+    UPDATE_ACCOUNT_SUCCESS,
+    UPDATING_ACCOUNT,
+} from "../accounts/accountsInterfaces";
 import ERRORS from "../../defs/errors";
 import configureMockStore from "redux-mock-store";
 import thunk, { ThunkDispatch } from "redux-thunk";

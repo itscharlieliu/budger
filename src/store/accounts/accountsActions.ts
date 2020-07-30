@@ -5,13 +5,13 @@ import ApplicationState from "../index";
 
 import {
     AccountType,
-    ADD_ACCOUNT_FAILURE,
-    ADD_ACCOUNT_SUCCESS,
-    ADDING_ACCOUNT,
+    UPDATE_ACCOUNT_FAILURE,
+    UPDATE_ACCOUNT_SUCCESS,
+    UPDATING_ACCOUNT,
     AllAccounts,
     BankAccount,
     GenericAccountsAction,
-    GenericAddAccountAction,
+    GenericUpdateAccountAction,
 } from "./accountsInterfaces";
 import { ACCOUNTS, TRANSACTIONS } from "../../defs/storageKeys";
 
@@ -22,16 +22,16 @@ export const addAccount = (
     type: AccountType = AccountType.unbudgeted,
     startingBalance: number = 0,
 ): GenericAccountsThunkAction => async (
-    dispatch: ThunkDispatch<ApplicationState, null, GenericAddAccountAction>,
+    dispatch: ThunkDispatch<ApplicationState, null, GenericUpdateAccountAction>,
     getState: () => ApplicationState,
 ): Promise<void> => {
-    dispatch({ type: ADDING_ACCOUNT });
+    dispatch({ type: UPDATING_ACCOUNT });
 
     const allAccounts = getState().accounts.allAccounts;
 
     // Return if account already exists
     if (allAccounts.some((bankAccount: BankAccount) => bankAccount.name === name)) {
-        dispatch({ type: ADD_ACCOUNT_FAILURE, error: new Error(ERRORS.accountAlreadyExists) });
+        dispatch({ type: UPDATE_ACCOUNT_FAILURE, error: new Error(ERRORS.accountAlreadyExists) });
         return;
     }
 
@@ -49,5 +49,29 @@ export const addAccount = (
     // Save account to local storage
     localStorage.setItem(ACCOUNTS, JSON.stringify(updatedAccounts));
 
-    dispatch({ type: ADD_ACCOUNT_SUCCESS, allAccounts: updatedAccounts });
+    dispatch({ type: UPDATE_ACCOUNT_SUCCESS, allAccounts: updatedAccounts });
+};
+
+export const deleteAccount = (name: string): GenericAccountsThunkAction => async (
+    dispatch: ThunkDispatch<ApplicationState, null, GenericUpdateAccountAction>,
+    getState: () => ApplicationState,
+): Promise<void> => {
+    dispatch({ type: UPDATING_ACCOUNT });
+
+    const allAccounts = getState().accounts.allAccounts;
+
+    const updatedAccounts: AllAccounts = [];
+
+    for (const account of allAccounts) {
+        // Don't push account if it matches the name we want to delete
+        if (account.name === name) {
+            continue;
+        }
+        updatedAccounts.push(account);
+    }
+
+    // Save account to local storage
+    localStorage.setItem(ACCOUNTS, JSON.stringify(updatedAccounts));
+
+    dispatch({ type: UPDATE_ACCOUNT_SUCCESS, allAccounts: updatedAccounts });
 };
