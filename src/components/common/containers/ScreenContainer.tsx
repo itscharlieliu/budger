@@ -5,6 +5,7 @@ import { UNIT_LENGTH } from "../../../defs/theme";
 const ScreenContainer = styled.div`
     flex-grow: 1;
     padding: ${UNIT_LENGTH / 2}px;
+    overflow: auto;
 `;
 
 export default ScreenContainer;
