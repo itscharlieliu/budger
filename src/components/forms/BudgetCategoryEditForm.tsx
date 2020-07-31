@@ -48,6 +48,10 @@ const BudgetCategoryEditForm = (props: AllProps): JSX.Element => {
                                 error={meta.touched && meta.error}
                                 label={t("budgeted")}
                                 autoFocus
+                                onFocus={(event: React.FocusEvent<HTMLInputElement>) => {
+                                    event.target.select();
+                                    input.onFocus(event);
+                                }}
                             />
                         )}
                     </Field>
