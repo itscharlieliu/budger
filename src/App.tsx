@@ -42,6 +42,7 @@ const BodyContainer = styled.div`
     flex-grow: 1;
     display: flex;
     flex-direction: row;
+    overflow: hidden;
 `;
 
 function App(props: AllProps): JSX.Element {
