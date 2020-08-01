@@ -2,20 +2,19 @@ import React, { useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
-import { theme } from "../../defs/theme";
 import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
+import { ReactComponent as Trash } from "../../resources/images/trash.svg";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
+import { deleteAccount } from "../../store/accounts/accountsActions";
 import { AccountType, AllAccounts, BankAccount } from "../../store/accounts/accountsInterfaces";
+import { Transaction } from "../../store/transactions/transactionInterfaces";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
+import GridBoxContainer from "../common/containers/GridBoxContainer";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 import ScreenContainer from "../common/containers/ScreenContainer";
 import AccountAddForm from "../forms/AccountAddForm";
-import { Transaction } from "../../store/transactions/transactionInterfaces";
-import { deleteAccount } from "../../store/accounts/accountsActions";
-import { deleteTransaction } from "../../store/transactions/transactionActions";
-import { ReactComponent as Trash } from "../../resources/images/trash.svg";
 
 interface StateProps {
     allAccounts: AllAccounts;
@@ -40,15 +39,6 @@ const AccountsContainer = styled.div`
 
 const AccountAddButton = styled(Button)`
     margin: -16px 16px;
-`;
-
-const AccountContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    font-size: ${theme.font.size.small};
-    padding: 16px;
-    border-top: 1px solid ${theme.palette.divider.main};
 `;
 
 const AccountRowButton = styled(Button)`
@@ -88,12 +78,12 @@ const AccountsRow = (props: AccountsRowProps): JSX.Element => {
 
     return (
         <>
-            <AccountContainer>
+            <GridBoxContainer>
                 {props.name}
                 <AccountRowButton icon={<Trash />} onClick={() => props.onDelete()} flat />
-            </AccountContainer>
-            <AccountContainer>{accountType}</AccountContainer>
-            <AccountContainer>{props.cachedBalance}</AccountContainer>
+            </GridBoxContainer>
+            <GridBoxContainer>{accountType}</GridBoxContainer>
+            <GridBoxContainer>{props.cachedBalance}</GridBoxContainer>
         </>
     );
 };

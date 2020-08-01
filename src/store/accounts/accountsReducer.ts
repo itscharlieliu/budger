@@ -1,4 +1,9 @@
 import {
+    SET_ACCOUNTS_INITIALIZED_SUCCESS,
+    SetAccountsInitializedSuccessAction,
+} from "../initialization/initializationInterfaces";
+
+import {
     AccountsState,
     UPDATE_ACCOUNT_FAILURE,
     UPDATE_ACCOUNT_SUCCESS,
@@ -7,10 +12,6 @@ import {
     SET_CACHED_BALANCE_FAILURE,
     SET_CACHED_BALANCE_SUCCESS,
 } from "./accountsInterfaces";
-import {
-    SET_ACCOUNTS_INITIALIZED_SUCCESS,
-    SetAccountsInitializedSuccessAction,
-} from "../initialization/initializationInterfaces";
 
 export const defaultAccountsState: AccountsState = {
     allAccounts: [],

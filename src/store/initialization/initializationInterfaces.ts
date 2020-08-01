@@ -1,7 +1,8 @@
 import { Action } from "redux";
+
+import { BankAccount } from "../accounts/accountsInterfaces";
 import { TotalBudget } from "../budget/budgetInterfaces";
 import { Transaction } from "../transactions/transactionInterfaces";
-import { BankAccount } from "../accounts/accountsInterfaces";
 
 export const SET_TRANSLATION_INITIALIZED = "SET_TRANSLATION_INITIALIZED";
 

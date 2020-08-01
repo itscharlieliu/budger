@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { forwardRef, Ref } from "react";
 import "./styles/DateSelector.css";
 import { DayPickerInputProps } from "react-day-picker";
@@ -5,10 +6,9 @@ import DayPickerInput from "react-day-picker/DayPickerInput";
 import styled from "styled-components";
 
 import { ZIndex } from "../../defs/theme";
+import t from "../../services/i18n/language";
+
 import Input, { InputProps } from "./Input";
-import date from "../../services/i18n/dates";
-import t, { language } from "../../services/i18n/language";
-import moment from "moment";
 
 interface DateSelectorProps extends DayPickerInputProps {
     error?: boolean;

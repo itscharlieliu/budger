@@ -1,14 +1,15 @@
 import {
+    SET_TRANSACTIONS_INITIALIZED_SUCCESS,
+    SetTransactionsInitializedSuccessAction,
+} from "../initialization/initializationInterfaces";
+
+import {
     GenericTransactionAction,
     TransactionState,
     UPDATE_TRANSACTIONS_FAILURE,
     UPDATE_TRANSACTIONS_SUCCESS,
     UPDATING_TRANSACTIONS,
 } from "./transactionInterfaces";
-import {
-    SET_TRANSACTIONS_INITIALIZED_SUCCESS,
-    SetTransactionsInitializedSuccessAction,
-} from "../initialization/initializationInterfaces";
 
 export const defaultTransactionState: TransactionState = {
     transactions: [],

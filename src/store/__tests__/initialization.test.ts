@@ -1,23 +1,15 @@
-import { addAccount } from "../accounts/accountsActions";
-import {
-    AccountType,
-    UPDATE_ACCOUNT_FAILURE,
-    UPDATE_ACCOUNT_SUCCESS,
-    UPDATING_ACCOUNT,
-} from "../accounts/accountsInterfaces";
-import ERRORS from "../../defs/errors";
+import { AnyAction } from "redux";
 import configureMockStore from "redux-mock-store";
 import thunk, { ThunkDispatch } from "redux-thunk";
-import { AnyAction } from "redux";
+
+import { BUDGET } from "../../defs/storageKeys";
 import ApplicationState from "../index";
 import { initBudget, setLanguageInitialized } from "../initialization/initializationActions";
 import {
-    SET_BUDGET_INITIALIZED_FAILURE,
     SET_BUDGET_INITIALIZED_SUCCESS,
     SET_TRANSLATION_INITIALIZED,
     SETTING_BUDGET_INITIALIZED,
 } from "../initialization/initializationInterfaces";
-import { BUDGET } from "../../defs/storageKeys";
 
 type Dispatch = ThunkDispatch<ApplicationState, null, AnyAction>;
 

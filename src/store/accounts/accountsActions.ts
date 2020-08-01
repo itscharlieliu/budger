@@ -1,19 +1,19 @@
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 
 import ERRORS from "../../defs/errors";
+import { ACCOUNTS } from "../../defs/storageKeys";
 import ApplicationState from "../index";
 
 import {
     AccountType,
-    UPDATE_ACCOUNT_FAILURE,
-    UPDATE_ACCOUNT_SUCCESS,
-    UPDATING_ACCOUNT,
     AllAccounts,
     BankAccount,
     GenericAccountsAction,
     GenericUpdateAccountAction,
+    UPDATE_ACCOUNT_FAILURE,
+    UPDATE_ACCOUNT_SUCCESS,
+    UPDATING_ACCOUNT,
 } from "./accountsInterfaces";
-import { ACCOUNTS, TRANSACTIONS } from "../../defs/storageKeys";
 
 type GenericAccountsThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericAccountsAction>;
 
@@ -36,6 +36,7 @@ export const addAccount = (
     }
 
     // TODO dispatch add transaction for starting balance
+    console.log("starting balance: ", startingBalance);
 
     const updatedAccounts: AllAccounts = [
         {
