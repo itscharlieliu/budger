@@ -1,14 +1,15 @@
 import {
+    SET_BUDGET_INITIALIZED_SUCCESS,
+    SetBudgetInitializedSuccessAction,
+} from "../initialization/initializationInterfaces";
+
+import {
     BudgetState,
     GenericBudgetAction,
     SET_TOTAL_BUDGET_FAILURE,
     SET_TOTAL_BUDGET_SUCCESS,
     SETTING_TOTAL_BUDGET,
 } from "./budgetInterfaces";
-import {
-    SET_BUDGET_INITIALIZED_SUCCESS,
-    SetBudgetInitializedSuccessAction,
-} from "../initialization/initializationInterfaces";
 
 export const defaultBudgetState: BudgetState = {
     totalBudget: [],

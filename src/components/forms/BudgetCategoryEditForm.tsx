@@ -1,12 +1,13 @@
-import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
-import ModalFormContainer from "../common/containers/ModalFormContainer";
-import Input from "../common/Input";
-import t from "../../services/i18n/language";
-import Button from "../common/Button";
 import React from "react";
+import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
 import { connect, ResolveThunks } from "react-redux";
-import { addBudgetCategory, editBudgetedAmount } from "../../store/budget/budgetActions";
+
+import t from "../../services/i18n/language";
+import { editBudgetedAmount } from "../../store/budget/budgetActions";
 import formatMoney from "../../utils/formatMoney";
+import Button from "../common/Button";
+import Input from "../common/Input";
+import ModalFormContainer from "../common/containers/ModalFormContainer";
 
 interface OwnProps {
     onSubmit?: () => void;

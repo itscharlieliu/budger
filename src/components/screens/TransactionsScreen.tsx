@@ -2,15 +2,15 @@ import React from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
-import { theme } from "../../defs/theme";
+import { ReactComponent as Trash } from "../../resources/images/trash.svg";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
+import { deleteTransaction } from "../../store/transactions/transactionActions";
 import { Transaction } from "../../store/transactions/transactionInterfaces";
+import Button from "../common/Button";
+import GridBoxContainer from "../common/containers/GridBoxContainer";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 import ScreenContainer from "../common/containers/ScreenContainer";
-import { deleteTransaction } from "../../store/transactions/transactionActions";
-import { ReactComponent as Trash } from "../../resources/images/trash.svg";
-import Button from "../common/Button";
 
 interface StateProps {
     transactions: Transaction[];
@@ -30,15 +30,6 @@ const TransactionsContainer = styled.div`
     display: grid;
     width: auto;
     grid-template-columns: auto 10% 10% 10% 10% 10% 15%;
-`;
-
-const TransactionContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    font-size: ${theme.font.size.small};
-    padding: 16px;
-    border-top: 1px solid ${theme.palette.divider.main};
 `;
 
 const TransactionRowButton = styled(Button)`
@@ -65,16 +56,28 @@ const TransactionsRow = (props: TransactionsRowProps): JSX.Element => {
 
     return (
         <>
-            <TransactionContainer>
-                {props.payee}
+            <GridBoxContainer>
+                <span>{props.payee}</span>
                 <TransactionRowButton icon={<Trash />} onClick={() => props.onDelete()} flat />
-            </TransactionContainer>
-            <TransactionContainer>{props.account}</TransactionContainer>
-            <TransactionContainer>{props.category}</TransactionContainer>
-            <TransactionContainer>{t("fullDate", { date: props.date })}</TransactionContainer>
-            <TransactionContainer>{inFlow}</TransactionContainer>
-            <TransactionContainer>{outFlow}</TransactionContainer>
-            <TransactionContainer>{props.note}</TransactionContainer>
+            </GridBoxContainer>
+            <GridBoxContainer>
+                <span>{props.account}</span>
+            </GridBoxContainer>
+            <GridBoxContainer>
+                <span>{props.category}</span>
+            </GridBoxContainer>
+            <GridBoxContainer>
+                <span>{t("fullDate", { date: props.date })}</span>
+            </GridBoxContainer>
+            <GridBoxContainer>
+                <span>{inFlow}</span>
+            </GridBoxContainer>
+            <GridBoxContainer>
+                <span>{outFlow}</span>
+            </GridBoxContainer>
+            <GridBoxContainer>
+                <span>{props.note}</span>
+            </GridBoxContainer>
         </>
     );
 };

@@ -3,22 +3,23 @@ import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
 import { theme } from "../../defs/theme";
+import { ReactComponent as Edit } from "../../resources/images/edit.svg";
 import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
 import { ReactComponent as Trash } from "../../resources/images/trash.svg";
-import { ReactComponent as Edit } from "../../resources/images/edit.svg";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
+import { deleteBudgetCategory, deleteBudgetGroup } from "../../store/budget/budgetActions";
 import { BudgetCategory, BudgetGroup, TotalBudget } from "../../store/budget/budgetInterfaces";
+import { Transaction } from "../../store/transactions/transactionInterfaces";
+import formatMoney from "../../utils/formatMoney";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
+import GridBoxContainer from "../common/containers/GridBoxContainer";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 import ScreenContainer from "../common/containers/ScreenContainer";
 import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
-import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
-import { deleteBudgetCategory, deleteBudgetGroup } from "../../store/budget/budgetActions";
-import { Transaction } from "../../store/transactions/transactionInterfaces";
 import BudgetCategoryEditForm from "../forms/BudgetCategoryEditForm";
-import formatMoney from "../../utils/formatMoney";
+import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
 
 interface StateProps {
     totalBudget: TotalBudget;
@@ -66,15 +67,6 @@ const BudgetGroupContainer = styled.div`
     grid-column-end: 5;
 `;
 
-const BudgetCategoryContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    font-size: ${theme.font.size.small};
-    padding: 16px;
-    border-top: 1px solid ${theme.palette.divider.main};
-`;
-
 const BudgetHeader = (): JSX.Element => {
     const [isAddingGroup, setIsAddingGroup] = useState(false);
 
@@ -99,7 +91,7 @@ const BudgetCategoryRow = (props: BudgetCategoryRowProps): JSX.Element => {
 
     return (
         <>
-            <BudgetCategoryContainer>
+            <GridBoxContainer>
                 <Modal visible={isEditingCategory} onClose={() => setIsEditingCategory(false)}>
                     <BudgetCategoryEditForm
                         onSubmit={() => setIsEditingCategory(false)}
@@ -110,10 +102,10 @@ const BudgetCategoryRow = (props: BudgetCategoryRowProps): JSX.Element => {
                 {props.category}
                 <BudgetAddButton icon={<Edit />} onClick={() => setIsEditingCategory(true)} flat />
                 <BudgetAddButton icon={<Trash />} onClick={() => props.onDelete(props.category)} flat />
-            </BudgetCategoryContainer>
-            <BudgetCategoryContainer>{props.budgeted}</BudgetCategoryContainer>
-            <BudgetCategoryContainer>{props.activity}</BudgetCategoryContainer>
-            <BudgetCategoryContainer>{props.budgeted + props.activity}</BudgetCategoryContainer>
+            </GridBoxContainer>
+            <GridBoxContainer>{props.budgeted}</GridBoxContainer>
+            <GridBoxContainer>{props.activity}</GridBoxContainer>
+            <GridBoxContainer>{props.budgeted + props.activity}</GridBoxContainer>
         </>
     );
 };

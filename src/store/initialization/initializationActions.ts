@@ -1,32 +1,32 @@
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 
+import ERRORS from "../../defs/errors";
 import { ACCOUNTS, BUDGET, TRANSACTIONS } from "../../defs/storageKeys";
+import validateAccounts from "../../utils/validateAccounts";
+import validateTotalBudget from "../../utils/validateTotalBudget";
+import validateTransactions from "../../utils/validateTransactions";
+import { BankAccount } from "../accounts/accountsInterfaces";
+import { TotalBudget } from "../budget/budgetInterfaces";
 import ApplicationState from "../index";
+import { Transaction } from "../transactions/transactionInterfaces";
 
 import {
     GenericInitializationAction,
     GenericSetAccountsInitializedAction,
     GenericSetBudgetInitializedAction,
     GenericSetTransactionsInitializedAction,
+    SET_ACCOUNTS_INITIALIZED_FAILURE,
+    SET_ACCOUNTS_INITIALIZED_SUCCESS,
     SET_BUDGET_INITIALIZED_FAILURE,
     SET_BUDGET_INITIALIZED_SUCCESS,
     SET_TRANSACTIONS_INITIALIZED_FAILURE,
     SET_TRANSACTIONS_INITIALIZED_SUCCESS,
     SET_TRANSLATION_INITIALIZED,
+    SETTING_ACCOUNTS_INITIALIZED,
     SETTING_BUDGET_INITIALIZED,
     SETTING_TRANSACTIONS_INITIALIZED,
     SetTranslationInitializedAction,
-    SETTING_ACCOUNTS_INITIALIZED,
-    SET_ACCOUNTS_INITIALIZED_FAILURE,
-    SET_ACCOUNTS_INITIALIZED_SUCCESS,
 } from "./initializationInterfaces";
-import { TotalBudget } from "../budget/budgetInterfaces";
-import validateTotalBudget from "../../utils/validateTotalBudget";
-import ERRORS from "../../defs/errors";
-import { GenericUpdateTransactionAction, Transaction } from "../transactions/transactionInterfaces";
-import validateTransactions from "../../utils/validateTransactions";
-import validateAccounts from "../../utils/validateAccounts";
-import { BankAccount } from "../accounts/accountsInterfaces";
 
 type GenericInitializationThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericInitializationAction>;
 

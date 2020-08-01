@@ -1,5 +1,5 @@
 import { useCombobox, UseComboboxState } from "downshift";
-import React, { Ref, RefObject } from "react";
+import React, { Ref } from "react";
 import { Omit } from "react-redux";
 import styled from "styled-components";
 
