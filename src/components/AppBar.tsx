@@ -7,7 +7,7 @@ import t from "../services/i18n/language";
 
 const AppBarContainer = styled.div`
     width: auto;
-    height: ${UNIT_LENGTH}px;
+    min-height: ${UNIT_LENGTH}px;
     display: flex;
     flex-direction: row;
     padding: 0 ${UNIT_LENGTH / 4}px;
