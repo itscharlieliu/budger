@@ -79,9 +79,15 @@ const BudgetHeader = (): JSX.Element => {
                 <span>{t("category")}</span>
                 <BudgetAddButton icon={<PlusIcon />} flat onClick={() => setIsAddingGroup(true)} />
             </GridHeaderContainer>
-            <GridHeaderContainer>{t("budgeted")}</GridHeaderContainer>
-            <GridHeaderContainer>{t("activity")}</GridHeaderContainer>
-            <GridHeaderContainer>{t("remaining")}</GridHeaderContainer>
+            <GridHeaderContainer>
+                <span>{t("budgeted")}</span>
+            </GridHeaderContainer>
+            <GridHeaderContainer>
+                <span>{t("activity")}</span>
+            </GridHeaderContainer>
+            <GridHeaderContainer>
+                <span>{t("remaining")}</span>
+            </GridHeaderContainer>
         </>
     );
 };

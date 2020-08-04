@@ -39,13 +39,27 @@ const TransactionRowButton = styled(Button)`
 const TransactionsHeader = (): JSX.Element => {
     return (
         <>
-            <GridHeaderContainer>{t("toFrom")}</GridHeaderContainer>
-            <GridHeaderContainer>{t("account")}</GridHeaderContainer>
-            <GridHeaderContainer>{t("category")}</GridHeaderContainer>
-            <GridHeaderContainer>{t("date")}</GridHeaderContainer>
-            <GridHeaderContainer>{t("in")}</GridHeaderContainer>
-            <GridHeaderContainer>{t("out")}</GridHeaderContainer>
-            <GridHeaderContainer>{t("notes")}</GridHeaderContainer>
+            <GridHeaderContainer>
+                <span>{t("toFrom")}</span>
+            </GridHeaderContainer>
+            <GridHeaderContainer>
+                <span>{t("account")}</span>
+            </GridHeaderContainer>
+            <GridHeaderContainer>
+                <span>{t("category")}</span>
+            </GridHeaderContainer>
+            <GridHeaderContainer>
+                <span>{t("date")}</span>
+            </GridHeaderContainer>
+            <GridHeaderContainer>
+                <span>{t("in")}</span>
+            </GridHeaderContainer>
+            <GridHeaderContainer>
+                <span>{t("out")}</span>
+            </GridHeaderContainer>
+            <GridHeaderContainer>
+                <span>{t("notes")}</span>
+            </GridHeaderContainer>
         </>
     );
 };
