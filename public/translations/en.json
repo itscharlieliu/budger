@@ -11,6 +11,7 @@
     "budget": "Budget",
     "budgeted": "Budgeted",
     "cannotBeEmpty": "This field cannot be empty",
+    "cancel": "Cancel",
     "category": "Category",
     "date": "Date",
     "didNotProvideAllValues": "Did not provide all values",
