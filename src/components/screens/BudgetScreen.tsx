@@ -54,14 +54,8 @@ const BudgetAddButton = styled(Button)`
     margin: -16px 0 -16px 16px;
 `;
 
-const BudgetGroupContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    font-size: ${theme.font.size.small};
+const BudgetGroupContainer = styled(GridBoxContainer)`
     font-weight: ${theme.font.weight.bold};
-    padding: 16px;
-    border-top: 1px solid ${theme.palette.divider.main};
 
     grid-column-start: 1;
     grid-column-end: 5;
