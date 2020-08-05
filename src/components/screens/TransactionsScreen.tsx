@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
@@ -11,6 +11,9 @@ import Button from "../common/Button";
 import GridBoxContainer from "../common/containers/GridBoxContainer";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 import ScreenContainer from "../common/containers/ScreenContainer";
+import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
+import TransactionAddForm from "../forms/TransactionAddForm";
+import Modal from "../common/Modal";
 
 interface StateProps {
     transactions: Transaction[];
@@ -37,10 +40,21 @@ const TransactionRowButton = styled(Button)`
 `;
 
 const TransactionsHeader = (): JSX.Element => {
+    const [isAddingTransaction, setIsAddingTransaction] = useState(false);
+
     return (
         <>
             <GridHeaderContainer>
+                <Modal
+                    visible={isAddingTransaction}
+                    onClose={() => {
+                        setIsAddingTransaction(false);
+                    }}
+                >
+                    <TransactionAddForm onSubmit={() => setIsAddingTransaction(false)} />
+                </Modal>
                 <span>{t("toFrom")}</span>
+                <TransactionRowButton icon={<PlusIcon />} flat onClick={() => setIsAddingTransaction(true)} />
             </GridHeaderContainer>
             <GridHeaderContainer>
                 <span>{t("account")}</span>
