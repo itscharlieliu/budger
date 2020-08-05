@@ -14,6 +14,7 @@ import Button from "../common/Button";
 import DateSelector from "../common/DateSelector";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
+import styled from "styled-components";
 
 interface StateProps {
     allAccounts: AllAccounts;
@@ -49,6 +50,15 @@ interface FormErrors {
 }
 
 type AllProps = OwnProps & StateProps & ResolveThunks<DispatchProps>;
+
+const ButtonContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+
+const AddFormButton = styled(Button)`
+    margin: 4px;
+`;
 
 const TransactionAddForm = (props: AllProps): JSX.Element => {
     const accountInputRef = useRef<HTMLInputElement>(null);
@@ -206,8 +216,10 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                         )}
                     </Field>
 
-                    <Button type={"submit"}>add</Button>
-                    <Button type={"button"}>cancel</Button>
+                    <ButtonContainer>
+                        <AddFormButton type={"submit"}>{t("add")}</AddFormButton>
+                        <AddFormButton type={"button"}>{t("cancel")}</AddFormButton>
+                    </ButtonContainer>
                 </ModalFormContainer>
             )}
         />
