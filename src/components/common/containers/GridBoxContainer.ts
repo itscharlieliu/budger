@@ -10,6 +10,27 @@ const GridBoxContainer = styled.div`
     padding: 16px;
     border-top: 1px solid ${theme.palette.divider.main};
     white-space: nowrap;
+
+    & > button {
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    &:hover > button {
+        opacity: 100;
+    }
+
+    & > button:focus-visible {
+        opacity: 100;
+    }
+
+    & > button:active {
+        opacity: 100;
+    }
+
+    & > button:focus {
+        opacity: 100;
+    }
 `;
 
 export default GridBoxContainer;
