@@ -20,6 +20,7 @@ import ScreenContainer from "../common/containers/ScreenContainer";
 import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
 import BudgetCategoryEditForm from "../forms/BudgetCategoryEditForm";
 import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
+import getMonthCode from "../../utils/getMonthCode";
 
 interface StateProps {
     totalBudget: TotalBudget;
@@ -38,7 +39,9 @@ interface BudgetCategoryRowProps extends BudgetCategory {
     activity: number;
 }
 
-interface BudgetGroupRowProps extends BudgetGroup {
+interface BudgetGroupRowProps {
+    groupName: string;
+    categories: BudgetCategory[];
     onDeleteCategory: (category: string) => void;
     onDeleteGroup: (group: string) => void;
     transactions: Transaction[];
@@ -119,7 +122,7 @@ const BudgetGroupRow = (props: BudgetGroupRowProps): JSX.Element => {
                 <Modal visible={isAddingCategory} onClose={() => setIsAddingCategory(false)}>
                     <BudgetCategoryAddForm onSubmit={() => setIsAddingCategory(false)} group={props.group} />
                 </Modal>
-                {props.group}
+                {props.groupName}
                 <BudgetAddButton icon={<PlusIcon />} onClick={() => setIsAddingCategory(true)} flat />
                 <BudgetAddButton icon={<Trash />} onClick={() => props.onDeleteGroup(props.group)} flat />
             </BudgetGroupContainer>
@@ -143,14 +146,18 @@ const BudgetGroupRow = (props: BudgetGroupRowProps): JSX.Element => {
 };
 
 const BudgetScreen = (props: AllProps): JSX.Element => {
+    // TODO change this to state so that we can change months
+    const currentMonthCode = getMonthCode(new Date());
+
     return (
         <ScreenContainer>
             <BudgetContainer>
                 <BudgetHeader />
-                {props.totalBudget.map((budgetGroup: BudgetGroup, index: number) => (
+                {Object.keys(props.totalBudget[currentMonthCode]).map((budgetGroupName: string, index: number) => (
                     <BudgetGroupRow
                         key={"budgetGroup" + index}
-                        {...budgetGroup}
+                        groupName={budgetGroupName}
+                        categories={Object.keys(props.totalBudget[currentMonthCode][budgetGroupName]).map()}
                         onDeleteCategory={props.deleteBudgetCategory}
                         onDeleteGroup={props.deleteBudgetGroup}
                         transactions={props.transactions}
