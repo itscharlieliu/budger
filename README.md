@@ -1,7 +1,16 @@
 # Budger
-A simple-to-use zero based budgeting app. This means you can budget for every single dollar.
+A simple-to-use zero based budgeting app.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Screenshots
+![budget screenshot](./src/resources/screenshots/budget_screenshot.png)
+
+![transactions_screenshot](./src/resources/screenshots/transactions_screenshot.png)
+
+![accounts_screenshot](./src/resources/screenshots/accounts_screenshot.png)
+
+
 
 ## Available Scripts
 
