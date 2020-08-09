@@ -15,6 +15,7 @@ import DateSelector from "../common/DateSelector";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
 import styled from "styled-components";
+import getMonthCode from "../../utils/getMonthCode";
 
 interface StateProps {
     allAccounts: AllAccounts;
@@ -65,6 +66,8 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
     const categoryInputRef = useRef<HTMLInputElement>(null);
     const dateInputRef = useRef<DayPickerInput>(null);
     const outInputRef = useRef<HTMLInputElement>(null);
+
+    const currentMonthCode = getMonthCode(new Date());
 
     const handleSubmit = (values: FormValues) => {
         if (!values.toFrom || !values.account || !values.category || !values.date) {
@@ -152,10 +155,12 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                                 error={meta.touched && meta.error}
                                 label={t("category")}
                                 value={input.value || { value: "", label: "" }}
-                                options={props.totalBudget.reduce(
-                                    (categories: AutocompleteOption[], budgetGroup: BudgetGroup) => {
-                                        for (const category of budgetGroup.categories) {
-                                            categories.push({ value: category.category, label: category.category });
+                                options={Object.keys(props.totalBudget).reduce(
+                                    (categories: AutocompleteOption[], budgetGroup: string) => {
+                                        for (const category of Object.keys(
+                                            props.totalBudget[currentMonthCode][budgetGroup],
+                                        )) {
+                                            categories.push({ value: category, label: category });
                                         }
                                         return categories;
                                     },
