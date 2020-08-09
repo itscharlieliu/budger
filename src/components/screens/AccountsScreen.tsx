@@ -15,6 +15,7 @@ import GridBoxContainer from "../common/containers/GridBoxContainer";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 import ScreenContainer from "../common/containers/ScreenContainer";
 import AccountAddForm from "../forms/AccountAddForm";
+import formatMoney from "../../utils/formatMoney";
 
 interface StateProps {
     allAccounts: AllAccounts;
@@ -83,7 +84,7 @@ const AccountsRow = (props: AccountsRowProps): JSX.Element => {
                 <AccountRowButton icon={<Trash />} onClick={() => props.onDelete()} flat />
             </GridBoxContainer>
             <GridBoxContainer>{accountType}</GridBoxContainer>
-            <GridBoxContainer>{props.cachedBalance}</GridBoxContainer>
+            <GridBoxContainer>{formatMoney(props.cachedBalance, 2)}</GridBoxContainer>
         </>
     );
 };
@@ -94,7 +95,7 @@ const AccountScreens = (props: AllProps): JSX.Element => {
             <AccountsContainer>
                 <AccountsHeader />
                 {props.allAccounts.map((bankAccount: BankAccount, index: number) => {
-                    // TODO THIS ABSOLUTELY NEEDS TO BE OPTIMIZED. It's currently O(n^2).
+                    // TODO Optimize this
                     return (
                         <AccountsRow
                             key={"bankAccount" + index}
