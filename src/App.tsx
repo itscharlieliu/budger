@@ -16,6 +16,7 @@ import {
     setLanguageInitialized,
 } from "./store/initialization/initializationActions";
 import useMount from "./utils/useMount";
+import { BASE_URL } from "./defs/routerPaths";
 
 interface StateProps {
     translationInitialized: boolean;
@@ -63,7 +64,7 @@ function App(props: AllProps): JSX.Element {
 
     return (
         <AppContainer>
-            <BrowserRouter>
+            <BrowserRouter basename={BASE_URL}>
                 <AppBar />
 
                 <BodyContainer>
