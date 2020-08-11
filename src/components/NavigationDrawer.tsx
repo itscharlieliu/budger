@@ -3,10 +3,10 @@ import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 import { ACCOUNTS, BUDGET, TRANSACTIONS } from "../defs/routerPaths";
+import { ReactComponent as AccountsIcon } from "../resources/images/accounts.svg";
 import { ReactComponent as PlusIcon } from "../resources/images/plusIcon.svg";
 import { ReactComponent as RecieptIcon } from "../resources/images/reciept.svg";
 import { ReactComponent as WalletIcon } from "../resources/images/wallet.svg";
-import { ReactComponent as AccountsIcon } from "../resources/images/accounts.svg";
 import t from "../services/i18n/language";
 
 import Button from "./common/Button";
