@@ -2,18 +2,18 @@ import React, { useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
+import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
 import { ReactComponent as Trash } from "../../resources/images/trash.svg";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
 import { deleteTransaction } from "../../store/transactions/transactionActions";
 import { Transaction } from "../../store/transactions/transactionInterfaces";
 import Button from "../common/Button";
+import Modal from "../common/Modal";
 import GridBoxContainer from "../common/containers/GridBoxContainer";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 import ScreenContainer from "../common/containers/ScreenContainer";
-import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
 import TransactionAddForm from "../forms/TransactionAddForm";
-import Modal from "../common/Modal";
 
 interface StateProps {
     transactions: Transaction[];

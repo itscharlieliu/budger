@@ -9,13 +9,13 @@ import ApplicationState from "../../store";
 import { deleteAccount } from "../../store/accounts/accountsActions";
 import { AccountType, AllAccounts, BankAccount } from "../../store/accounts/accountsInterfaces";
 import { Transaction } from "../../store/transactions/transactionInterfaces";
+import formatMoney from "../../utils/formatMoney";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
 import GridBoxContainer from "../common/containers/GridBoxContainer";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 import ScreenContainer from "../common/containers/ScreenContainer";
 import AccountAddForm from "../forms/AccountAddForm";
-import formatMoney from "../../utils/formatMoney";
 
 interface StateProps {
     allAccounts: AllAccounts;

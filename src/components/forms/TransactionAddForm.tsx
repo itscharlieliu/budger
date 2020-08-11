@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
 import { connect, ResolveThunks } from "react-redux";
+import styled from "styled-components";
 
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
@@ -14,7 +15,6 @@ import Button from "../common/Button";
 import DateSelector from "../common/DateSelector";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
-import styled from "styled-components";
 
 interface StateProps {
     allAccounts: AllAccounts;
