@@ -14,6 +14,7 @@ import GridBoxContainer from "../common/containers/GridBoxContainer";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 import ScreenContainer from "../common/containers/ScreenContainer";
 import TransactionAddForm from "../forms/TransactionAddForm";
+import { theme } from "../../defs/theme";
 
 interface StateProps {
     transactions: Transaction[];
@@ -37,6 +38,16 @@ const TransactionsContainer = styled.div`
 
 const TransactionRowButton = styled(Button)`
     margin: -16px 0 -16px 16px;
+`;
+
+const InfoCard = styled.div`
+    border-radius: 4px;
+    ${theme.shadow.low};
+    margin: 16px;
+    padding: 16px;
+
+    grid-column-start: 1;
+    grid-column-end: 8;
 `;
 
 const TransactionsHeader = (): JSX.Element => {
@@ -115,6 +126,8 @@ const TransactionsScreen = (props: AllProps): JSX.Element => {
         <ScreenContainer>
             <TransactionsContainer>
                 <TransactionsHeader />
+                {props.transactions.length === 0 && <InfoCard>{t("noTransactions")}</InfoCard>}
+
                 {props.transactions.map((transaction: Transaction, index: number) => (
                     <TransactionsRow
                         key={"transaction" + index}
