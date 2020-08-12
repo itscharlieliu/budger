@@ -65,7 +65,8 @@ const InfoCard = styled.div`
     border-radius: 4px;
     ${theme.shadow.low};
     margin: 16px;
-    padding 16px;
+    padding: 16px;
+
     grid-column-start: 1;
     grid-column-end: 5;
 `;
