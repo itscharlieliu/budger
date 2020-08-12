@@ -1,6 +1,8 @@
 # Budger
 A simple-to-use zero based budgeting app.
 
+Demo can be found [here](https://itscharlieliu.github.io/budger)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Screenshots
