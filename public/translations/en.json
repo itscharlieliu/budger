@@ -16,6 +16,7 @@
     "date": "Date",
     "didNotProvideAllValues": "Did not provide all values",
     "fullDate": "{{- date, L}}",
+    "noCategories": "It looks like you haven't added any categories yet! Try adding a category group by pressing the + button next to the Category header.",
     "startingBalance": "Starting Balance",
     "unknown": "Unknown",
     "unbudgeted": "Unbudgeted",
