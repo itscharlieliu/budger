@@ -218,7 +218,9 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
 
                     <ButtonContainer>
                         <AddFormButton type={"submit"}>{t("add")}</AddFormButton>
-                        <AddFormButton type={"button"}>{t("cancel")}</AddFormButton>
+                        <AddFormButton type={"button"} onClick={() => props.onSubmit()}>
+                            {t("cancel")}
+                        </AddFormButton>
                     </ButtonContainer>
                 </ModalFormContainer>
             )}
