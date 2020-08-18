@@ -1,6 +1,6 @@
 import React from "react";
 import { connect, ResolveThunks } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import styled from "styled-components";
 
 import AppBar from "./components/AppBar";
@@ -16,7 +16,6 @@ import {
     setLanguageInitialized,
 } from "./store/initialization/initializationActions";
 import useMount from "./utils/useMount";
-import { BASE_URL } from "./defs/routerPaths";
 
 interface StateProps {
     translationInitialized: boolean;
@@ -64,14 +63,14 @@ function App(props: AllProps): JSX.Element {
 
     return (
         <AppContainer>
-            <BrowserRouter basename={BASE_URL}>
+            <HashRouter basename={"/"}>
                 <AppBar />
 
                 <BodyContainer>
                     <NavigationDrawer />
                     <Router />
                 </BodyContainer>
-            </BrowserRouter>
+            </HashRouter>
         </AppContainer>
     );
 }
