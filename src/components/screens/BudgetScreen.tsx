@@ -52,6 +52,7 @@ const BudgetContainer = styled.div`
 
 const BudgetAddButton = styled(Button)`
     margin: -16px 0 -16px 16px;
+    display: block;
 `;
 
 const BudgetGroupContainer = styled(GridBoxContainer)`
