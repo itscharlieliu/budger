@@ -15,7 +15,7 @@ import Button from "../common/Button";
 import DateSelector from "../common/DateSelector";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
-import styled from "styled-components";
+
 import getMonthCode from "../../utils/getMonthCode";
 
 interface StateProps {
