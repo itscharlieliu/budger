@@ -3,6 +3,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 import { ACCOUNTS, BUDGET, TRANSACTIONS } from "../defs/routerPaths";
+import { ReactComponent as AccountsIcon } from "../resources/images/accounts.svg";
 import { ReactComponent as PlusIcon } from "../resources/images/plusIcon.svg";
 import { ReactComponent as RecieptIcon } from "../resources/images/reciept.svg";
 import { ReactComponent as WalletIcon } from "../resources/images/wallet.svg";
@@ -61,7 +62,7 @@ const NavigationDrawer = (): JSX.Element => {
                 onClick={() => history.push(ACCOUNTS)}
             >
                 <Icon edge={"left"}>
-                    <RecieptIcon />
+                    <AccountsIcon />
                 </Icon>
                 {t("accounts")}
             </DrawerListItem>

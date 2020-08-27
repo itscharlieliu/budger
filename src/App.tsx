@@ -1,6 +1,6 @@
 import React from "react";
 import { connect, ResolveThunks } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import styled from "styled-components";
 
 import AppBar from "./components/AppBar";
@@ -63,14 +63,14 @@ function App(props: AllProps): JSX.Element {
 
     return (
         <AppContainer>
-            <BrowserRouter>
+            <HashRouter basename={"/"}>
                 <AppBar />
 
                 <BodyContainer>
                     <NavigationDrawer />
                     <Router />
                 </BodyContainer>
-            </BrowserRouter>
+            </HashRouter>
         </AppContainer>
     );
 }

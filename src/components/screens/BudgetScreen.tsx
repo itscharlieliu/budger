@@ -64,6 +64,16 @@ const BudgetGroupContainer = styled(GridBoxContainer)`
     grid-column-end: 5;
 `;
 
+const InfoCard = styled.div`
+    border-radius: 4px;
+    ${theme.shadow.low};
+    margin: 16px;
+    padding: 16px;
+
+    grid-column-start: 1;
+    grid-column-end: 5;
+`;
+
 const BudgetHeader = (): JSX.Element => {
     const [isAddingGroup, setIsAddingGroup] = useState(false);
 
@@ -153,6 +163,7 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
         <ScreenContainer>
             <BudgetContainer>
                 <BudgetHeader />
+                {props.totalBudget.length === 0 && <InfoCard>{t("noCategories")}</InfoCard>}
                 {Object.keys(props.totalBudget[currentMonthCode]).map((budgetGroupName: string, index: number) => (
                     <BudgetGroupRow
                         key={"budgetGroup" + index}

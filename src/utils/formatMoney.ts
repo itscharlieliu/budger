@@ -1,5 +1,5 @@
-const formatMoney = (value: string, decimals: number): string => {
-    const stringValue = parseFloat(value);
+const formatMoney = (value: string | number, decimals: number): string => {
+    const stringValue = typeof value === "string" ? parseFloat(value) : value;
     if (isNaN(stringValue)) {
         return "";
     }
