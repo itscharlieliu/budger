@@ -20,6 +20,21 @@ import { BUDGET } from "../../defs/storageKeys";
 
 type GenericBudgetThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericBudgetAction>;
 
+export const addBudgetMonth = (monthCode: string): GenericBudgetThunkAction => async (
+    dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
+    getState: () => ApplicationState,
+): Promise<void> => {
+    dispatch({ type: SETTING_TOTAL_BUDGET });
+
+    const totalBudget = getState().budget.totalBudget;
+
+    // Add empty budget
+    // TODO create budget from template
+    const newTotalBudget = { ...totalBudget, [monthCode]: {} };
+    totalBudget[monthCode] = {};
+    dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
+};
+
 export const addBudgetGroup = (budgetGroup: string): GenericBudgetThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
     getState: () => ApplicationState,
