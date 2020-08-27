@@ -9,12 +9,14 @@ import ApplicationState from "../../store";
 import { deleteAccount } from "../../store/accounts/accountsActions";
 import { AccountType, AllAccounts, BankAccount } from "../../store/accounts/accountsInterfaces";
 import { Transaction } from "../../store/transactions/transactionInterfaces";
+import formatMoney from "../../utils/formatMoney";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
 import GridBoxContainer from "../common/containers/GridBoxContainer";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 import ScreenContainer from "../common/containers/ScreenContainer";
 import AccountAddForm from "../forms/AccountAddForm";
+import { theme } from "../../defs/theme";
 
 interface StateProps {
     allAccounts: AllAccounts;
@@ -43,6 +45,16 @@ const AccountAddButton = styled(Button)`
 
 const AccountRowButton = styled(Button)`
     margin: -16px 0 -16px 16px;
+`;
+
+const InfoCard = styled.div`
+    border-radius: 4px;
+    ${theme.shadow.low};
+    margin: 16px;
+    padding: 16px;
+
+    grid-column-start: 1;
+    grid-column-end: 4;
 `;
 
 const AccountsHeader = (): JSX.Element => {
@@ -83,7 +95,7 @@ const AccountsRow = (props: AccountsRowProps): JSX.Element => {
                 <AccountRowButton icon={<Trash />} onClick={() => props.onDelete()} flat />
             </GridBoxContainer>
             <GridBoxContainer>{accountType}</GridBoxContainer>
-            <GridBoxContainer>{props.cachedBalance}</GridBoxContainer>
+            <GridBoxContainer>{formatMoney(props.cachedBalance, 2)}</GridBoxContainer>
         </>
     );
 };
@@ -93,8 +105,10 @@ const AccountScreens = (props: AllProps): JSX.Element => {
         <ScreenContainer>
             <AccountsContainer>
                 <AccountsHeader />
+                {props.allAccounts.length === 0 && <InfoCard>{t("noAccounts")}</InfoCard>}
+
                 {props.allAccounts.map((bankAccount: BankAccount, index: number) => {
-                    // TODO THIS ABSOLUTELY NEEDS TO BE OPTIMIZED. It's currently O(n^2).
+                    // TODO Optimize this
                     return (
                         <AccountsRow
                             key={"bankAccount" + index}

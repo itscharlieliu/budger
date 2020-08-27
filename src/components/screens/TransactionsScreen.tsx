@@ -2,18 +2,19 @@ import React, { useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
+import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
 import { ReactComponent as Trash } from "../../resources/images/trash.svg";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
 import { deleteTransaction } from "../../store/transactions/transactionActions";
 import { Transaction } from "../../store/transactions/transactionInterfaces";
 import Button from "../common/Button";
+import Modal from "../common/Modal";
 import GridBoxContainer from "../common/containers/GridBoxContainer";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 import ScreenContainer from "../common/containers/ScreenContainer";
-import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
 import TransactionAddForm from "../forms/TransactionAddForm";
-import Modal from "../common/Modal";
+import { theme } from "../../defs/theme";
 
 interface StateProps {
     transactions: Transaction[];
@@ -37,6 +38,16 @@ const TransactionsContainer = styled.div`
 
 const TransactionRowButton = styled(Button)`
     margin: -16px 0 -16px 16px;
+`;
+
+const InfoCard = styled.div`
+    border-radius: 4px;
+    ${theme.shadow.low};
+    margin: 16px;
+    padding: 16px;
+
+    grid-column-start: 1;
+    grid-column-end: 8;
 `;
 
 const TransactionsHeader = (): JSX.Element => {
@@ -115,6 +126,8 @@ const TransactionsScreen = (props: AllProps): JSX.Element => {
         <ScreenContainer>
             <TransactionsContainer>
                 <TransactionsHeader />
+                {props.transactions.length === 0 && <InfoCard>{t("noTransactions")}</InfoCard>}
+
                 {props.transactions.map((transaction: Transaction, index: number) => (
                     <TransactionsRow
                         key={"transaction" + index}

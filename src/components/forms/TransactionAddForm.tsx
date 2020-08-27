@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
 import { connect, ResolveThunks } from "react-redux";
+import styled from "styled-components";
 
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
@@ -223,7 +224,9 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
 
                     <ButtonContainer>
                         <AddFormButton type={"submit"}>{t("add")}</AddFormButton>
-                        <AddFormButton type={"button"}>{t("cancel")}</AddFormButton>
+                        <AddFormButton type={"button"} onClick={() => props.onSubmit()}>
+                            {t("cancel")}
+                        </AddFormButton>
                     </ButtonContainer>
                 </ModalFormContainer>
             )}
