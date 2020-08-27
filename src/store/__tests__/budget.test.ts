@@ -3,7 +3,13 @@ import configureMockStore from "redux-mock-store";
 import thunk, { ThunkDispatch } from "redux-thunk";
 
 import ERRORS from "../../defs/errors";
-import { addBudgetCategory, addBudgetGroup, deleteBudgetCategory, deleteBudgetGroup } from "../budget/budgetActions";
+import {
+    addBudgetCategory,
+    addBudgetGroup,
+    addBudgetMonth,
+    deleteBudgetCategory,
+    deleteBudgetGroup,
+} from "../budget/budgetActions";
 import {
     SET_TOTAL_BUDGET_FAILURE,
     SET_TOTAL_BUDGET_SUCCESS,
@@ -12,12 +18,30 @@ import {
 } from "../budget/budgetInterfaces";
 import budgetReducer from "../budget/budgetReducer";
 import ApplicationState from "../index";
+import getMonthCode from "../../utils/getMonthCode";
 
 type Dispatch = ThunkDispatch<ApplicationState, null, AnyAction>;
 
 const mockStore = configureMockStore<unknown, Dispatch>([thunk]);
 
 describe("budget actions", () => {
+    it("successfully adds new budget for a new month", () => {
+        const store = mockStore({
+            budget: {
+                totalBudget: {},
+            },
+        });
+
+        const currDate = new Date();
+
+        store.dispatch(addBudgetMonth(getMonthCode(currDate)));
+        const actions = store.getActions();
+
+        expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
+        expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
+        expect(actions[1].totalBudget[getMonthCode(currDate)]).toEqual({});
+    });
+
     it("successfully adds budget group", async () => {
         const store = mockStore({
             budget: {

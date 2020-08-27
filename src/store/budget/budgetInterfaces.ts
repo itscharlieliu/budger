@@ -17,7 +17,7 @@ export interface MonthlyBudget {
 }
 
 export interface TotalBudget {
-    [month: number]: MonthlyBudget;
+    [month: string]: MonthlyBudget;
 }
 
 export interface BudgetState {
