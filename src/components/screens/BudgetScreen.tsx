@@ -37,6 +37,7 @@ type AllProps = StateProps & ResolveThunks<DispatchProps>;
 interface BudgetCategoryRowProps extends BudgetCategory {
     onDelete: (category: string) => void;
     activity: number;
+    categoryName: string;
 }
 
 interface BudgetGroupRowProps {
@@ -108,13 +109,13 @@ const BudgetCategoryRow = (props: BudgetCategoryRowProps): JSX.Element => {
                 <Modal visible={isEditingCategory} onClose={() => setIsEditingCategory(false)}>
                     <BudgetCategoryEditForm
                         onSubmit={() => setIsEditingCategory(false)}
-                        budgetCategory={props.category}
+                        budgetCategory={props.categoryName}
                         defaultValue={formatMoney(props.budgeted.toString(), 2)}
                     />
                 </Modal>
-                {props.category}
+                {props.categoryName}
                 <BudgetAddButton icon={<Edit />} onClick={() => setIsEditingCategory(true)} flat />
-                <BudgetAddButton icon={<Trash />} onClick={() => props.onDelete(props.category)} flat />
+                <BudgetAddButton icon={<Trash />} onClick={() => props.onDelete(props.categoryName)} flat />
             </GridBoxContainer>
             <GridBoxContainer>{props.budgeted}</GridBoxContainer>
             <GridBoxContainer>{props.activity}</GridBoxContainer>
@@ -130,27 +131,26 @@ const BudgetGroupRow = (props: BudgetGroupRowProps): JSX.Element => {
         <>
             <BudgetGroupContainer>
                 <Modal visible={isAddingCategory} onClose={() => setIsAddingCategory(false)}>
-                    <BudgetCategoryAddForm onSubmit={() => setIsAddingCategory(false)} group={props.group} />
+                    {/*<BudgetCategoryAddForm onSubmit={() => setIsAddingCategory(false)} group={props.group} />*/}
                 </Modal>
                 {props.groupName}
                 <BudgetAddButton icon={<PlusIcon />} onClick={() => setIsAddingCategory(true)} flat />
-                <BudgetAddButton icon={<Trash />} onClick={() => props.onDeleteGroup(props.group)} flat />
+                {/*<BudgetAddButton icon={<Trash />} onClick={() => props.onDeleteGroup(props.group)} flat />*/}
             </BudgetGroupContainer>
-            {props.categories.map((category: BudgetCategory) => (
-                // TODO This needs to be optimized. It's currently O(n^2).
-                <BudgetCategoryRow
-                    key={category.category}
-                    category={category.category}
-                    budgeted={category.budgeted}
-                    activity={props.transactions.reduce((totalBalance: number, transaction: Transaction) => {
-                        if (transaction.category !== category.category) {
-                            return totalBalance;
-                        }
-                        return totalBalance + transaction.activity;
-                    }, 0)}
-                    onDelete={props.onDeleteCategory}
-                />
-            ))}
+            {/*{props.categories.map((category: BudgetCategory) => (*/}
+            {/*    <BudgetCategoryRow*/}
+            {/*        key={category.category}*/}
+            {/*        category={category.category}*/}
+            {/*        budgeted={category.budgeted}*/}
+            {/*        activity={props.transactions.reduce((totalBalance: number, transaction: Transaction) => {*/}
+            {/*            if (transaction.category !== category.category) {*/}
+            {/*                return totalBalance;*/}
+            {/*            }*/}
+            {/*            return totalBalance + transaction.activity;*/}
+            {/*        }, 0)}*/}
+            {/*        onDelete={props.onDeleteCategory}*/}
+            {/*    />*/}
+            {/*))}*/}
         </>
     );
 };
@@ -159,21 +159,25 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
     // TODO change this to state so that we can change months
     const currentMonthCode = getMonthCode(new Date());
 
+    const currentMonthlyBudgetKeys = Object.keys(props.totalBudget[currentMonthCode]);
+
     return (
         <ScreenContainer>
             <BudgetContainer>
                 <BudgetHeader />
-                {props.totalBudget.length === 0 && <InfoCard>{t("noCategories")}</InfoCard>}
-                {Object.keys(props.totalBudget[currentMonthCode]).map((budgetGroupName: string, index: number) => (
-                    <BudgetGroupRow
-                        key={"budgetGroup" + index}
-                        groupName={budgetGroupName}
-                        categories={Object.keys(props.totalBudget[currentMonthCode][budgetGroupName]).map()}
-                        onDeleteCategory={props.deleteBudgetCategory}
-                        onDeleteGroup={props.deleteBudgetGroup}
-                        transactions={props.transactions}
-                    />
-                ))}
+                {currentMonthlyBudgetKeys.length === 0 && <InfoCard>{t("noCategories")}</InfoCard>}
+                {/*{currentMonthlyBudgetKeys.map((budgetGroupName: string, index: number) => (*/}
+                {/*    <BudgetGroupRow*/}
+                {/*        key={"budgetGroup" + index}*/}
+                {/*        groupName={budgetGroupName}*/}
+                {/*        categories={Object.keys(*/}
+                {/*            props.totalBudget[currentMonthCode][budgetGroupName],*/}
+                {/*        ).map((budgetCategoryName: string, index: number) => {})}*/}
+                {/*        onDeleteCategory={props.deleteBudgetCategory}*/}
+                {/*        onDeleteGroup={props.deleteBudgetGroup}*/}
+                {/*        transactions={props.transactions}*/}
+                {/*    />*/}
+                {/*))}*/}
             </BudgetContainer>
         </ScreenContainer>
     );
