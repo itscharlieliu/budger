@@ -42,6 +42,24 @@ describe("budget actions", () => {
         expect(actions[1].totalBudget[getMonthCode(currDate)]).toEqual({});
     });
 
+    it("doesn't add new month if month already exists", () => {
+        const monthCode = "202009";
+
+        const store = mockStore({
+            budget: {
+                totalBudget: {
+                    [monthCode]: {},
+                },
+            },
+        });
+
+        store.dispatch(addBudgetMonth(monthCode));
+        const actions = store.getActions();
+        expect(actions[1].type).toBe(SET_TOTAL_BUDGET_FAILURE);
+        expect(actions[1].error.message).toBe(ERRORS.monthAlreadyExists);
+        expect(actions[2]).toBeUndefined();
+    });
+
     it("successfully adds budget group", async () => {
         const store = mockStore({
             budget: {
