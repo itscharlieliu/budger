@@ -20,10 +20,16 @@ const DrawerButton = styled(Button)`
     margin: 16px;
 `;
 
+const VersionContainer = styled.div`
+    margin: auto 16px 16px;
+`;
+
 const NavigationDrawer = (): JSX.Element => {
     const [isAddingTransaction, setIsAddingTransaction] = useState(false);
     const location = useLocation();
     const history = useHistory();
+
+    console.log(process.env);
 
     return (
         <Drawer>
@@ -66,6 +72,8 @@ const NavigationDrawer = (): JSX.Element => {
                 </Icon>
                 {t("accounts")}
             </DrawerListItem>
+
+            <VersionContainer>v{process.env.REACT_APP_VERSION}</VersionContainer>
         </Drawer>
     );
 };
