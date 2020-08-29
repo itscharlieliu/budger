@@ -28,6 +28,12 @@ export const addBudgetMonth = (monthCode: string): GenericBudgetThunkAction => a
 
     const totalBudget = getState().budget.totalBudget;
 
+    if (totalBudget[monthCode]) {
+        // Month already exists
+        dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.monthAlreadyExists) });
+        return;
+    }
+
     // Add empty budget
     // TODO create budget from template
     const newTotalBudget = { ...totalBudget, [monthCode]: {} };
