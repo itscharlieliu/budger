@@ -5,6 +5,7 @@ const ERRORS = {
     categoryDoesNotExist: "This category does not exist",
     accountAlreadyExists: "This account already exists",
     monthAlreadyExists: "This month already has a budget",
+    monthDoesNotExist: "This month does not have a budget",
     invalidTotalBudget: "Invalid total budget",
     invalidTransactions: "Invalid transactions",
     invalidAccounts: "Invalid accounts",
