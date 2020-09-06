@@ -202,7 +202,19 @@ export const editBudgetedAmount = (
         return;
     }
 
-    // TODO loop through all groups to determine if category exists
+    let numCategoriesEdited = 0;
+
+    for (const group of Object.keys(newTotalBudget[monthCode])) {
+        if (newTotalBudget[monthCode][group][budgetCategory] !== undefined) {
+            newTotalBudget[monthCode][group][budgetCategory].budgeted = budgeted;
+            ++numCategoriesEdited;
+        }
+    }
+
+    if (numCategoriesEdited === 0) {
+        dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.categoryDoesNotExist) });
+        return;
+    }
 
     // Save budget to local storage
     localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
