@@ -333,7 +333,7 @@ describe("budget actions", () => {
                 },
             },
         });
-        await store.dispatch(editBudgetedAmount(MONTH_CODE, "test group", 420));
+        await store.dispatch(editBudgetedAmount(MONTH_CODE, "test category", 420));
         const actions = store.getActions();
 
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
