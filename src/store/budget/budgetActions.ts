@@ -15,6 +15,10 @@ import {
     SET_TOTAL_BUDGET_FAILURE,
     TotalBudget,
     MonthlyBudget,
+    ADDING_MONTHLY_BUDGET,
+    GenericAddMonthlyBudgetAction,
+    ADD_MONTHLY_BUDGET_FAILURE,
+    ADD_MONTHLY_BUDGET_SUCCESS,
 } from "./budgetInterfaces";
 import ERRORS from "../../defs/errors";
 import { BUDGET } from "../../defs/storageKeys";
@@ -22,16 +26,16 @@ import { BUDGET } from "../../defs/storageKeys";
 type GenericBudgetThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericBudgetAction>;
 
 export const addBudgetMonth = (monthCode: string): GenericBudgetThunkAction => async (
-    dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
+    dispatch: ThunkDispatch<ApplicationState, null, GenericAddMonthlyBudgetAction>,
     getState: () => ApplicationState,
 ): Promise<void> => {
-    dispatch({ type: SETTING_TOTAL_BUDGET });
+    dispatch({ type: ADDING_MONTHLY_BUDGET });
 
     const totalBudget = getState().budget.totalBudget;
 
     if (totalBudget[monthCode]) {
         // Month already exists
-        dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.monthAlreadyExists) });
+        dispatch({ type: ADD_MONTHLY_BUDGET_FAILURE, error: new Error(ERRORS.monthAlreadyExists) });
         return;
     }
 
@@ -42,7 +46,7 @@ export const addBudgetMonth = (monthCode: string): GenericBudgetThunkAction => a
     // Save budget to local storage
     localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
 
-    dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
+    dispatch({ type: ADD_MONTHLY_BUDGET_SUCCESS, totalBudget: newTotalBudget });
 };
 
 export const addBudgetGroup = (budgetGroup: string, monthCode: string): GenericBudgetThunkAction => async (

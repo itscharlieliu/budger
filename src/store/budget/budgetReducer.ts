@@ -4,6 +4,9 @@ import {
 } from "../initialization/initializationInterfaces";
 
 import {
+    ADD_MONTHLY_BUDGET_FAILURE,
+    ADD_MONTHLY_BUDGET_SUCCESS,
+    ADDING_MONTHLY_BUDGET,
     BudgetState,
     GenericBudgetAction,
     SET_TOTAL_BUDGET_FAILURE,
@@ -12,8 +15,9 @@ import {
 } from "./budgetInterfaces";
 
 export const defaultBudgetState: BudgetState = {
-    totalBudget: [],
+    totalBudget: {},
     isSettingBudget: false,
+    isAddingMonthlyBudget: false,
     error: null,
 };
 
@@ -33,6 +37,15 @@ const budgetReducer = (
         }
         case SET_TOTAL_BUDGET_FAILURE: {
             return { ...state, isSettingBudget: false, error: action.error };
+        }
+        case ADDING_MONTHLY_BUDGET: {
+            return { ...state, isAddingMonthlyBudget: true, error: null };
+        }
+        case ADD_MONTHLY_BUDGET_SUCCESS: {
+            return { ...state, isAddingMonthlyBudget: false, totalBudget: action.totalBudget };
+        }
+        case ADD_MONTHLY_BUDGET_FAILURE: {
+            return { ...state, isAddingMonthlyBudget: false, error: action.error };
         }
         default: {
             return { ...state };
