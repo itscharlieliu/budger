@@ -10,6 +10,7 @@ import ModalFormContainer from "../common/containers/ModalFormContainer";
 
 interface OwnProps {
     onSubmit?: () => void;
+    monthCode: string;
 }
 
 interface DispatchProps {
@@ -24,7 +25,7 @@ interface FormValues {
 
 const BudgetGroupAddForm = (props: AllProps): JSX.Element => {
     const handleAddCategoryGroup = (values: FormValues) => {
-        values.groupName && props.addBudgetGroup(values.groupName);
+        values.groupName && props.addBudgetGroup(props.monthCode, values.groupName);
         props.onSubmit && props.onSubmit();
     };
 

@@ -12,6 +12,7 @@ import ModalFormContainer from "../common/containers/ModalFormContainer";
 interface OwnProps {
     onSubmit?: () => void;
     budgetCategory: string;
+    monthCode: string;
     defaultValue?: string;
 }
 
@@ -27,7 +28,11 @@ interface FormValues {
 const BudgetCategoryEditForm = (props: AllProps): JSX.Element => {
     const handleAddCategoryGroup = (values: FormValues) => {
         const updatedBudgetAmount = parseFloat(values.budgeted ? values.budgeted : "0");
-        props.editBudgetedAmount(props.budgetCategory, isNaN(updatedBudgetAmount) ? 0 : updatedBudgetAmount);
+        props.editBudgetedAmount(
+            props.monthCode,
+            props.budgetCategory,
+            isNaN(updatedBudgetAmount) ? 0 : updatedBudgetAmount,
+        );
         props.onSubmit && props.onSubmit();
     };
 
