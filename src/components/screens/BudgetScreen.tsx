@@ -187,6 +187,7 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
     }
 
     const currentMonthlyBudgetKeys = props.totalBudget[monthCode] ? Object.keys(props.totalBudget[monthCode]) : [];
+    // TODO figure out why it is not adding a group
 
     return (
         <ScreenContainer>

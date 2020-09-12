@@ -49,7 +49,7 @@ export const addBudgetMonth = (monthCode: string): GenericBudgetThunkAction => a
     dispatch({ type: ADD_MONTHLY_BUDGET_SUCCESS, totalBudget: newTotalBudget });
 };
 
-export const addBudgetGroup = (budgetGroup: string, monthCode: string): GenericBudgetThunkAction => async (
+export const addBudgetGroup = (monthCode: string, budgetGroup: string): GenericBudgetThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
     getState: () => ApplicationState,
 ): Promise<void> => {
@@ -57,7 +57,7 @@ export const addBudgetGroup = (budgetGroup: string, monthCode: string): GenericB
 
     const totalBudget = getState().budget.totalBudget;
 
-    if (!totalBudget[monthCode]) {
+    if (totalBudget[monthCode] === undefined) {
         dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.monthDoesNotExist) });
         return;
     }
