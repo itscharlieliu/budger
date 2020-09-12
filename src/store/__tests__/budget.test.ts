@@ -12,6 +12,9 @@ import {
     editBudgetedAmount,
 } from "../budget/budgetActions";
 import {
+    ADD_MONTHLY_BUDGET_FAILURE,
+    ADD_MONTHLY_BUDGET_SUCCESS,
+    ADDING_MONTHLY_BUDGET,
     SET_TOTAL_BUDGET_FAILURE,
     SET_TOTAL_BUDGET_SUCCESS,
     SETTING_TOTAL_BUDGET,
@@ -40,8 +43,8 @@ describe("budget actions", () => {
         store.dispatch(addBudgetMonth(getMonthCode(currDate)));
         const actions = store.getActions();
 
-        expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
-        expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
+        expect(actions[0].type).toBe(ADDING_MONTHLY_BUDGET);
+        expect(actions[1].type).toBe(ADD_MONTHLY_BUDGET_SUCCESS);
         expect(actions[1].totalBudget[getMonthCode(currDate)]).toEqual({});
     });
 
@@ -56,7 +59,7 @@ describe("budget actions", () => {
 
         store.dispatch(addBudgetMonth(MONTH_CODE));
         const actions = store.getActions();
-        expect(actions[1].type).toBe(SET_TOTAL_BUDGET_FAILURE);
+        expect(actions[1].type).toBe(ADD_MONTHLY_BUDGET_FAILURE);
         expect(actions[1].error.message).toBe(ERRORS.monthAlreadyExists);
         expect(actions[2]).toBeUndefined();
     });
@@ -69,7 +72,7 @@ describe("budget actions", () => {
                 },
             },
         });
-        await store.dispatch(addBudgetGroup("test group", MONTH_CODE));
+        await store.dispatch(addBudgetGroup(MONTH_CODE, "test group"));
         const actions = store.getActions();
 
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
@@ -91,7 +94,7 @@ describe("budget actions", () => {
                 },
             },
         });
-        await store.dispatch(addBudgetGroup("test group 2", MONTH_CODE));
+        await store.dispatch(addBudgetGroup(MONTH_CODE, "test group 2"));
         const actions = store.getActions();
 
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
@@ -111,7 +114,7 @@ describe("budget actions", () => {
             },
         });
 
-        await store.dispatch(addBudgetGroup("test group", MONTH_CODE));
+        await store.dispatch(addBudgetGroup(MONTH_CODE, "test group"));
 
         const actions = store.getActions();
 
@@ -130,7 +133,7 @@ describe("budget actions", () => {
             },
         });
 
-        await store.dispatch(addBudgetGroup("test group", MONTH_CODE));
+        await store.dispatch(addBudgetGroup(MONTH_CODE, "test group"));
 
         const actions = store.getActions();
 
