@@ -37,7 +37,7 @@ interface DispatchProps {
 type AllProps = StateProps & ResolveThunks<DispatchProps>;
 
 interface BudgetCategoryRowProps extends BudgetCategory {
-    onDelete: (category: string) => void;
+    onDeleteCategory: () => void;
     activity: number;
     categoryName: string;
     monthCode: string;
@@ -45,6 +45,7 @@ interface BudgetCategoryRowProps extends BudgetCategory {
 
 interface BudgetGroupRowProps {
     groupName: string;
+    monthCode: string;
     onDeleteGroup: () => void;
 }
 
@@ -129,36 +130,30 @@ const BudgetHeader = (props: BudgetHeaderProps): JSX.Element => {
 //     );
 // };
 
-// const BudgetGroupRow = (props: BudgetGroupRowProps): JSX.Element => {
-//     const [isAddingCategory, setIsAddingCategory] = useState(false);
-//
-//     return (
-//         <>
-//             <BudgetGroupContainer>
-//                 <Modal visible={isAddingCategory} onClose={() => setIsAddingCategory(false)}>
-//                     {/*<BudgetCategoryAddForm onSubmit={() => setIsAddingCategory(false)} group={props.group} />*/}
-//                 </Modal>
-//                 {props.groupName}
-//                 <BudgetAddButton icon={<PlusIcon />} onClick={() => setIsAddingCategory(true)} flat />
-//                 {/*<BudgetAddButton icon={<Trash />} onClick={() => props.onDeleteGroup(props.group)} flat />*/}
-//             </BudgetGroupContainer>
-//             {props.categories.map((category: BudgetCategory) => (
-//                 <BudgetCategoryRow
-//                     key={category.category}
-//                     category={category.category}
-//                     budgeted={category.budgeted}
-//                     activity={props.transactions.reduce((totalBalance: number, transaction: Transaction) => {
-//                         if (transaction.category !== category.category) {
-//                             return totalBalance;
-//                         }
-//                         return totalBalance + transaction.activity;
-//                     }, 0)}
-//                     onDelete={props.onDeleteCategory}
-//                 />
-//             ))}
-//         </>
-//     );
-// };
+const BudgetCategoryRow = (props: BudgetCategoryRowProps): JSX.Element => {
+    const [isEditingCategory, setIsEditingCategory] = useState(false);
+
+    return (
+        <>
+            <GridBoxContainer>
+                <Modal visible={isEditingCategory} onClose={() => setIsEditingCategory(false)}>
+                    <BudgetCategoryEditForm
+                        onSubmit={() => setIsEditingCategory(false)}
+                        budgetCategory={props.categoryName}
+                        defaultValue={formatMoney(props.budgeted.toString(), 2)}
+                        monthCode={props.monthCode}
+                    />
+                </Modal>
+                {props.categoryName}
+                <BudgetAddButton icon={<Edit />} onClick={() => setIsEditingCategory(true)} flat />
+                <BudgetAddButton icon={<Trash />} onClick={() => props.onDeleteCategory()} flat />
+            </GridBoxContainer>
+            <GridBoxContainer>{props.budgeted}</GridBoxContainer>
+            <GridBoxContainer>{props.activity}</GridBoxContainer>
+            <GridBoxContainer>{props.budgeted + props.activity}</GridBoxContainer>
+        </>
+    );
+};
 
 const BudgetGroupRow = (props: BudgetGroupRowProps): JSX.Element => {
     const [isAddingCategory, setIsAddingCategory] = useState(false);
@@ -167,7 +162,11 @@ const BudgetGroupRow = (props: BudgetGroupRowProps): JSX.Element => {
         <>
             <BudgetGroupContainer>
                 <Modal visible={isAddingCategory} onClose={() => setIsAddingCategory(false)}>
-                    {/*<BudgetCategoryAddForm onSubmit={() => setIsAddingCategory(false)} group={props.group} />*/}
+                    <BudgetCategoryAddForm
+                        onSubmit={() => setIsAddingCategory(false)}
+                        group={props.groupName}
+                        monthCode={props.monthCode}
+                    />
                 </Modal>
                 {props.groupName}
                 <BudgetAddButton icon={<PlusIcon />} onClick={() => setIsAddingCategory(true)} flat />
@@ -187,7 +186,6 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
     }
 
     const currentMonthlyBudgetKeys = props.totalBudget[monthCode] ? Object.keys(props.totalBudget[monthCode]) : [];
-    // TODO figure out why it is not adding a group
 
     return (
         <ScreenContainer>
@@ -195,11 +193,26 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
                 <BudgetHeader monthCode={monthCode} />
                 {currentMonthlyBudgetKeys.length === 0 && <InfoCard>{t("noCategories")}</InfoCard>}
                 {currentMonthlyBudgetKeys.map((budgetGroupName: string, index: number) => (
-                    <BudgetGroupRow
-                        key={"budgetGroup" + index}
-                        groupName={budgetGroupName}
-                        onDeleteGroup={() => props.deleteBudgetGroup(monthCode, budgetGroupName)}
-                    />
+                    <>
+                        <BudgetGroupRow
+                            key={"budgetGroup" + index}
+                            groupName={budgetGroupName}
+                            onDeleteGroup={() => props.deleteBudgetGroup(monthCode, budgetGroupName)}
+                            monthCode={monthCode}
+                        />
+                        {Object.keys(props.totalBudget[monthCode][budgetGroupName]).map(
+                            (categoryName: string, index: number) => (
+                                <BudgetCategoryRow
+                                    key={categoryName + index}
+                                    categoryName={categoryName}
+                                    monthCode={monthCode}
+                                    onDeleteCategory={() => props.deleteBudgetCategory(monthCode, categoryName)}
+                                    activity={props.totalBudget[monthCode][budgetGroupName][categoryName].activity}
+                                    budgeted={props.totalBudget[monthCode][budgetGroupName][categoryName].budgeted}
+                                />
+                            ),
+                        )}
+                    </>
                 ))}
             </BudgetContainer>
         </ScreenContainer>

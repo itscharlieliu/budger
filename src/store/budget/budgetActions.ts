@@ -114,6 +114,7 @@ export const addBudgetCategory = (
         ...totalBudget[monthCode][budgetGroup],
         [budgetCategory]: {
             budgeted: 0,
+            activity: 0,
         },
     };
 
