@@ -10,6 +10,7 @@ export const ADD_MONTHLY_BUDGET_FAILURE = "ADD_MONTHLY_BUDGET_FAILURE";
 
 export interface BudgetCategory {
     budgeted: number;
+    activity: number;
 }
 
 export interface BudgetGroup {
