@@ -156,17 +156,16 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                                 error={meta.touched && meta.error}
                                 label={t("category")}
                                 value={input.value || { value: "", label: "" }}
-                                options={Object.keys(props.totalBudget).reduce(
-                                    (categories: AutocompleteOption[], budgetGroup: string) => {
-                                        for (const category of Object.keys(
-                                            props.totalBudget[currentMonthCode][budgetGroup],
-                                        )) {
-                                            categories.push({ value: category, label: category });
-                                        }
-                                        return categories;
-                                    },
-                                    [],
-                                )}
+                                options={Object.keys(
+                                    props.totalBudget[currentMonthCode] ? props.totalBudget[currentMonthCode] : {},
+                                ).reduce((categories: AutocompleteOption[], budgetGroup: string) => {
+                                    for (const category of Object.keys(
+                                        props.totalBudget[currentMonthCode][budgetGroup],
+                                    )) {
+                                        categories.push({ value: category, label: category });
+                                    }
+                                    return categories;
+                                }, [])}
                                 onSelectedItemChange={() =>
                                     dateInputRef.current && dateInputRef.current.getInput().focus()
                                 }
