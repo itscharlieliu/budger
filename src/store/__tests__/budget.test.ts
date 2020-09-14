@@ -3,6 +3,7 @@ import configureMockStore from "redux-mock-store";
 import thunk, { ThunkDispatch } from "redux-thunk";
 
 import ERRORS from "../../defs/errors";
+import getMonthCode from "../../utils/getMonthCode";
 import {
     addBudgetCategory,
     addBudgetGroup,
@@ -22,7 +23,6 @@ import {
 } from "../budget/budgetInterfaces";
 import budgetReducer from "../budget/budgetReducer";
 import ApplicationState from "../index";
-import getMonthCode from "../../utils/getMonthCode";
 
 type Dispatch = ThunkDispatch<ApplicationState, null, AnyAction>;
 
@@ -363,6 +363,7 @@ describe("budget reducer", () => {
                 "test group": {
                     "test category": {
                         budgeted: 1999,
+                        activity: 10,
                     },
                 },
             },

@@ -1,32 +1,38 @@
 import validateTotalBudget from "../validateTotalBudget";
+import { TotalBudget } from "../../store/budget/budgetInterfaces";
+
+const MONTH_CODE = "202009";
 
 describe("total budget validator", () => {
     it("returns true if object is a valid total budget", () => {
-        let validTotalBudget = [
-            {
-                group: "test group",
-                categories: [
-                    {
-                        category: "test category",
-                        budgeted: 50,
-                        activity: -10,
+        let validTotalBudget: TotalBudget = {
+            [MONTH_CODE]: {
+                "test group": {
+                    "test category": {
+                        budgeted: 0,
+                        activity: 10,
                     },
-                ],
+                },
             },
-        ];
+        };
 
         expect(validateTotalBudget(validTotalBudget)).toBe(true);
 
-        validTotalBudget = [
-            {
-                group: "test group",
-                categories: [],
+        validTotalBudget = {
+            [MONTH_CODE]: {
+                "test group": {},
             },
-        ];
+        };
 
         expect(validateTotalBudget(validTotalBudget)).toBe(true);
 
-        validTotalBudget = [];
+        validTotalBudget = {
+            [MONTH_CODE]: {},
+        };
+
+        expect(validateTotalBudget(validTotalBudget)).toBe(true);
+
+        validTotalBudget = {};
 
         expect(validateTotalBudget(validTotalBudget)).toBe(true);
     });
@@ -47,27 +53,27 @@ describe("total budget validator", () => {
 
         expect(validateTotalBudget(invalidTotalBudget1)).toBe(false);
 
-        const invalidTotalBudget2 = [
-            {
-                group: "test category",
-                categories: [
-                    {
-                        category: "test category",
-                        budgeted: "50",
-                        activity: -10,
-                    },
-                ],
+        const invalidTotalBudget2 = {
+            "test group": {
+                "test category": {
+                    budgeted: 0,
+                    activity: 10,
+                },
             },
-        ];
+        };
 
         expect(validateTotalBudget(invalidTotalBudget2)).toBe(false);
 
-        const invalidTotalBudget3 = [
-            {
-                group: "test category",
-                categories: [null],
+        const invalidTotalBudget3 = {
+            [MONTH_CODE]: {
+                "test group": {
+                    "test category": {
+                        budgeted: "s",
+                        activity: 10,
+                    },
+                },
             },
-        ];
+        };
 
         expect(validateTotalBudget(invalidTotalBudget3)).toBe(false);
 
