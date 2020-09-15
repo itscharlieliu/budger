@@ -25,8 +25,6 @@ interface FormValues {
 
 const BudgetGroupAddForm = (props: AllProps): JSX.Element => {
     const handleAddCategoryGroup = (values: FormValues) => {
-        console.log(props);
-
         values.groupName && props.addBudgetGroup(props.monthCode, values.groupName);
         props.onSubmit && props.onSubmit();
     };

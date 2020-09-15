@@ -162,6 +162,7 @@ describe("budget actions", () => {
                 "test group": {
                     "test category": {
                         budgeted: 0,
+                        activity: 0,
                     },
                 },
             },
@@ -176,6 +177,7 @@ describe("budget actions", () => {
                         "test group": {
                             "test category": {
                                 budgeted: 0,
+                                activity: 0,
                             },
                         },
                     },
@@ -191,9 +193,11 @@ describe("budget actions", () => {
             [MONTH_CODE]: {
                 "test group": {
                     "test category": {
+                        activity: 0,
                         budgeted: 0,
                     },
                     "test category 2": {
+                        activity: 0,
                         budgeted: 0,
                     },
                 },

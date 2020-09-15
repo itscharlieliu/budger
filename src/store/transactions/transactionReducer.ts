@@ -23,7 +23,6 @@ const transactionReducer = (
 ): TransactionState => {
     switch (action.type) {
         case SET_TRANSACTIONS_INITIALIZED_SUCCESS: {
-            console.log(action.transactions);
             return { ...state, transactions: action.transactions };
         }
         case UPDATING_TRANSACTIONS: {
