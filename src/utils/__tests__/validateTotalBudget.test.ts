@@ -77,12 +77,12 @@ describe("total budget validator", () => {
 
         expect(validateTotalBudget(invalidTotalBudget3)).toBe(false);
 
-        const invalidTotalBudget4 = "test";
-
-        expect(validateTotalBudget(invalidTotalBudget4)).toBe(false);
-
-        const invalidTotalBudget5 = undefined;
+        const invalidTotalBudget5 = "test";
 
         expect(validateTotalBudget(invalidTotalBudget5)).toBe(false);
+
+        const invalidTotalBudget6 = undefined;
+
+        expect(validateTotalBudget(invalidTotalBudget6)).toBe(false);
     });
 });

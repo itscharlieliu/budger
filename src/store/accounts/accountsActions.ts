@@ -36,7 +36,7 @@ export const addAccount = (
     }
 
     // TODO dispatch add transaction for starting balance
-    console.log("starting balance: ", startingBalance);
+    // console.log("starting balance: ", startingBalance);
 
     const updatedAccounts: AllAccounts = [
         {
