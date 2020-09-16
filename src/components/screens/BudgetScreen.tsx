@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
@@ -8,10 +8,11 @@ import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg"
 import { ReactComponent as Trash } from "../../resources/images/trash.svg";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
-import { deleteBudgetCategory, deleteBudgetGroup, addBudgetMonth } from "../../store/budget/budgetActions";
-import { BudgetCategory, BudgetGroup, TotalBudget } from "../../store/budget/budgetInterfaces";
+import { addBudgetMonth, deleteBudgetCategory, deleteBudgetGroup } from "../../store/budget/budgetActions";
+import { BudgetCategory, TotalBudget } from "../../store/budget/budgetInterfaces";
 import { Transaction } from "../../store/transactions/transactionInterfaces";
 import formatMoney from "../../utils/formatMoney";
+import getMonthCode from "../../utils/getMonthCode";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
 import GridBoxContainer from "../common/containers/GridBoxContainer";
@@ -20,7 +21,6 @@ import ScreenContainer from "../common/containers/ScreenContainer";
 import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
 import BudgetCategoryEditForm from "../forms/BudgetCategoryEditForm";
 import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
-import getMonthCode from "../../utils/getMonthCode";
 
 interface StateProps {
     totalBudget: TotalBudget;

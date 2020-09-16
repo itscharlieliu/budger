@@ -7,7 +7,7 @@ import styled from "styled-components";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
 import { AllAccounts, BankAccount } from "../../store/accounts/accountsInterfaces";
-import { BudgetGroup, TotalBudget } from "../../store/budget/budgetInterfaces";
+import { TotalBudget } from "../../store/budget/budgetInterfaces";
 import { addTransaction } from "../../store/transactions/transactionActions";
 import formatMoney from "../../utils/formatMoney";
 import Autocomplete, { AutocompleteOption } from "../common/Autocomplete";
