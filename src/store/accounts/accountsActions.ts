@@ -42,7 +42,7 @@ export const addAccount = (
         {
             name,
             type,
-            cachedBalance: 0,
+            cachedBalance: startingBalance,
         },
         ...allAccounts,
     ];

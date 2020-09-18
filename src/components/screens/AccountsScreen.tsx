@@ -115,15 +115,7 @@ const AccountScreens = (props: AllProps): JSX.Element => {
                             name={bankAccount.name}
                             type={bankAccount.type}
                             onDelete={() => props.deleteAccount(bankAccount.name)}
-                            cachedBalance={props.transactions.reduce(
-                                (totalBalance: number, transaction: Transaction) => {
-                                    if (transaction.account !== bankAccount.name) {
-                                        return totalBalance;
-                                    }
-                                    return totalBalance + transaction.activity;
-                                },
-                                0,
-                            )}
+                            cachedBalance={bankAccount.cachedBalance}
                         />
                     );
                 })}
