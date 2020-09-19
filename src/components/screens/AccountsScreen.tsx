@@ -106,9 +106,7 @@ const AccountScreens = (props: AllProps): JSX.Element => {
             <AccountsContainer>
                 <AccountsHeader />
                 {props.allAccounts.length === 0 && <InfoCard>{t("noAccounts")}</InfoCard>}
-
                 {props.allAccounts.map((bankAccount: BankAccount, index: number) => {
-                    // TODO Optimize this
                     return (
                         <AccountsRow
                             key={"bankAccount" + index}

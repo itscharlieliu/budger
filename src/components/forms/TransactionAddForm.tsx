@@ -106,6 +106,12 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
             errors.date = t("invalidDate");
         }
 
+        if (
+            !props.allAccounts.some((account: BankAccount) => values.account && account.name === values.account.value)
+        ) {
+            errors.account = t("accountDoesNotExist");
+        }
+
         return errors;
     };
 
