@@ -36,6 +36,9 @@ module.exports =  {
     es6: true,
     "jest/globals": true
   },
+  globals: {
+    process: "readonly"
+  },
   "ignorePatterns": [
     "**/*.css",
     "**/*.png",

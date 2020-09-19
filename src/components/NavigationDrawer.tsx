@@ -29,8 +29,6 @@ const NavigationDrawer = (): JSX.Element => {
     const location = useLocation();
     const history = useHistory();
 
-    console.log(process.env);
-
     return (
         <Drawer>
             <Modal
