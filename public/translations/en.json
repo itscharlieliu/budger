@@ -19,6 +19,7 @@
     "fullDate": "{{- date, L}}",
     "in": "In",
     "invalidDate": "Invalid date",
+    "categoryDoesNotExist": "Category does not exist",
     "newCategory": "New Category",
     "newGroup": "New Group",
     "noAccounts": "No accounts added.",
@@ -30,8 +31,8 @@
     "startingBalance": "Starting Balance",
     "toFrom": "To / From",
     "transactions": "Transactions",
-    "type": "Type"
+    "type": "Type",
     "unbudgeted": "Unbudgeted",
-    "unknown": "Unknown",
+    "unknown": "Unknown"
   }
 }
