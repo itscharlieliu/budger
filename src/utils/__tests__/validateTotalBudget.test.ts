@@ -1,5 +1,5 @@
-import validateTotalBudget from "../validateTotalBudget";
 import { TotalBudget } from "../../store/budget/budgetInterfaces";
+import validateTotalBudget from "../validateTotalBudget";
 
 const MONTH_CODE = "202009";
 

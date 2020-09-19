@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
+import { theme } from "../../defs/theme";
 import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
 import { ReactComponent as Trash } from "../../resources/images/trash.svg";
 import t from "../../services/i18n/language";
@@ -14,7 +15,6 @@ import GridBoxContainer from "../common/containers/GridBoxContainer";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 import ScreenContainer from "../common/containers/ScreenContainer";
 import TransactionAddForm from "../forms/TransactionAddForm";
-import { theme } from "../../defs/theme";
 
 interface StateProps {
     transactions: Transaction[];
