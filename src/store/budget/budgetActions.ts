@@ -226,3 +226,42 @@ export const editBudgetedAmount = (
 
     dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
 };
+
+export const editActivityAmount = (
+    monthCode: string,
+    budgetCategory: string,
+    activity: number,
+): GenericBudgetThunkAction => async (
+    dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
+    getState: () => ApplicationState,
+): Promise<void> => {
+    dispatch({ type: SETTING_TOTAL_BUDGET });
+
+    const totalBudget = getState().budget.totalBudget;
+
+    const newTotalBudget: TotalBudget = { ...totalBudget };
+
+    if (!newTotalBudget[monthCode]) {
+        dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.monthDoesNotExist) });
+        return;
+    }
+
+    let numCategoriesEdited = 0;
+
+    for (const group of Object.keys(newTotalBudget[monthCode])) {
+        if (newTotalBudget[monthCode][group][budgetCategory] !== undefined) {
+            newTotalBudget[monthCode][group][budgetCategory].budgeted = budgeted;
+            ++numCategoriesEdited;
+        }
+    }
+
+    if (numCategoriesEdited === 0) {
+        dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.categoryDoesNotExist) });
+        return;
+    }
+
+    // Save budget to local storage
+    localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
+
+    dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
+};
