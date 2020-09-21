@@ -11,6 +11,7 @@ import {
     deleteBudgetCategory,
     deleteBudgetGroup,
     editBudgetedAmount,
+    setActivityAmount,
 } from "../budget/budgetActions";
 import {
     ADD_MONTHLY_BUDGET_FAILURE,
@@ -350,6 +351,76 @@ describe("budget actions", () => {
                 "test group": {
                     "test category": {
                         budgeted: 420,
+                    },
+                },
+            },
+        });
+    });
+
+    it("successfully modifies activity amount", async () => {
+        const store = mockStore({
+            budget: {
+                totalBudget: {
+                    [MONTH_CODE]: {
+                        "test group": {
+                            "test category": {
+                                budgeted: 70,
+                                activity: -10,
+                            },
+                        },
+                    },
+                },
+            },
+        });
+        await store.dispatch(setActivityAmount(MONTH_CODE, "test category", -15));
+
+        const actions = store.getActions();
+
+        expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
+        expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
+        expect(actions[1].totalBudget).toEqual({
+            [MONTH_CODE]: {
+                "test group": {
+                    "test category": {
+                        budgeted: 70,
+                        activity: -15,
+                    },
+                },
+            },
+        });
+    });
+    it("can use function to set activity", async () => {
+        const store = mockStore({
+            budget: {
+                totalBudget: {
+                    [MONTH_CODE]: {
+                        "test group": {
+                            "test category": {
+                                budgeted: 70,
+                                activity: -10,
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        await store.dispatch(
+            setActivityAmount(MONTH_CODE, "test category", (currActivityAmount: number): number => {
+                return currActivityAmount + 30;
+            }),
+        );
+
+        const actions = store.getActions();
+
+        expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
+        expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
+        expect(actions[1].totalBudget).toEqual({
+            [MONTH_CODE]: {
+                "test group": {
+                    "test category": {
+                        budgeted: 70,
+                        activity: 20,
                     },
                 },
             },

@@ -227,10 +227,10 @@ export const editBudgetedAmount = (
     dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
 };
 
-export const editActivityAmount = (
+export const setActivityAmount = (
     monthCode: string,
     budgetCategory: string,
-    activity: number,
+    activity: number | ((currActivity: number) => number),
 ): GenericBudgetThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
     getState: () => ApplicationState,
@@ -250,8 +250,15 @@ export const editActivityAmount = (
 
     for (const group of Object.keys(newTotalBudget[monthCode])) {
         if (newTotalBudget[monthCode][group][budgetCategory] !== undefined) {
-            newTotalBudget[monthCode][group][budgetCategory].budgeted = budgeted;
             ++numCategoriesEdited;
+
+            if (typeof activity === "function") {
+                newTotalBudget[monthCode][group][budgetCategory].activity = activity(
+                    newTotalBudget[monthCode][group][budgetCategory].activity,
+                );
+                continue;
+            }
+            newTotalBudget[monthCode][group][budgetCategory].activity = activity;
         }
     }
 
