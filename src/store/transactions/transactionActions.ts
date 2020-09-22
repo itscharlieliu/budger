@@ -11,6 +11,8 @@ import {
     UPDATE_TRANSACTIONS_SUCCESS,
     UPDATING_TRANSACTIONS,
 } from "./transactionInterfaces";
+import { setActivityAmount } from "../budget/budgetActions";
+import getMonthCode from "../../utils/getMonthCode";
 
 export type GenericTransactionThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericBudgetAction>;
 
@@ -46,6 +48,10 @@ export const addTransaction = (
             // Save transaction to local storage
             localStorage.setItem(TRANSACTIONS, JSON.stringify(newTransactions));
 
+            // Update budget activity
+            const monthCode = getMonthCode(date);
+            await dispatch(setActivityAmount(monthCode, category, (currActivity: number) => currActivity + activity));
+
             dispatch({ type: UPDATE_TRANSACTIONS_SUCCESS, transactions: newTransactions });
         } catch (error) {
             console.warn(error);
@@ -66,10 +72,20 @@ export const deleteTransaction = (index: number): GenericTransactionThunkAction 
             // update transactions
             const newTransactions: Transaction[] = [...transactions];
 
-            newTransactions.splice(index, 1);
+            const oldTransaction = newTransactions.splice(index, 1);
 
             // Save transaction to local storage
             localStorage.setItem(TRANSACTIONS, JSON.stringify(newTransactions));
+
+            // Update budget activity
+            const monthCode = getMonthCode(oldTransaction[0].date);
+            await dispatch(
+                setActivityAmount(
+                    monthCode,
+                    oldTransaction[0].category,
+                    (currActivity: number) => currActivity - oldTransaction[0].activity,
+                ),
+            );
 
             dispatch({ type: UPDATE_TRANSACTIONS_SUCCESS, transactions: newTransactions });
         } catch (error) {
