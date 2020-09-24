@@ -14,7 +14,6 @@ import {
     UPDATE_ACCOUNT_SUCCESS,
     UPDATING_ACCOUNT,
 } from "./accountsInterfaces";
-import { GenericSetBudgetAction } from "../budget/budgetInterfaces";
 
 type GenericAccountsThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericAccountsAction>;
 

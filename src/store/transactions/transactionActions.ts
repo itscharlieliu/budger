@@ -1,6 +1,9 @@
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 
 import { TRANSACTIONS } from "../../defs/storageKeys";
+import getMonthCode from "../../utils/getMonthCode";
+import { setBalance } from "../accounts/accountsActions";
+import { setActivityAmount } from "../budget/budgetActions";
 import { GenericBudgetAction } from "../budget/budgetInterfaces";
 import ApplicationState from "../index";
 
@@ -11,9 +14,6 @@ import {
     UPDATE_TRANSACTIONS_SUCCESS,
     UPDATING_TRANSACTIONS,
 } from "./transactionInterfaces";
-import { setActivityAmount } from "../budget/budgetActions";
-import getMonthCode from "../../utils/getMonthCode";
-import { setBalance } from "../accounts/accountsActions";
 
 export type GenericTransactionThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericBudgetAction>;
 
