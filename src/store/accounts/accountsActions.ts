@@ -14,6 +14,7 @@ import {
     UPDATE_ACCOUNT_SUCCESS,
     UPDATING_ACCOUNT,
 } from "./accountsInterfaces";
+import { GenericSetBudgetAction } from "../budget/budgetInterfaces";
 
 type GenericAccountsThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericAccountsAction>;
 
@@ -67,6 +68,37 @@ export const deleteAccount = (name: string): GenericAccountsThunkAction => async
         // Don't push account if it matches the name we want to delete
         if (account.name === name) {
             continue;
+        }
+        updatedAccounts.push(account);
+    }
+
+    // Save account to local storage
+    localStorage.setItem(ACCOUNTS, JSON.stringify(updatedAccounts));
+
+    dispatch({ type: UPDATE_ACCOUNT_SUCCESS, allAccounts: updatedAccounts });
+};
+
+export const setBalance = (
+    name: string,
+    balance: number | ((currBalance: number) => number),
+): GenericAccountsThunkAction => async (
+    dispatch: ThunkDispatch<ApplicationState, null, GenericUpdateAccountAction>,
+    getState: () => ApplicationState,
+): Promise<void> => {
+    dispatch({ type: UPDATING_ACCOUNT });
+
+    const allAccounts = getState().accounts.allAccounts;
+
+    const updatedAccounts: AllAccounts = [];
+
+    for (const account of allAccounts) {
+        // Don't push account if it matches the name we want to delete
+        if (account.name === name) {
+            if (typeof balance === "function") {
+                account.cachedBalance = balance(account.cachedBalance);
+                continue;
+            }
+            account.cachedBalance = balance;
         }
         updatedAccounts.push(account);
     }
