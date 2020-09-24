@@ -13,6 +13,7 @@ import {
 } from "./transactionInterfaces";
 import { setActivityAmount } from "../budget/budgetActions";
 import getMonthCode from "../../utils/getMonthCode";
+import { setBalance } from "../accounts/accountsActions";
 
 export type GenericTransactionThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericBudgetAction>;
 
@@ -51,6 +52,7 @@ export const addTransaction = (
             // Update budget activity
             const monthCode = getMonthCode(date);
             await dispatch(setActivityAmount(monthCode, category, (currActivity: number) => currActivity + activity));
+            await dispatch(setBalance(account, (currBalance: number) => currBalance + activity));
 
             dispatch({ type: UPDATE_TRANSACTIONS_SUCCESS, transactions: newTransactions });
         } catch (error) {
@@ -84,6 +86,13 @@ export const deleteTransaction = (index: number): GenericTransactionThunkAction 
                     monthCode,
                     oldTransaction[0].category,
                     (currActivity: number) => currActivity - oldTransaction[0].activity,
+                ),
+            );
+
+            await dispatch(
+                setBalance(
+                    oldTransaction[0].account,
+                    (currBalance: number) => currBalance - oldTransaction[0].activity,
                 ),
             );
 
