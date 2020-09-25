@@ -15,7 +15,12 @@ import {
     UPDATING_TRANSACTIONS,
 } from "./transactionInterfaces";
 
-export type GenericTransactionThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericBudgetAction>;
+export type GenericTransactionThunkAction = ThunkAction<
+    Promise<GenericTransactionAction>,
+    ApplicationState,
+    null,
+    GenericBudgetAction
+>;
 
 export const addTransaction = (
     payee: string,
@@ -28,7 +33,7 @@ export const addTransaction = (
     return async (
         dispatch: ThunkDispatch<ApplicationState, null, GenericTransactionAction>,
         getState: () => ApplicationState,
-    ): Promise<void> => {
+    ): Promise<GenericTransactionAction> => {
         dispatch({ type: UPDATING_TRANSACTIONS });
         const transactions = getState().transaction.transactions;
 
@@ -52,13 +57,27 @@ export const addTransaction = (
             // Update budget activity
             const monthCode = getMonthCode(date);
 
-            await dispatch(setActivityAmount(monthCode, category, (currActivity: number) => currActivity + activity));
-            await dispatch(setBalance(account, (currBalance: number) => currBalance + activity));
+            const setActivityResult = await dispatch(
+                setActivityAmount(monthCode, category, (currActivity: number) => currActivity + activity),
+            );
 
-            dispatch({ type: UPDATE_TRANSACTIONS_SUCCESS, transactions: newTransactions });
+            if ("error" in setActivityResult) {
+                // We know setting activity failed
+                return dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error: setActivityResult.error });
+            }
+
+            const setBalanceResult = await dispatch(
+                setBalance(account, (currBalance: number) => currBalance + activity),
+            );
+            if ("error" in setBalanceResult) {
+                // We know setting account balance failed
+                return dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error: setBalanceResult.error });
+            }
+
+            return dispatch({ type: UPDATE_TRANSACTIONS_SUCCESS, transactions: newTransactions });
         } catch (error) {
             console.warn(error);
-            dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error });
+            return dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error });
         }
     };
 };
@@ -67,7 +86,7 @@ export const deleteTransaction = (index: number): GenericTransactionThunkAction 
     return async (
         dispatch: ThunkDispatch<ApplicationState, null, GenericTransactionAction>,
         getState: () => ApplicationState,
-    ): Promise<void> => {
+    ): Promise<GenericTransactionAction> => {
         dispatch({ type: UPDATING_TRANSACTIONS });
         const transactions = getState().transaction.transactions;
 
@@ -82,7 +101,7 @@ export const deleteTransaction = (index: number): GenericTransactionThunkAction 
 
             // Update budget activity
             const monthCode = getMonthCode(oldTransaction[0].date);
-            await dispatch(
+            const setActivityResult = await dispatch(
                 setActivityAmount(
                     monthCode,
                     oldTransaction[0].category,
@@ -90,17 +109,27 @@ export const deleteTransaction = (index: number): GenericTransactionThunkAction 
                 ),
             );
 
-            await dispatch(
+            if ("error" in setActivityResult) {
+                // We know setting activity failed
+                return dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error: setActivityResult.error });
+            }
+
+            const setBalanceResult = await dispatch(
                 setBalance(
                     oldTransaction[0].account,
                     (currBalance: number) => currBalance - oldTransaction[0].activity,
                 ),
             );
 
-            dispatch({ type: UPDATE_TRANSACTIONS_SUCCESS, transactions: newTransactions });
+            if ("error" in setBalanceResult) {
+                // We know setting account balance failed
+                return dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error: setBalanceResult.error });
+            }
+
+            return dispatch({ type: UPDATE_TRANSACTIONS_SUCCESS, transactions: newTransactions });
         } catch (error) {
             console.warn(error);
-            dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error });
+            return dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error });
         }
     };
 };

@@ -116,6 +116,8 @@ describe("transactions actions", () => {
 
         expect(actions[3].type).toBe(UPDATE_TRANSACTIONS_FAILURE);
     });
+
+    // TODO add test for delete transaction
 });
 
 // TODO Add fail tests
