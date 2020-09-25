@@ -51,6 +51,7 @@ export const addTransaction = (
 
             // Update budget activity
             const monthCode = getMonthCode(date);
+
             await dispatch(setActivityAmount(monthCode, category, (currActivity: number) => currActivity + activity));
             await dispatch(setBalance(account, (currBalance: number) => currBalance + activity));
 

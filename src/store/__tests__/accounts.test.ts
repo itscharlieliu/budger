@@ -62,6 +62,7 @@ describe("accounts reducer", () => {
             {
                 name: "test account",
                 type: AccountType.budgeted,
+                cachedBalance: 0,
             },
         ];
 
