@@ -23,20 +23,19 @@ import {
 import ERRORS from "../../defs/errors";
 import { BUDGET } from "../../defs/storageKeys";
 
-type GenericBudgetThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericBudgetAction>;
+type GenericBudgetThunkAction = ThunkAction<Promise<GenericBudgetAction>, ApplicationState, null, GenericBudgetAction>;
 
 export const addBudgetMonth = (monthCode: string): GenericBudgetThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericAddMonthlyBudgetAction>,
     getState: () => ApplicationState,
-): Promise<void> => {
+): Promise<GenericAddMonthlyBudgetAction> => {
     dispatch({ type: ADDING_MONTHLY_BUDGET });
 
     const totalBudget = getState().budget.totalBudget;
 
     if (totalBudget[monthCode]) {
         // Month already exists
-        dispatch({ type: ADD_MONTHLY_BUDGET_FAILURE, error: new Error(ERRORS.monthAlreadyExists) });
-        return;
+        return dispatch({ type: ADD_MONTHLY_BUDGET_FAILURE, error: new Error(ERRORS.monthAlreadyExists) });
     }
 
     // Add empty budget
@@ -46,25 +45,23 @@ export const addBudgetMonth = (monthCode: string): GenericBudgetThunkAction => a
     // Save budget to local storage
     localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
 
-    dispatch({ type: ADD_MONTHLY_BUDGET_SUCCESS, totalBudget: newTotalBudget });
+    return dispatch({ type: ADD_MONTHLY_BUDGET_SUCCESS, totalBudget: newTotalBudget });
 };
 
 export const addBudgetGroup = (monthCode: string, budgetGroup: string): GenericBudgetThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
     getState: () => ApplicationState,
-): Promise<void> => {
+): Promise<GenericSetBudgetAction> => {
     dispatch({ type: SETTING_TOTAL_BUDGET });
 
     const totalBudget = getState().budget.totalBudget;
 
     if (totalBudget[monthCode] === undefined) {
-        dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.monthDoesNotExist) });
-        return;
+        return dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.monthDoesNotExist) });
     }
 
     if (totalBudget[monthCode][budgetGroup] !== undefined) {
-        dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.groupAlreadyExists) });
-        return;
+        return dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.groupAlreadyExists) });
     }
 
     const newMonthlyBudget = { ...totalBudget[monthCode], [budgetGroup]: {} };
@@ -74,7 +71,7 @@ export const addBudgetGroup = (monthCode: string, budgetGroup: string): GenericB
     // Save budget to local storage
     localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
 
-    dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
+    return dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
 };
 
 export const addBudgetCategory = (
@@ -84,29 +81,26 @@ export const addBudgetCategory = (
 ): GenericBudgetThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
     getState: () => ApplicationState,
-): Promise<void> => {
+): Promise<GenericSetBudgetAction> => {
     dispatch({ type: SETTING_TOTAL_BUDGET });
 
     const totalBudget = getState().budget.totalBudget;
 
     // Check if month exists
     if (!totalBudget[monthCode]) {
-        dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.monthDoesNotExist) });
-        return;
+        return dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.monthDoesNotExist) });
     }
 
     // Check if group exists
     if (!totalBudget[monthCode][budgetGroup]) {
-        dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.groupDoesNotExist) });
-        return;
+        return dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.groupDoesNotExist) });
     }
 
     // Check if category already exists in any group
 
     for (const group of Object.keys(totalBudget[monthCode])) {
         if (totalBudget[monthCode][group][budgetCategory] !== undefined) {
-            dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.categoryAlreadyExists) });
-            return;
+            return dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.categoryAlreadyExists) });
         }
     }
 
@@ -125,13 +119,13 @@ export const addBudgetCategory = (
     // Save budget to local storage
     localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
 
-    dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
+    return dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
 };
 
 export const deleteBudgetCategory = (monthcode: string, budgetCategory: string): GenericBudgetThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
     getState: () => ApplicationState,
-): Promise<void> => {
+): Promise<GenericSetBudgetAction> => {
     dispatch({ type: SETTING_TOTAL_BUDGET });
 
     const totalBudget = getState().budget.totalBudget;
@@ -148,8 +142,7 @@ export const deleteBudgetCategory = (monthcode: string, budgetCategory: string):
     }
 
     if (numCategoriesDeleted === 0) {
-        dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.categoryDoesNotExist) });
-        return;
+        return dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.categoryDoesNotExist) });
     }
 
     const newTotalBudget = { ...totalBudget, [monthcode]: newMonthlyBudget };
@@ -157,13 +150,13 @@ export const deleteBudgetCategory = (monthcode: string, budgetCategory: string):
     // Save budget to local storage
     localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
 
-    dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
+    return dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
 };
 
 export const deleteBudgetGroup = (monthCode: string, budgetGroup: string): GenericBudgetThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
     getState: () => ApplicationState,
-): Promise<void> => {
+): Promise<GenericSetBudgetAction> => {
     dispatch({ type: SETTING_TOTAL_BUDGET });
 
     const totalBudget = getState().budget.totalBudget;
@@ -171,13 +164,11 @@ export const deleteBudgetGroup = (monthCode: string, budgetGroup: string): Gener
     const newTotalBudget = { ...totalBudget };
 
     if (!newTotalBudget[monthCode]) {
-        dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.monthDoesNotExist) });
-        return;
+        return dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.monthDoesNotExist) });
     }
 
     if (!newTotalBudget[monthCode][budgetGroup]) {
-        dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.groupDoesNotExist) });
-        return;
+        return dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.groupDoesNotExist) });
     }
 
     delete newTotalBudget[monthCode][budgetGroup];
@@ -185,7 +176,7 @@ export const deleteBudgetGroup = (monthCode: string, budgetGroup: string): Gener
     // Save budget to local storage
     localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
 
-    dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
+    return dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
 };
 
 export const editBudgetedAmount = (
@@ -195,7 +186,7 @@ export const editBudgetedAmount = (
 ): GenericBudgetThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
     getState: () => ApplicationState,
-): Promise<void> => {
+): Promise<GenericSetBudgetAction> => {
     dispatch({ type: SETTING_TOTAL_BUDGET });
 
     const totalBudget = getState().budget.totalBudget;
@@ -203,8 +194,7 @@ export const editBudgetedAmount = (
     const newTotalBudget: TotalBudget = { ...totalBudget };
 
     if (!newTotalBudget[monthCode]) {
-        dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.monthDoesNotExist) });
-        return;
+        return dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.monthDoesNotExist) });
     }
 
     let numCategoriesEdited = 0;
@@ -217,14 +207,13 @@ export const editBudgetedAmount = (
     }
 
     if (numCategoriesEdited === 0) {
-        dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.categoryDoesNotExist) });
-        return;
+        return dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.categoryDoesNotExist) });
     }
 
     // Save budget to local storage
     localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
 
-    dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
+    return dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
 };
 
 export const setActivityAmount = (
@@ -234,7 +223,7 @@ export const setActivityAmount = (
 ): GenericBudgetThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
     getState: () => ApplicationState,
-): Promise<void> => {
+): Promise<GenericSetBudgetAction> => {
     dispatch({ type: SETTING_TOTAL_BUDGET });
 
     const totalBudget = getState().budget.totalBudget;
@@ -242,8 +231,7 @@ export const setActivityAmount = (
     const newTotalBudget: TotalBudget = { ...totalBudget };
 
     if (!newTotalBudget[monthCode]) {
-        dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.monthDoesNotExist) });
-        return;
+        return dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.monthDoesNotExist) });
     }
 
     let numCategoriesEdited = 0;
@@ -263,12 +251,11 @@ export const setActivityAmount = (
     }
 
     if (numCategoriesEdited === 0) {
-        dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.categoryDoesNotExist) });
-        return;
+        return dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.categoryDoesNotExist) });
     }
 
     // Save budget to local storage
     localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
 
-    dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
+    return dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
 };
