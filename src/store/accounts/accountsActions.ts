@@ -15,7 +15,12 @@ import {
     UPDATING_ACCOUNT,
 } from "./accountsInterfaces";
 
-type GenericAccountsThunkAction = ThunkAction<Promise<void>, ApplicationState, null, GenericAccountsAction>;
+type GenericAccountsThunkAction = ThunkAction<
+    Promise<GenericAccountsAction>,
+    ApplicationState,
+    null,
+    GenericAccountsAction
+>;
 
 export const addAccount = (
     name: string,
@@ -24,15 +29,14 @@ export const addAccount = (
 ): GenericAccountsThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericUpdateAccountAction>,
     getState: () => ApplicationState,
-): Promise<void> => {
+): Promise<GenericUpdateAccountAction> => {
     dispatch({ type: UPDATING_ACCOUNT });
 
     const allAccounts = getState().accounts.allAccounts;
 
     // Return if account already exists
     if (allAccounts.some((bankAccount: BankAccount) => bankAccount.name === name)) {
-        dispatch({ type: UPDATE_ACCOUNT_FAILURE, error: new Error(ERRORS.accountAlreadyExists) });
-        return;
+        return dispatch({ type: UPDATE_ACCOUNT_FAILURE, error: new Error(ERRORS.accountAlreadyExists) });
     }
 
     // TODO dispatch add transaction for starting balance
@@ -50,13 +54,13 @@ export const addAccount = (
     // Save account to local storage
     localStorage.setItem(ACCOUNTS, JSON.stringify(updatedAccounts));
 
-    dispatch({ type: UPDATE_ACCOUNT_SUCCESS, allAccounts: updatedAccounts });
+    return dispatch({ type: UPDATE_ACCOUNT_SUCCESS, allAccounts: updatedAccounts });
 };
 
 export const deleteAccount = (name: string): GenericAccountsThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericUpdateAccountAction>,
     getState: () => ApplicationState,
-): Promise<void> => {
+): Promise<GenericUpdateAccountAction> => {
     dispatch({ type: UPDATING_ACCOUNT });
 
     const allAccounts = getState().accounts.allAccounts;
@@ -74,7 +78,7 @@ export const deleteAccount = (name: string): GenericAccountsThunkAction => async
     // Save account to local storage
     localStorage.setItem(ACCOUNTS, JSON.stringify(updatedAccounts));
 
-    dispatch({ type: UPDATE_ACCOUNT_SUCCESS, allAccounts: updatedAccounts });
+    return dispatch({ type: UPDATE_ACCOUNT_SUCCESS, allAccounts: updatedAccounts });
 };
 
 export const setBalance = (
@@ -83,7 +87,7 @@ export const setBalance = (
 ): GenericAccountsThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericUpdateAccountAction>,
     getState: () => ApplicationState,
-): Promise<void> => {
+): Promise<GenericUpdateAccountAction> => {
     dispatch({ type: UPDATING_ACCOUNT });
 
     const allAccounts = getState().accounts.allAccounts;
@@ -105,5 +109,5 @@ export const setBalance = (
     // Save account to local storage
     localStorage.setItem(ACCOUNTS, JSON.stringify(updatedAccounts));
 
-    dispatch({ type: UPDATE_ACCOUNT_SUCCESS, allAccounts: updatedAccounts });
+    return dispatch({ type: UPDATE_ACCOUNT_SUCCESS, allAccounts: updatedAccounts });
 };
