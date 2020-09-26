@@ -1,14 +1,15 @@
 const ERRORS = {
-    groupAlreadyExists: "This group already exists",
-    categoryAlreadyExists: "This category already exists",
-    groupDoesNotExist: "This group does not exist",
-    categoryDoesNotExist: "This category does not exist",
     accountAlreadyExists: "This account already exists",
-    monthAlreadyExists: "This month already has a budget",
-    monthDoesNotExist: "This month does not have a budget",
+    accountDoesNotExist: "This account does not exist",
+    categoryAlreadyExists: "This category already exists",
+    categoryDoesNotExist: "This category does not exist",
+    groupAlreadyExists: "This group already exists",
+    groupDoesNotExist: "This group does not exist",
+    invalidAccounts: "Invalid accounts",
     invalidTotalBudget: "Invalid total budget",
     invalidTransactions: "Invalid transactions",
-    invalidAccounts: "Invalid accounts",
+    monthAlreadyExists: "This month already has a budget",
+    monthDoesNotExist: "This month does not have a budget",
 };
 
 export default ERRORS;

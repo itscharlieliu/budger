@@ -94,16 +94,24 @@ export const setBalance = (
 
     const updatedAccounts: AllAccounts = [];
 
+    let numAccountsUpdated = 0;
+
     for (const account of allAccounts) {
         // Don't push account if it matches the name we want to delete
         if (account.name === name) {
+            ++numAccountsUpdated;
             if (typeof balance === "function") {
                 account.cachedBalance = balance(account.cachedBalance);
-                continue;
+            } else {
+                account.cachedBalance = balance;
             }
-            account.cachedBalance = balance;
         }
         updatedAccounts.push(account);
+    }
+
+    if (numAccountsUpdated === 0) {
+        // We did not update anything
+        return dispatch({ type: UPDATE_ACCOUNT_FAILURE, error: Error(ERRORS.accountDoesNotExist) });
     }
 
     // Save account to local storage

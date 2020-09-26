@@ -69,6 +69,7 @@ export const addTransaction = (
             const setBalanceResult = await dispatch(
                 setBalance(account, (currBalance: number) => currBalance + activity),
             );
+
             if ("error" in setBalanceResult) {
                 // We know setting account balance failed
                 return dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error: setBalanceResult.error });
