@@ -51,6 +51,8 @@ describe("accounts actions", () => {
         expect(actions[1].type).toBe(UPDATE_ACCOUNT_FAILURE);
         expect(actions[1].error.message).toBe(ERRORS.accountAlreadyExists);
     });
+
+    // TODO add test for setting account balance
 });
 
 describe("accounts reducer", () => {
