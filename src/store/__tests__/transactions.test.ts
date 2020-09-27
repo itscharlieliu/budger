@@ -137,6 +137,61 @@ describe("transactions actions", () => {
     });
 
     // TODO Add test for happy path delete transaction
+    it("successfully deletes transaction", async () => {
+        const store = mockStore({
+            transaction: {
+                transactions: [
+                    {
+                        account: "test account",
+                        date: testDate,
+                        payee: "test payee",
+                        category: "test category",
+                        note: "hello",
+                        activity: 26,
+                    },
+                ],
+                isUpdatingTransactions: false,
+                error: null,
+            },
+            accounts: {
+                allAccounts: [
+                    {
+                        name: "test account",
+                        type: AccountType.budgeted,
+                        balance: 100,
+                    },
+                ],
+            },
+            budget: {
+                totalBudget: {
+                    [monthCode]: {
+                        "test group": {
+                            "test category": {
+                                budgeted: 70,
+                                activity: -15,
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        // Delete with invalid category
+        await store.dispatch(deleteTransaction(0));
+
+        const actions = store.getActions();
+
+        expect(actions[0].type).toBe(UPDATING_TRANSACTIONS);
+
+        // First set budget accurately
+        expect(actions[1].type).toBe(SETTING_TOTAL_BUDGET);
+        expect(actions[2].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
+
+        expect(actions[3].type).toBe(UPDATING_ACCOUNT);
+        expect(actions[4].type).toBe(UPDATE_ACCOUNT_SUCCESS);
+
+        expect(actions[5].type).toBe(UPDATE_TRANSACTIONS_SUCCESS);
+    });
 
     it("does not delete transaction unless all actions succeed", async () => {
         let store = mockStore({
@@ -244,5 +299,3 @@ describe("transactions actions", () => {
         expect(actions[5].type).toBe(UPDATE_TRANSACTIONS_FAILURE);
     });
 });
-
-// TODO Add fail tests
