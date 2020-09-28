@@ -19,9 +19,12 @@ import {
     GenericAddMonthlyBudgetAction,
     ADD_MONTHLY_BUDGET_FAILURE,
     ADD_MONTHLY_BUDGET_SUCCESS,
+    GenericSetToBeBudgetedAction,
+    SETTING_TO_BE_BUDGETED,
+    SET_TO_BE_BUDGETED_SUCCESS,
 } from "./budgetInterfaces";
 import ERRORS from "../../defs/errors";
-import { BUDGET } from "../../defs/storageKeys";
+import { BUDGET, TO_BE_BUDGETED } from "../../defs/storageKeys";
 
 type GenericBudgetThunkAction = ThunkAction<Promise<GenericBudgetAction>, ApplicationState, null, GenericBudgetAction>;
 
@@ -214,6 +217,27 @@ export const editBudgetedAmount = (
     localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
 
     return dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
+};
+
+export const setToBeBudgetedAmount = (
+    toBeBudgeted: number | ((currToBeBudgeted: number) => number),
+): GenericBudgetThunkAction => async (
+    dispatch: ThunkDispatch<ApplicationState, null, GenericSetToBeBudgetedAction>,
+    getState: () => ApplicationState,
+): Promise<GenericSetToBeBudgetedAction> => {
+    dispatch({ type: SETTING_TO_BE_BUDGETED });
+
+    let newToBeBudgeted = getState().budget.toBeBudgeted;
+
+    if (typeof toBeBudgeted === "function") {
+        newToBeBudgeted = toBeBudgeted(newToBeBudgeted);
+    } else {
+        newToBeBudgeted = toBeBudgeted;
+    }
+
+    localStorage.setItem(TO_BE_BUDGETED, JSON.stringify(newToBeBudgeted));
+
+    return dispatch({ type: SET_TO_BE_BUDGETED_SUCCESS, toBeBudgeted: newToBeBudgeted });
 };
 
 export const setActivityAmount = (

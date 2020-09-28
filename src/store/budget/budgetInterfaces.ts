@@ -8,6 +8,10 @@ export const ADDING_MONTHLY_BUDGET = "ADDING_MONTHLY_BUDGET";
 export const ADD_MONTHLY_BUDGET_SUCCESS = "ADD_MONTHLY_BUDGET_SUCCESS";
 export const ADD_MONTHLY_BUDGET_FAILURE = "ADD_MONTHLY_BUDGET_FAILURE";
 
+export const SETTING_TO_BE_BUDGETED = "SET_TO_BE_BUDGETE";
+export const SET_TO_BE_BUDGETED_SUCCESS = "SET_TO_BE_BUDGETED_SUCCESS";
+export const SET_TO_BE_BUDGETED_FAILURE = "SET_TO_BE_BUDGETED_FAILURE";
+
 export interface BudgetCategory {
     budgeted: number;
     activity: number;
@@ -27,6 +31,7 @@ export interface TotalBudget {
 
 export interface BudgetState {
     totalBudget: TotalBudget;
+    toBeBudgeted: number;
     isSettingBudget: boolean;
     isAddingMonthlyBudget: boolean;
     error: Error | null;
@@ -52,6 +57,16 @@ export interface AddMonthlyBudgetFailureAction extends Action<typeof ADD_MONTHLY
     error: Error;
 }
 
+export interface SettingToBeBudgetedAction extends Action<typeof SETTING_TO_BE_BUDGETED> {}
+
+export interface SetToBeBudgetedSuccessAction extends Action<typeof SET_TO_BE_BUDGETED_SUCCESS> {
+    toBeBudgeted: number;
+}
+
+export interface SetToBeBudgetedFailureAction extends Action<typeof SET_TO_BE_BUDGETED_FAILURE> {
+    error: Error;
+}
+
 export type GenericSetBudgetAction =
     | SettingTotalBudgetAction
     | SetTotalBudgetSuccessAction
@@ -62,4 +77,9 @@ export type GenericAddMonthlyBudgetAction =
     | AddMonthlyBudgetSuccessAction
     | AddMonthlyBudgetFailureAction;
 
-export type GenericBudgetAction = GenericSetBudgetAction | GenericAddMonthlyBudgetAction;
+export type GenericSetToBeBudgetedAction =
+    | SettingToBeBudgetedAction
+    | SetToBeBudgetedSuccessAction
+    | SetToBeBudgetedFailureAction;
+
+export type GenericBudgetAction = GenericSetBudgetAction | GenericAddMonthlyBudgetAction | GenericSetToBeBudgetedAction;
