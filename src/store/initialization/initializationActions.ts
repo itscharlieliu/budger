@@ -1,7 +1,7 @@
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 
 import ERRORS from "../../defs/errors";
-import { ACCOUNTS, BUDGET, TRANSACTIONS } from "../../defs/storageKeys";
+import { ACCOUNTS, BUDGET, TO_BE_BUDGETED, TRANSACTIONS } from "../../defs/storageKeys";
 import validateAccounts from "../../utils/validateAccounts";
 import validateTotalBudget from "../../utils/validateTotalBudget";
 import validateTransactions from "../../utils/validateTransactions";
@@ -49,7 +49,10 @@ export const initBudget = (): GenericInitializationThunkAction => async (
             return;
         }
 
-        dispatch({ type: SET_BUDGET_INITIALIZED_SUCCESS, totalBudget });
+        const toBeBudgetedJson = localStorage.getItem(TO_BE_BUDGETED);
+        const toBeBudgeted = toBeBudgetedJson ? JSON.parse(toBeBudgetedJson) : 0;
+
+        dispatch({ type: SET_BUDGET_INITIALIZED_SUCCESS, totalBudget, toBeBudgeted });
     } catch (error) {
         dispatch({ type: SET_BUDGET_INITIALIZED_FAILURE, error });
     }

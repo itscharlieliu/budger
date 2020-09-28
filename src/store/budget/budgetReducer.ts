@@ -16,6 +16,7 @@ import {
 
 export const defaultBudgetState: BudgetState = {
     totalBudget: {},
+    toBeBudgeted: 0,
     isSettingBudget: false,
     isAddingMonthlyBudget: false,
     error: null,
@@ -27,7 +28,7 @@ const budgetReducer = (
 ): BudgetState => {
     switch (action.type) {
         case SET_BUDGET_INITIALIZED_SUCCESS: {
-            return { ...state, totalBudget: action.totalBudget };
+            return { ...state, totalBudget: action.totalBudget, toBeBudgeted: action.toBeBudgeted };
         }
         case SETTING_TOTAL_BUDGET: {
             return { ...state, isSettingBudget: true, error: null };

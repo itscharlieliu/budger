@@ -37,6 +37,7 @@ export interface SettingBudgetInitializedAction extends Action<typeof SETTING_BU
 
 export interface SetBudgetInitializedSuccessAction extends Action<typeof SET_BUDGET_INITIALIZED_SUCCESS> {
     totalBudget: TotalBudget;
+    toBeBudgeted: number;
 }
 
 export interface SetBudgetInitializedFailureAction extends Action<typeof SET_BUDGET_INITIALIZED_FAILURE> {
