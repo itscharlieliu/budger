@@ -10,6 +10,7 @@
     "balance": "Balance",
     "budger": "Budger",
     "budget": "Budget",
+    "toBeBudgeted": "This amount still needs to be budgeted: ",
     "budgeted": "Budgeted",
     "cancel": "Cancel",
     "cannotBeEmpty": "This field cannot be empty",

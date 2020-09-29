@@ -4,6 +4,10 @@ import styled from "styled-components";
 import { theme, UNIT_LENGTH } from "../defs/theme";
 import { ReactComponent as BudgerLogo } from "../resources/images/BudgerLogo.svg";
 import t from "../services/i18n/language";
+import { TotalBudget } from "../store/budget/budgetInterfaces";
+import { Transaction } from "../store/transactions/transactionInterfaces";
+import ApplicationState from "../store";
+import { connect } from "react-redux";
 
 const AppBarContainer = styled.div`
     width: auto;
