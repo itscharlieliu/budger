@@ -24,6 +24,7 @@ import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
 
 interface StateProps {
     totalBudget: TotalBudget;
+    toBeBudgeted: number;
     transactions: Transaction[];
     isAddingMonthlyBudget: boolean;
 }
@@ -192,6 +193,11 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
             <BudgetContainer>
                 <BudgetHeader monthCode={monthCode} />
                 {currentMonthlyBudgetKeys.length === 0 && <InfoCard>{t("noCategories")}</InfoCard>}
+                {props.toBeBudgeted > 0 && (
+                    <InfoCard>
+                        {t("toBeBudgeted")} {props.toBeBudgeted}
+                    </InfoCard>
+                )}
                 {currentMonthlyBudgetKeys.map((budgetGroupName: string, index: number) => (
                     <>
                         <BudgetGroupRow
@@ -221,6 +227,7 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
     totalBudget: state.budget.totalBudget,
+    toBeBudgeted: state.budget.toBeBudgeted,
     transactions: state.transaction.transactions,
     isAddingMonthlyBudget: state.budget.isAddingMonthlyBudget,
 });
