@@ -25,9 +25,9 @@ export type GenericTransactionThunkAction = ThunkAction<
 export const addTransaction = (
     payee: string,
     account: string,
-    category: string,
     date: Date,
     activity: number,
+    category?: string,
     note?: string,
 ): GenericTransactionThunkAction => {
     return async (
