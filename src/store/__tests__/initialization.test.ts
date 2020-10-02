@@ -2,7 +2,7 @@ import { AnyAction } from "redux";
 import configureMockStore from "redux-mock-store";
 import thunk, { ThunkDispatch } from "redux-thunk";
 
-import { BUDGET } from "../../defs/storageKeys";
+import { BUDGET, TO_BE_BUDGETED } from "../../defs/storageKeys";
 import ApplicationState from "../index";
 import { initBudget, setLanguageInitialized } from "../initialization/initializationActions";
 import {
@@ -45,6 +45,7 @@ describe("initialization actions", () => {
 
         expect(actions[0].type).toBe(SETTING_BUDGET_INITIALIZED);
         expect(actions[1].type).toBe(SET_BUDGET_INITIALIZED_SUCCESS);
-        expect(localStorage.getItem).toHaveBeenLastCalledWith(BUDGET);
+        expect(localStorage.getItem).toHaveBeenNthCalledWith(1, BUDGET);
+        expect(localStorage.getItem).toHaveBeenLastCalledWith(TO_BE_BUDGETED);
     });
 });
