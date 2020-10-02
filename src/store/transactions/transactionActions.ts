@@ -3,7 +3,7 @@ import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { TRANSACTIONS } from "../../defs/storageKeys";
 import getMonthCode from "../../utils/getMonthCode";
 import { setBalance } from "../accounts/accountsActions";
-import { setActivityAmount } from "../budget/budgetActions";
+import { setActivityAmount, setToBeBudgetedAmount } from "../budget/budgetActions";
 import { GenericBudgetAction } from "../budget/budgetInterfaces";
 import ApplicationState from "../index";
 
@@ -57,13 +57,22 @@ export const addTransaction = (
             // Update budget activity
             const monthCode = getMonthCode(date);
 
-            const setActivityResult = await dispatch(
-                setActivityAmount(monthCode, category, (currActivity: number) => currActivity + activity),
-            );
+            let updateBudgetResult;
 
-            if ("error" in setActivityResult) {
-                // We know setting activity failed
-                return dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error: setActivityResult.error });
+            // If we don't have a category, then just add the activity to our To-Be budgeted pool
+            if (!category) {
+                updateBudgetResult = await dispatch(
+                    setToBeBudgetedAmount((currActivity: number) => currActivity + activity),
+                );
+            } else {
+                updateBudgetResult = await dispatch(
+                    setActivityAmount(monthCode, category, (currActivity: number) => currActivity + activity),
+                );
+            }
+
+            if ("error" in updateBudgetResult) {
+                // We know updating budget failed
+                return dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error: updateBudgetResult.error });
             }
 
             const setBalanceResult = await dispatch(
