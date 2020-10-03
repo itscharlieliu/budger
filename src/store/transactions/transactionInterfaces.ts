@@ -8,7 +8,7 @@ export interface Transaction {
     account: string;
     date: Date;
     payee: string;
-    category: string;
+    category?: string;
     note?: string;
     activity: number;
 }
