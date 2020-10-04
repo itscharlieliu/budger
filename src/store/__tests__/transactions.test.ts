@@ -9,7 +9,13 @@ import {
     UPDATING_ACCOUNT,
     UPDATE_ACCOUNT_FAILURE,
 } from "../accounts/accountsInterfaces";
-import { SET_TOTAL_BUDGET_SUCCESS, SETTING_TOTAL_BUDGET, SET_TOTAL_BUDGET_FAILURE } from "../budget/budgetInterfaces";
+import {
+    SET_TOTAL_BUDGET_SUCCESS,
+    SETTING_TOTAL_BUDGET,
+    SET_TOTAL_BUDGET_FAILURE,
+    SETTING_TO_BE_BUDGETED,
+    SET_TO_BE_BUDGETED_SUCCESS,
+} from "../budget/budgetInterfaces";
 import ApplicationState from "../index";
 import { addTransaction, deleteTransaction } from "../transactions/transactionActions";
 import {
@@ -65,6 +71,94 @@ describe("transactions actions", () => {
         // First set budget accurately
         expect(actions[1].type).toBe(SETTING_TOTAL_BUDGET);
         expect(actions[2].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
+
+        // Then set account activity correctly
+        expect(actions[3].type).toBe(UPDATING_ACCOUNT);
+        expect(actions[4].type).toBe(UPDATE_ACCOUNT_SUCCESS);
+
+        expect(actions[5].type).toBe(UPDATE_TRANSACTIONS_SUCCESS);
+    });
+
+    it("sets to be budgeted when adding transaction if we do not provide a category", async () => {
+        const store = mockStore({
+            transaction: {
+                transactions: [],
+                isUpdatingTransactions: false,
+                error: null,
+            },
+            accounts: {
+                allAccounts: [
+                    {
+                        name: "test account",
+                        type: AccountType.budgeted,
+                        balance: 100,
+                    },
+                ],
+            },
+            budget: {
+                totalBudget: {},
+                toBeBudgeted: 100,
+            },
+        });
+
+        // Add transaction without providing category
+        await store.dispatch(addTransaction("test payee", "test account", testDate, -70));
+        const actions = store.getActions();
+
+        expect(actions[0].type).toBe(UPDATING_TRANSACTIONS);
+
+        // First set budget accurately
+        expect(actions[1].type).toBe(SETTING_TO_BE_BUDGETED);
+        expect(actions[2].type).toBe(SET_TO_BE_BUDGETED_SUCCESS);
+        expect(actions[2].toBeBudgeted).toBe(100 - 70);
+
+        // Then set account activity correctly
+        expect(actions[3].type).toBe(UPDATING_ACCOUNT);
+        expect(actions[4].type).toBe(UPDATE_ACCOUNT_SUCCESS);
+
+        expect(actions[5].type).toBe(UPDATE_TRANSACTIONS_SUCCESS);
+    });
+
+    it("sets to be budgeted when deleting transaction if the transaction does not have a category", async () => {
+        const store = mockStore({
+            transaction: {
+                transactions: [
+                    {
+                        account: "test account",
+                        date: testDate,
+                        payee: "test payee",
+                        note: "hello",
+                        activity: 27,
+                    },
+                ],
+                isUpdatingTransactions: false,
+                error: null,
+            },
+            accounts: {
+                allAccounts: [
+                    {
+                        name: "test account",
+                        type: AccountType.budgeted,
+                        balance: 100,
+                    },
+                ],
+            },
+            budget: {
+                totalBudget: {},
+                toBeBudgeted: 100,
+            },
+        });
+
+        // Add transaction without providing category
+        await store.dispatch(deleteTransaction(0));
+        const actions = store.getActions();
+
+        expect(actions[0].type).toBe(UPDATING_TRANSACTIONS);
+
+        // First set budget accurately
+        expect(actions[1].type).toBe(SETTING_TO_BE_BUDGETED);
+        expect(actions[2].type).toBe(SET_TO_BE_BUDGETED_SUCCESS);
+        expect(actions[2].toBeBudgeted).toBe(100 - 27);
 
         // Then set account activity correctly
         expect(actions[3].type).toBe(UPDATING_ACCOUNT);
@@ -136,7 +230,6 @@ describe("transactions actions", () => {
         expect(actions[5].type).toBe(UPDATE_TRANSACTIONS_FAILURE);
     });
 
-    // TODO Add test for happy path delete transaction
     it("successfully deletes transaction", async () => {
         const store = mockStore({
             transaction: {
