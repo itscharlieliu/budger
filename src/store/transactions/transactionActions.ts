@@ -111,17 +111,27 @@ export const deleteTransaction = (index: number): GenericTransactionThunkAction 
 
             // Update budget activity
             const monthCode = getMonthCode(oldTransaction[0].date);
-            const setActivityResult = await dispatch(
-                setActivityAmount(
-                    monthCode,
-                    oldTransaction[0].category,
-                    (currActivity: number) => currActivity - oldTransaction[0].activity,
-                ),
-            );
 
-            if ("error" in setActivityResult) {
-                // We know setting activity failed
-                return dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error: setActivityResult.error });
+            let updateBudgetResult;
+
+            // If we don't have a category, then just add the activity to our To-Be budgeted pool
+            if (!oldTransaction[0].category) {
+                updateBudgetResult = await dispatch(
+                    setToBeBudgetedAmount((currActivity: number) => currActivity - oldTransaction[0].activity),
+                );
+            } else {
+                updateBudgetResult = await dispatch(
+                    setActivityAmount(
+                        monthCode,
+                        oldTransaction[0].category,
+                        (currActivity: number) => currActivity - oldTransaction[0].activity,
+                    ),
+                );
+            }
+
+            if ("error" in updateBudgetResult) {
+                // We know updating budget failed
+                return dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error: updateBudgetResult.error });
             }
 
             const setBalanceResult = await dispatch(
