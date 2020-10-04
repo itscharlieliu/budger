@@ -57,7 +57,7 @@ describe("transactions actions", () => {
             },
         });
 
-        await store.dispatch(addTransaction("test payee", "test account", "test category", testDate, -70));
+        await store.dispatch(addTransaction("test payee", "test account", testDate, -70, "test category"));
         const actions = store.getActions();
 
         expect(actions[0].type).toBe(UPDATING_TRANSACTIONS);
@@ -105,7 +105,7 @@ describe("transactions actions", () => {
 
         // Add with invalid category
         await store.dispatch(
-            addTransaction("invalid payee payee", "invalid account", "invalid category", testDate, -70),
+            addTransaction("invalid payee payee", "invalid account", testDate, -70, "invalid category"),
         );
         let actions = store.getActions();
 
@@ -120,7 +120,7 @@ describe("transactions actions", () => {
         store.clearActions();
 
         // Add with valid category but invalid account
-        await store.dispatch(addTransaction("invalid payee payee", "invalid account", "test category", testDate, -70));
+        await store.dispatch(addTransaction("invalid payee payee", "invalid account", testDate, -70, "test category"));
 
         actions = store.getActions();
 
