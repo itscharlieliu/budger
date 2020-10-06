@@ -193,9 +193,9 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
             <BudgetContainer>
                 <BudgetHeader monthCode={monthCode} />
                 {currentMonthlyBudgetKeys.length === 0 && <InfoCard>{t("noCategories")}</InfoCard>}
-                {props.toBeBudgeted > 0 && (
+                {props.toBeBudgeted !== 0 && (
                     <InfoCard>
-                        {t("toBeBudgeted")} {props.toBeBudgeted}
+                        {t("toBeBudgeted")} {formatMoney(props.toBeBudgeted, 2)}
                     </InfoCard>
                 )}
                 {currentMonthlyBudgetKeys.map((budgetGroupName: string, index: number) => (
