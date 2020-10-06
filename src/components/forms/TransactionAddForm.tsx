@@ -81,21 +81,21 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
         props.addTransaction(
             values.toFrom.value,
             values.account.value,
-            values.category.value,
             values.date,
             (isNaN(inflow) ? 0 : inflow) - (isNaN(outflow) ? 0 : outflow),
             values.note,
+            values.category.value,
         );
         props.onSubmit();
     };
 
     const validateCategories = (category?: AutocompleteOption): string | undefined => {
         if (!category) {
-            return t("cannotBeEmpty");
+            return;
         }
 
         if (category.value.length === 0) {
-            return t("cannotBeEmpty");
+            return;
         }
 
         if (!props.totalBudget[monthCode]) {
