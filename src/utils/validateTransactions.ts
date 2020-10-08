@@ -12,7 +12,7 @@ const validateTransactions = (transactions: unknown): boolean => {
             if (typeof transaction.payee !== "string") {
                 return false;
             }
-            if (typeof transaction.category !== "string") {
+            if (typeof transaction.category !== "string" && transaction.category !== undefined) {
                 return false;
             }
             if (transaction.note !== undefined && typeof transaction.note !== "string") {
