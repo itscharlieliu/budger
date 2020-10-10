@@ -50,9 +50,13 @@ interface BudgetGroupRowProps {
     onDeleteGroup: () => void;
 }
 
-interface BudgetHeaderProps {
+interface MonthHeaderProps {
     monthCode: string;
+    onNextMonth: () => void;
+    onPrevMonth: () => void;
 }
+
+interface BudgetHeaderProps extends MonthHeaderProps {}
 
 const BudgetContainer = styled.div`
     display: grid;
@@ -60,7 +64,7 @@ const BudgetContainer = styled.div`
     grid-template-columns: auto 15% 15% 15%;
 `;
 
-const BudgetAddButton = styled(Button)`
+const BudgetHeaderButton = styled(Button)`
     margin: -16px 0 -16px 16px;
 `;
 
@@ -81,6 +85,16 @@ const InfoCard = styled.div`
     grid-column-end: 5;
 `;
 
+const MonthDisplay = (props: MonthHeaderProps): JSX.Element => {
+    return (
+        <div>
+            <BudgetHeaderButton icon={<span>prev</span>} onClick={props.onPrevMonth} />
+            <span>{props.monthCode}</span>
+            <BudgetHeaderButton icon={<span>next</span>} onClick={props.onNextMonth} />
+        </div>
+    );
+};
+
 const BudgetHeader = (props: BudgetHeaderProps): JSX.Element => {
     const [isAddingGroup, setIsAddingGroup] = useState(false);
 
@@ -91,7 +105,8 @@ const BudgetHeader = (props: BudgetHeaderProps): JSX.Element => {
                     <BudgetGroupAddForm monthCode={props.monthCode} onSubmit={() => setIsAddingGroup(false)} />
                 </Modal>
                 <span>{t("category")}</span>
-                <BudgetAddButton icon={<PlusIcon />} flat onClick={() => setIsAddingGroup(true)} />
+                <BudgetHeaderButton icon={<PlusIcon />} flat onClick={() => setIsAddingGroup(true)} />
+                <MonthDisplay date={props.date} onNextMonth={props.onNextMonth} onPrevMonth={props.onPrevMonth} />
             </GridHeaderContainer>
             <GridHeaderContainer>
                 <span>{t("budgeted")}</span>
@@ -105,31 +120,6 @@ const BudgetHeader = (props: BudgetHeaderProps): JSX.Element => {
         </>
     );
 };
-
-// const BudgetCategoryRow = (props: BudgetCategoryRowProps): JSX.Element => {
-//     const [isEditingCategory, setIsEditingCategory] = useState(false);
-//
-//     return (
-//         <>
-//             <GridBoxContainer>
-//                 <Modal visible={isEditingCategory} onClose={() => setIsEditingCategory(false)}>
-//                     <BudgetCategoryEditForm
-//                         onSubmit={() => setIsEditingCategory(false)}
-//                         budgetCategory={props.categoryName}
-//                         defaultValue={formatMoney(props.budgeted.toString(), 2)}
-//                         monthCode={props.monthCode}
-//                     />
-//                 </Modal>
-//                 {props.categoryName}
-//                 <BudgetAddButton icon={<Edit />} onClick={() => setIsEditingCategory(true)} flat />
-//                 <BudgetAddButton icon={<Trash />} onClick={() => props.onDelete(props.categoryName)} flat />
-//             </GridBoxContainer>
-//             <GridBoxContainer>{props.budgeted}</GridBoxContainer>
-//             <GridBoxContainer>{props.activity}</GridBoxContainer>
-//             <GridBoxContainer>{props.budgeted + props.activity}</GridBoxContainer>
-//         </>
-//     );
-// };
 
 const BudgetCategoryRow = (props: BudgetCategoryRowProps): JSX.Element => {
     const [isEditingCategory, setIsEditingCategory] = useState(false);
@@ -146,8 +136,8 @@ const BudgetCategoryRow = (props: BudgetCategoryRowProps): JSX.Element => {
                     />
                 </Modal>
                 {props.categoryName}
-                <BudgetAddButton icon={<Edit />} onClick={() => setIsEditingCategory(true)} flat />
-                <BudgetAddButton icon={<Trash />} onClick={() => props.onDeleteCategory()} flat />
+                <BudgetHeaderButton icon={<Edit />} onClick={() => setIsEditingCategory(true)} flat />
+                <BudgetHeaderButton icon={<Trash />} onClick={() => props.onDeleteCategory()} flat />
             </GridBoxContainer>
             <GridBoxContainer>{props.budgeted}</GridBoxContainer>
             <GridBoxContainer>{props.activity}</GridBoxContainer>
@@ -170,8 +160,8 @@ const BudgetGroupRow = (props: BudgetGroupRowProps): JSX.Element => {
                     />
                 </Modal>
                 {props.groupName}
-                <BudgetAddButton icon={<PlusIcon />} onClick={() => setIsAddingCategory(true)} flat />
-                <BudgetAddButton icon={<Trash />} onClick={() => props.onDeleteGroup()} flat />
+                <BudgetHeaderButton icon={<PlusIcon />} onClick={() => setIsAddingCategory(true)} flat />
+                <BudgetHeaderButton icon={<Trash />} onClick={() => props.onDeleteGroup()} flat />
             </BudgetGroupContainer>
         </>
     );
@@ -179,7 +169,9 @@ const BudgetGroupRow = (props: BudgetGroupRowProps): JSX.Element => {
 
 const BudgetScreen = (props: AllProps): JSX.Element => {
     // TODO change this to state so that we can change months
-    const monthCode = getMonthCode(new Date());
+    // const monthCode = getMonthCode(new Date());
+
+    const [monthCode, setMonthCode] = useState<string>(getMonthCode(new Date()));
 
     if (!props.totalBudget[monthCode] && !props.isAddingMonthlyBudget) {
         // Month does not exist yet and we are not in the process of creating it, so create it
@@ -188,10 +180,34 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
 
     const currentMonthlyBudgetKeys = props.totalBudget[monthCode] ? Object.keys(props.totalBudget[monthCode]) : [];
 
+    // const handleNextMonthPress = () => {
+    //     console.log("next");
+    //     setDate((currDate: Date) => {
+    //         console.log(currDate);
+    //         currDate.setMonth(currDate.getMonth() + 1);
+    //         console.log(new Date(currDate));
+    //         return new Date(currDate);
+    //     });
+    // };
+    //
+    // const handlePrevMonthPress = () => {
+    //     console.log("prev");
+    //     setDate((currDate: Date) => {
+    //         currDate.setMonth(currDate.getMonth() - 1);
+    //         return new Date(currDate);
+    //     });
+    // };
+
+    // TODO Add util to change monthcode
+
     return (
         <ScreenContainer>
             <BudgetContainer>
-                <BudgetHeader monthCode={monthCode} />
+                <BudgetHeader
+                    monthCode={monthCode}
+                    onNextMonth={handleNextMonthPress}
+                    onPrevMonth={handlePrevMonthPress}
+                />
                 {currentMonthlyBudgetKeys.length === 0 && <InfoCard>{t("noCategories")}</InfoCard>}
                 {props.toBeBudgeted !== 0 && (
                     <InfoCard>
