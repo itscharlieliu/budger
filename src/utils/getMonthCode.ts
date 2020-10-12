@@ -4,6 +4,22 @@ const MONTHCODE_SEPERATOR = "_";
 
 const END_MONTH = 11;
 
+export class MonthCode {
+    public readonly month: number = 0;
+    public readonly year: number = 0;
+
+    constructor(date: Date) {
+        this.month = date.getMonth();
+        this.year = date.getFullYear();
+    }
+
+    public toString(): string {
+        return `${this.year}${this.month.toString().padStart(2, "0")}`;
+    }
+
+    public getNext(): MonthCode {}
+}
+
 const getMonthCode = (date: Date): string => {
     return `${date.getFullYear()}${MONTHCODE_SEPERATOR}${date.getMonth().toString().padStart(2, "0")}`;
 };
