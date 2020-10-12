@@ -10,6 +10,7 @@ const ERRORS = {
     invalidTransactions: "Invalid transactions",
     monthAlreadyExists: "This month already has a budget",
     monthDoesNotExist: "This month does not have a budget",
+    invalidMonthCode: "Invalid Month Code",
 };
 
 export default ERRORS;
