@@ -17,7 +17,13 @@ export class MonthCode {
         return `${this.year}${this.month.toString().padStart(2, "0")}`;
     }
 
-    public getNext(): MonthCode {}
+    public getNext(): MonthCode {
+        return new MonthCode(new Date(this.year, this.month + 1));
+    }
+
+    public getPrev(): MonthCode {
+        return new MonthCode(new Date(this.year, this.month - 1));
+    }
 }
 
 const getMonthCode = (date: Date): string => {
