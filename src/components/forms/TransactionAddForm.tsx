@@ -10,12 +10,12 @@ import { AllAccounts, BankAccount } from "../../store/accounts/accountsInterface
 import { TotalBudget } from "../../store/budget/budgetInterfaces";
 import { addTransaction } from "../../store/transactions/transactionActions";
 import formatMoney from "../../utils/formatMoney";
-import getMonthCode from "../../utils/getMonthCode";
 import Autocomplete, { AutocompleteOption } from "../common/Autocomplete";
 import Button from "../common/Button";
 import DateSelector from "../common/DateSelector";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
+import MonthCode from "../../utils/getMonthCode";
 
 interface StateProps {
     allAccounts: AllAccounts;
@@ -67,7 +67,9 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
     const dateInputRef = useRef<DayPickerInput>(null);
     const outInputRef = useRef<HTMLInputElement>(null);
 
-    const [monthCode, setMonthCode] = useState(getMonthCode(new Date()));
+    const [monthCode, setMonthCode] = useState(new MonthCode());
+
+    const monthCodeString = monthCode.toString();
 
     const handleSubmit = (values: FormValues) => {
         if (!values.toFrom || !values.account || !values.category || !values.date) {
@@ -98,12 +100,12 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
             return;
         }
 
-        if (!props.totalBudget[monthCode]) {
+        if (!props.totalBudget[monthCodeString]) {
             return t("categoryDoesNotExist");
         }
 
-        for (const group of Object.keys(props.totalBudget[monthCode])) {
-            for (const budgetCategory of Object.keys(props.totalBudget[monthCode][group])) {
+        for (const group of Object.keys(props.totalBudget[monthCodeString])) {
+            for (const budgetCategory of Object.keys(props.totalBudget[monthCodeString][group])) {
                 console.log(budgetCategory, category);
                 if (budgetCategory === category.value) {
                     return;
@@ -184,9 +186,11 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                                 label={t("category")}
                                 value={input.value || { value: "", label: "" }}
                                 options={Object.keys(
-                                    props.totalBudget[monthCode] ? props.totalBudget[monthCode] : {},
+                                    props.totalBudget[monthCodeString] ? props.totalBudget[monthCodeString] : {},
                                 ).reduce((categories: AutocompleteOption[], budgetGroup: string) => {
-                                    for (const category of Object.keys(props.totalBudget[monthCode][budgetGroup])) {
+                                    for (const category of Object.keys(
+                                        props.totalBudget[monthCodeString][budgetGroup],
+                                    )) {
                                         categories.push({ value: category, label: category });
                                     }
                                     return categories;
@@ -204,7 +208,7 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                                 <DateSelector
                                     {...input}
                                     onBlur={(event: React.FocusEvent<HTMLDivElement>) => {
-                                        input.value && setMonthCode(getMonthCode(input.value));
+                                        input.value && setMonthCode(new MonthCode(input.value));
                                         input.onBlur(event);
                                     }}
                                     value={input.value}
