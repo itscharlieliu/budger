@@ -1,49 +1,68 @@
-import getMonthCode, { MonthCode } from "../getMonthCode";
+import { getMonthCodeString, getNextMonthCode, getPrevMonthCode, MonthCode, validateMonthCode } from "../getMonthCode";
 
 describe("month code util tests", () => {
-    it("gets a month code from a date", () => {
-        const date = new Date(2020, 2, 25);
+    it("validates month code", () => {
+        const monthCode: MonthCode = {
+            month: 2,
+            year: 2020,
+        };
 
-        const monthCode = new MonthCode(date);
+        expect(validateMonthCode(monthCode)).toBe(true);
 
-        expect(monthCode.toString()).toBe("202002");
+        const invalidMonthCode1: MonthCode = {
+            month: 50,
+            year: 2020,
+        };
+
+        expect(validateMonthCode(invalidMonthCode1)).toBe(false);
+
+        const invalidMonthCode2: MonthCode = {
+            month: 2,
+            year: 100,
+        };
+
+        expect(validateMonthCode(invalidMonthCode2)).toBe(false);
     });
 
     it("is able to get next month", () => {
-        let date = new Date(2020, 2, 25);
+        let monthCode: MonthCode = {
+            month: 2,
+            year: 2020,
+        };
 
-        let monthCode = new MonthCode(date);
+        let nextMonth = getNextMonthCode(monthCode);
 
-        let nextMonth = monthCode.getNext();
-
-        expect(nextMonth.toString()).toBe("202003");
+        expect(getMonthCodeString(nextMonth)).toBe("202003");
 
         // Test year rollover
-        date = new Date(2020, 11);
+        monthCode = {
+            month: 11,
+            year: 2020,
+        };
 
-        monthCode = new MonthCode(date);
+        nextMonth = getNextMonthCode(monthCode);
 
-        nextMonth = monthCode.getNext();
-
-        expect(nextMonth.toString()).toBe("202100");
+        expect(getMonthCodeString(nextMonth)).toBe("202100");
     });
 
     it("is able to get previous month", () => {
-        let date = new Date(2020, 2, 25);
+        let monthCode: MonthCode = {
+            month: 2,
+            year: 2020,
+        };
 
-        let monthCode = new MonthCode(date);
+        let nextMonth = getPrevMonthCode(monthCode);
 
-        let nextMonth = monthCode.getPrev();
-
-        expect(nextMonth.toString()).toBe("202001");
+        expect(getMonthCodeString(nextMonth)).toBe("202001");
 
         // Test year rollover
-        date = new Date(2020, 0);
+        monthCode = {
+            month: 0,
+            year: 2020,
+        };
 
-        monthCode = new MonthCode(date);
+        nextMonth = getPrevMonthCode(monthCode);
 
-        nextMonth = monthCode.getPrev();
-
-        expect(nextMonth.toString()).toBe("201911");
+        expect(getMonthCodeString(nextMonth)).toBe("201911");
     });
 });
