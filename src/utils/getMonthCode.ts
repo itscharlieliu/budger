@@ -10,6 +10,10 @@ export interface MonthCode {
     year: number;
 }
 
+export const getMonthCodeFromDate = (date: Date): MonthCode => {
+    return { month: date.getMonth(), year: date.getFullYear() };
+};
+
 export const getNextMonthCode = (monthCode: MonthCode): MonthCode => {
     const nextMonthCodeDate = new Date(monthCode.year, monthCode.month + 1);
 

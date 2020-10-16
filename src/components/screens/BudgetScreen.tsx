@@ -12,7 +12,6 @@ import { addBudgetMonth, deleteBudgetCategory, deleteBudgetGroup } from "../../s
 import { BudgetCategory, TotalBudget } from "../../store/budget/budgetInterfaces";
 import { Transaction } from "../../store/transactions/transactionInterfaces";
 import formatMoney from "../../utils/formatMoney";
-import getMonthCode from "../../utils/getMonthCode";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
 import GridBoxContainer from "../common/containers/GridBoxContainer";
@@ -21,6 +20,7 @@ import ScreenContainer from "../common/containers/ScreenContainer";
 import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
 import BudgetCategoryEditForm from "../forms/BudgetCategoryEditForm";
 import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
+import { getMonthCodeFromDate, getMonthCodeString, MonthCode } from "../../utils/getMonthCode";
 
 interface StateProps {
     totalBudget: TotalBudget;
@@ -41,17 +41,17 @@ interface BudgetCategoryRowProps extends BudgetCategory {
     onDeleteCategory: () => void;
     activity: number;
     categoryName: string;
-    monthCode: string;
+    monthCode: MonthCode;
 }
 
 interface BudgetGroupRowProps {
     groupName: string;
-    monthCode: string;
+    monthCode: MonthCode;
     onDeleteGroup: () => void;
 }
 
 interface MonthHeaderProps {
-    monthCode: string;
+    monthCode: MonthCode;
     onNextMonth: () => void;
     onPrevMonth: () => void;
 }
@@ -106,7 +106,11 @@ const BudgetHeader = (props: BudgetHeaderProps): JSX.Element => {
                 </Modal>
                 <span>{t("category")}</span>
                 <BudgetHeaderButton icon={<PlusIcon />} flat onClick={() => setIsAddingGroup(true)} />
-                <MonthDisplay date={props.date} onNextMonth={props.onNextMonth} onPrevMonth={props.onPrevMonth} />
+                <MonthDisplay
+                    monthCode={props.monthCode}
+                    onNextMonth={props.onNextMonth}
+                    onPrevMonth={props.onPrevMonth}
+                />
             </GridHeaderContainer>
             <GridHeaderContainer>
                 <span>{t("budgeted")}</span>
@@ -171,11 +175,11 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
     // TODO change this to state so that we can change months
     // const monthCode = getMonthCode(new Date());
 
-    const [monthCode, setMonthCode] = useState<string>(getMonthCode(new Date()));
+    const [monthCode, setMonthCode] = useState<MonthCode>(getMonthCodeFromDate(new Date()));
 
-    if (!props.totalBudget[monthCode] && !props.isAddingMonthlyBudget) {
+    if (!props.totalBudget[getMonthCodeString(monthCode)] && !props.isAddingMonthlyBudget) {
         // Month does not exist yet and we are not in the process of creating it, so create it
-        props.addBudgetMonth(monthCode);
+        props.addBudgetMonth(getMonthCodeString(monthCode));
     }
 
     const currentMonthlyBudgetKeys = props.totalBudget[monthCode] ? Object.keys(props.totalBudget[monthCode]) : [];

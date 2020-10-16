@@ -1,6 +1,18 @@
-import { getMonthCodeString, getNextMonthCode, getPrevMonthCode, MonthCode, validateMonthCode } from "../getMonthCode";
+import {
+    getMonthCodeFromDate,
+    getMonthCodeString,
+    getNextMonthCode,
+    getPrevMonthCode,
+    MonthCode,
+    validateMonthCode,
+} from "../getMonthCode";
 
 describe("month code util tests", () => {
+    it("can get month code from date", () => {
+        const date = new Date(2020, 2);
+
+        expect(getMonthCodeFromDate(date)).toEqual({ month: 2, year: 2020 });
+    });
     it("validates month code", () => {
         const monthCode: MonthCode = {
             month: 2,
