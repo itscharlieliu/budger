@@ -15,7 +15,7 @@ import Button from "../common/Button";
 import DateSelector from "../common/DateSelector";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
-import MonthCode from "../../utils/getMonthCode";
+import { getMonthCodeFromDate, getMonthCodeString, MonthCode } from "../../utils/getMonthCode";
 
 interface StateProps {
     allAccounts: AllAccounts;
@@ -67,9 +67,9 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
     const dateInputRef = useRef<DayPickerInput>(null);
     const outInputRef = useRef<HTMLInputElement>(null);
 
-    const [monthCode, setMonthCode] = useState(new MonthCode());
+    const [monthCode, setMonthCode] = useState<MonthCode>(getMonthCodeFromDate(new Date()));
 
-    const monthCodeString = monthCode.toString();
+    const monthCodeString = getMonthCodeString(monthCode);
 
     const handleSubmit = (values: FormValues) => {
         if (!values.toFrom || !values.account || !values.category || !values.date) {
@@ -208,7 +208,7 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                                 <DateSelector
                                     {...input}
                                     onBlur={(event: React.FocusEvent<HTMLDivElement>) => {
-                                        input.value && setMonthCode(new MonthCode(input.value));
+                                        input.value && setMonthCode(getMonthCodeFromDate(input.value));
                                         input.onBlur(event);
                                     }}
                                     value={input.value}
