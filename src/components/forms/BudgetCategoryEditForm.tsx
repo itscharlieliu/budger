@@ -8,11 +8,12 @@ import formatMoney from "../../utils/formatMoney";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
+import { MonthCode } from "../../utils/getMonthCode";
 
 interface OwnProps {
     onSubmit?: () => void;
     budgetCategory: string;
-    monthCode: string;
+    monthCode: MonthCode;
     defaultValue?: string;
 }
 

@@ -7,11 +7,12 @@ import { addBudgetCategory } from "../../store/budget/budgetActions";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
+import { MonthCode } from "../../utils/getMonthCode";
 
 interface OwnProps {
     onSubmit?: () => void;
     group: string;
-    monthCode: string;
+    monthCode: MonthCode;
 }
 
 interface DispatchProps {
