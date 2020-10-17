@@ -1,7 +1,6 @@
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 
 import { TRANSACTIONS } from "../../defs/storageKeys";
-import getMonthCode from "../../utils/getMonthCode";
 import { setBalance } from "../accounts/accountsActions";
 import { setActivityAmount, setToBeBudgetedAmount } from "../budget/budgetActions";
 import { GenericBudgetAction } from "../budget/budgetInterfaces";
@@ -14,6 +13,7 @@ import {
     UPDATE_TRANSACTIONS_SUCCESS,
     UPDATING_TRANSACTIONS,
 } from "./transactionInterfaces";
+import { getMonthCodeFromDate, getMonthCodeString, MonthCode } from "../../utils/getMonthCode";
 
 export type GenericTransactionThunkAction = ThunkAction<
     Promise<GenericTransactionAction>,
@@ -55,7 +55,7 @@ export const addTransaction = (
             localStorage.setItem(TRANSACTIONS, JSON.stringify(newTransactions));
 
             // Update budget activity
-            const monthCode = getMonthCode(date);
+            const monthCode: MonthCode = getMonthCodeFromDate(date);
 
             let updateBudgetResult;
 
@@ -66,7 +66,11 @@ export const addTransaction = (
                 );
             } else {
                 updateBudgetResult = await dispatch(
-                    setActivityAmount(monthCode, category, (currActivity: number) => currActivity + activity),
+                    setActivityAmount(
+                        getMonthCodeString(monthCode),
+                        category,
+                        (currActivity: number) => currActivity + activity,
+                    ),
                 );
             }
 
@@ -110,7 +114,7 @@ export const deleteTransaction = (index: number): GenericTransactionThunkAction 
             localStorage.setItem(TRANSACTIONS, JSON.stringify(newTransactions));
 
             // Update budget activity
-            const monthCode = getMonthCode(oldTransaction[0].date);
+            const monthCode: MonthCode = getMonthCodeFromDate(oldTransaction[0].date);
 
             let updateBudgetResult;
 
@@ -122,7 +126,7 @@ export const deleteTransaction = (index: number): GenericTransactionThunkAction 
             } else {
                 updateBudgetResult = await dispatch(
                     setActivityAmount(
-                        monthCode,
+                        getMonthCodeString(monthCode),
                         oldTransaction[0].category,
                         (currActivity: number) => currActivity - oldTransaction[0].activity,
                     ),

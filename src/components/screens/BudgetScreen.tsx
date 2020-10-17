@@ -20,7 +20,13 @@ import ScreenContainer from "../common/containers/ScreenContainer";
 import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
 import BudgetCategoryEditForm from "../forms/BudgetCategoryEditForm";
 import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
-import { getMonthCodeFromDate, getMonthCodeString, MonthCode } from "../../utils/getMonthCode";
+import {
+    getMonthCodeFromDate,
+    getMonthCodeString,
+    getNextMonthCode,
+    getPrevMonthCode,
+    MonthCode,
+} from "../../utils/getMonthCode";
 
 interface StateProps {
     totalBudget: TotalBudget;
@@ -89,7 +95,7 @@ const MonthDisplay = (props: MonthHeaderProps): JSX.Element => {
     return (
         <div>
             <BudgetHeaderButton icon={<span>prev</span>} onClick={props.onPrevMonth} />
-            <span>{props.monthCode}</span>
+            <span>{getMonthCodeString(props.monthCode)}</span>
             <BudgetHeaderButton icon={<span>next</span>} onClick={props.onNextMonth} />
         </div>
     );
@@ -182,27 +188,21 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
         props.addBudgetMonth(getMonthCodeString(monthCode));
     }
 
-    const currentMonthlyBudgetKeys = props.totalBudget[monthCode] ? Object.keys(props.totalBudget[monthCode]) : [];
+    const monthCodeString = getMonthCodeString(monthCode);
 
-    // const handleNextMonthPress = () => {
-    //     console.log("next");
-    //     setDate((currDate: Date) => {
-    //         console.log(currDate);
-    //         currDate.setMonth(currDate.getMonth() + 1);
-    //         console.log(new Date(currDate));
-    //         return new Date(currDate);
-    //     });
-    // };
-    //
-    // const handlePrevMonthPress = () => {
-    //     console.log("prev");
-    //     setDate((currDate: Date) => {
-    //         currDate.setMonth(currDate.getMonth() - 1);
-    //         return new Date(currDate);
-    //     });
-    // };
+    const currentMonthlyBudgetKeys = props.totalBudget[monthCodeString]
+        ? Object.keys(props.totalBudget[monthCodeString])
+        : [];
 
-    // TODO Add util to change monthcode
+    const handleNextMonthPress = () => {
+        console.log("next");
+        setMonthCode((currMonth: MonthCode) => getNextMonthCode(currMonth));
+    };
+
+    const handlePrevMonthPress = () => {
+        console.log("prev");
+        setMonthCode((currMonth: MonthCode) => getPrevMonthCode(currMonth));
+    };
 
     return (
         <ScreenContainer>
@@ -226,15 +226,19 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
                             onDeleteGroup={() => props.deleteBudgetGroup(monthCode, budgetGroupName)}
                             monthCode={monthCode}
                         />
-                        {Object.keys(props.totalBudget[monthCode][budgetGroupName]).map(
+                        {Object.keys(props.totalBudget[monthCodeString][budgetGroupName]).map(
                             (categoryName: string, index: number) => (
                                 <BudgetCategoryRow
                                     key={categoryName + index}
                                     categoryName={categoryName}
                                     monthCode={monthCode}
-                                    onDeleteCategory={() => props.deleteBudgetCategory(monthCode, categoryName)}
-                                    activity={props.totalBudget[monthCode][budgetGroupName][categoryName].activity}
-                                    budgeted={props.totalBudget[monthCode][budgetGroupName][categoryName].budgeted}
+                                    onDeleteCategory={() => props.deleteBudgetCategory(monthCodeString, categoryName)}
+                                    activity={
+                                        props.totalBudget[monthCodeString][budgetGroupName][categoryName].activity
+                                    }
+                                    budgeted={
+                                        props.totalBudget[monthCodeString][budgetGroupName][categoryName].budgeted
+                                    }
                                 />
                             ),
                         )}
