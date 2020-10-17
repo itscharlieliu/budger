@@ -6,6 +6,8 @@ import { theme } from "../../defs/theme";
 import { ReactComponent as Edit } from "../../resources/images/edit.svg";
 import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
 import { ReactComponent as Trash } from "../../resources/images/trash.svg";
+import { ReactComponent as LeftArrow } from "../../resources/images/LeftArrow.svg";
+import { ReactComponent as RightArrow } from "../../resources/images/RightArrow.svg";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
 import { addBudgetMonth, deleteBudgetCategory, deleteBudgetGroup } from "../../store/budget/budgetActions";
@@ -81,6 +83,16 @@ const BudgetGroupContainer = styled(GridBoxContainer)`
     grid-column-end: 5;
 `;
 
+const MonthDisplayContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`;
+
+const MonthText = styled.span`
+    margin-left: 16px;
+`;
+
 const InfoCard = styled.div`
     border-radius: 4px;
     ${theme.shadow.low};
@@ -93,11 +105,11 @@ const InfoCard = styled.div`
 
 const MonthDisplay = (props: MonthHeaderProps): JSX.Element => {
     return (
-        <div>
-            <BudgetHeaderButton icon={<span>prev</span>} onClick={props.onPrevMonth} />
-            <span>{getMonthCodeString(props.monthCode)}</span>
-            <BudgetHeaderButton icon={<span>next</span>} onClick={props.onNextMonth} />
-        </div>
+        <MonthDisplayContainer>
+            <BudgetHeaderButton flat icon={<LeftArrow />} onClick={props.onPrevMonth} />
+            <BudgetHeaderButton flat icon={<RightArrow />} onClick={props.onNextMonth} />
+            <MonthText>{getMonthCodeString(props.monthCode)}</MonthText>
+        </MonthDisplayContainer>
     );
 };
 
