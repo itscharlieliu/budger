@@ -20,6 +20,7 @@
     "fullDate": "{{- date, L}}",
     "in": "In",
     "invalidDate": "Invalid date",
+    "month": "{{- date, MMMM, YYYY}}",
     "categoryDoesNotExist": "Category does not exist",
     "newCategory": "New Category",
     "newGroup": "New Group",

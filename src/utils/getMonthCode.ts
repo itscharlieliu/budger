@@ -14,6 +14,10 @@ export const getMonthCodeFromDate = (date: Date): MonthCode => {
     return { month: date.getMonth(), year: date.getFullYear() };
 };
 
+export const getDateFromMonthCode = (monthCode: MonthCode): Date => {
+    return new Date(monthCode.year, monthCode.month);
+};
+
 export const getNextMonthCode = (monthCode: MonthCode): MonthCode => {
     const nextMonthCodeDate = new Date(monthCode.year, monthCode.month + 1);
 

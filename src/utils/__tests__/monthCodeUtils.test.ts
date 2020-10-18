@@ -1,4 +1,5 @@
 import {
+    getDateFromMonthCode,
     getMonthCodeFromDate,
     getMonthCodeString,
     getNextMonthCode,
@@ -13,6 +14,19 @@ describe("month code util tests", () => {
 
         expect(getMonthCodeFromDate(date)).toEqual({ month: 2, year: 2020 });
     });
+
+    it("can get date from month code", () => {
+        const monthCode: MonthCode = {
+            month: 2,
+            year: 2020,
+        };
+
+        const date: Date = getDateFromMonthCode(monthCode);
+
+        expect(date.getMonth()).toBe(2);
+        expect(date.getFullYear()).toBe(2020);
+    });
+
     it("validates month code", () => {
         const monthCode: MonthCode = {
             month: 2,

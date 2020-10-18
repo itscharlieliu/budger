@@ -23,6 +23,7 @@ import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
 import BudgetCategoryEditForm from "../forms/BudgetCategoryEditForm";
 import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
 import {
+    getDateFromMonthCode,
     getMonthCodeFromDate,
     getMonthCodeString,
     getNextMonthCode,
@@ -108,7 +109,7 @@ const MonthDisplay = (props: MonthHeaderProps): JSX.Element => {
         <MonthDisplayContainer>
             <BudgetHeaderButton flat icon={<LeftArrow />} onClick={props.onPrevMonth} />
             <BudgetHeaderButton flat icon={<RightArrow />} onClick={props.onNextMonth} />
-            <MonthText>{getMonthCodeString(props.monthCode)}</MonthText>
+            <MonthText>{t("month", { date: getDateFromMonthCode(props.monthCode) })}</MonthText>
         </MonthDisplayContainer>
     );
 };
