@@ -7,7 +7,7 @@ import { addBudgetGroup } from "../../store/budget/budgetActions";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
-import { getMonthCodeString, MonthCode } from "../../utils/getMonthCode";
+import { MonthCode } from "../../utils/getMonthCode";
 
 interface OwnProps {
     onSubmit?: () => void;
@@ -26,7 +26,7 @@ interface FormValues {
 
 const BudgetGroupAddForm = (props: AllProps): JSX.Element => {
     const handleAddCategoryGroup = (values: FormValues) => {
-        values.groupName && props.addBudgetGroup(getMonthCodeString(props.monthCode), values.groupName);
+        values.groupName && props.addBudgetGroup(props.monthCode, values.groupName);
         props.onSubmit && props.onSubmit();
     };
 

@@ -3,25 +3,17 @@ import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
 import { theme } from "../../defs/theme";
+import { ReactComponent as LeftArrow } from "../../resources/images/LeftArrow.svg";
+import { ReactComponent as RightArrow } from "../../resources/images/RightArrow.svg";
 import { ReactComponent as Edit } from "../../resources/images/edit.svg";
 import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
 import { ReactComponent as Trash } from "../../resources/images/trash.svg";
-import { ReactComponent as LeftArrow } from "../../resources/images/LeftArrow.svg";
-import { ReactComponent as RightArrow } from "../../resources/images/RightArrow.svg";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
 import { addBudgetMonth, deleteBudgetCategory, deleteBudgetGroup } from "../../store/budget/budgetActions";
 import { BudgetCategory, TotalBudget } from "../../store/budget/budgetInterfaces";
 import { Transaction } from "../../store/transactions/transactionInterfaces";
 import formatMoney from "../../utils/formatMoney";
-import Button from "../common/Button";
-import Modal from "../common/Modal";
-import GridBoxContainer from "../common/containers/GridBoxContainer";
-import GridHeaderContainer from "../common/containers/GridHeaderContainer";
-import ScreenContainer from "../common/containers/ScreenContainer";
-import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
-import BudgetCategoryEditForm from "../forms/BudgetCategoryEditForm";
-import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
 import {
     getDateFromMonthCode,
     getMonthCodeFromDate,
@@ -30,6 +22,14 @@ import {
     getPrevMonthCode,
     MonthCode,
 } from "../../utils/getMonthCode";
+import Button from "../common/Button";
+import Modal from "../common/Modal";
+import GridBoxContainer from "../common/containers/GridBoxContainer";
+import GridHeaderContainer from "../common/containers/GridHeaderContainer";
+import ScreenContainer from "../common/containers/ScreenContainer";
+import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
+import BudgetCategoryEditForm from "../forms/BudgetCategoryEditForm";
+import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
 
 interface StateProps {
     totalBudget: TotalBudget;
@@ -198,7 +198,7 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
 
     if (!props.totalBudget[getMonthCodeString(monthCode)] && !props.isAddingMonthlyBudget) {
         // Month does not exist yet and we are not in the process of creating it, so create it
-        props.addBudgetMonth(getMonthCodeString(monthCode));
+        props.addBudgetMonth(monthCode);
     }
 
     const monthCodeString = getMonthCodeString(monthCode);
@@ -245,7 +245,7 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
                                     key={categoryName + index}
                                     categoryName={categoryName}
                                     monthCode={monthCode}
-                                    onDeleteCategory={() => props.deleteBudgetCategory(monthCodeString, categoryName)}
+                                    onDeleteCategory={() => props.deleteBudgetCategory(monthCode, categoryName)}
                                     activity={
                                         props.totalBudget[monthCodeString][budgetGroupName][categoryName].activity
                                     }
