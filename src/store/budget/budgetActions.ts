@@ -29,7 +29,7 @@ import { getMonthCodeString, MonthCode } from "../../utils/getMonthCode";
 
 type GenericBudgetThunkAction = ThunkAction<Promise<GenericBudgetAction>, ApplicationState, null, GenericBudgetAction>;
 
-export const addBudgetMonth = (monthCode: string): GenericBudgetThunkAction => async (
+export const addBudgetMonth = (monthCode: MonthCode): GenericBudgetThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericAddMonthlyBudgetAction>,
     getState: () => ApplicationState,
 ): Promise<GenericAddMonthlyBudgetAction> => {
@@ -37,14 +37,16 @@ export const addBudgetMonth = (monthCode: string): GenericBudgetThunkAction => a
 
     const totalBudget = getState().budget.totalBudget;
 
-    if (totalBudget[monthCode]) {
+    const monthCodeString = getMonthCodeString(monthCode);
+
+    if (totalBudget[monthCodeString]) {
         // Month already exists
         return dispatch({ type: ADD_MONTHLY_BUDGET_FAILURE, error: new Error(ERRORS.monthAlreadyExists) });
     }
 
     // Add empty budget
     // TODO create budget from template
-    const newTotalBudget = { ...totalBudget, [monthCode]: {} };
+    const newTotalBudget = { ...totalBudget, [monthCodeString]: {} };
 
     // Save budget to local storage
     localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
@@ -52,7 +54,7 @@ export const addBudgetMonth = (monthCode: string): GenericBudgetThunkAction => a
     return dispatch({ type: ADD_MONTHLY_BUDGET_SUCCESS, totalBudget: newTotalBudget });
 };
 
-export const addBudgetGroup = (monthCode: string, budgetGroup: string): GenericBudgetThunkAction => async (
+export const addBudgetGroup = (monthCode: MonthCode, budgetGroup: string): GenericBudgetThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
     getState: () => ApplicationState,
 ): Promise<GenericSetBudgetAction> => {
@@ -60,17 +62,19 @@ export const addBudgetGroup = (monthCode: string, budgetGroup: string): GenericB
 
     const totalBudget = getState().budget.totalBudget;
 
-    if (totalBudget[monthCode] === undefined) {
+    const monthCodeString = getMonthCodeString(monthCode);
+
+    if (totalBudget[monthCodeString] === undefined) {
         return dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.monthDoesNotExist) });
     }
 
-    if (totalBudget[monthCode][budgetGroup] !== undefined) {
+    if (totalBudget[monthCodeString][budgetGroup] !== undefined) {
         return dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.groupAlreadyExists) });
     }
 
-    const newMonthlyBudget = { ...totalBudget[monthCode], [budgetGroup]: {} };
+    const newMonthlyBudget = { ...totalBudget[monthCodeString], [budgetGroup]: {} };
 
-    const newTotalBudget = { ...totalBudget, [monthCode]: newMonthlyBudget };
+    const newTotalBudget = { ...totalBudget, [monthCodeString]: newMonthlyBudget };
 
     // Save budget to local storage
     localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
@@ -128,7 +132,7 @@ export const addBudgetCategory = (
     return dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
 };
 
-export const deleteBudgetCategory = (monthcode: string, budgetCategory: string): GenericBudgetThunkAction => async (
+export const deleteBudgetCategory = (monthcode: MonthCode, budgetCategory: string): GenericBudgetThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
     getState: () => ApplicationState,
 ): Promise<GenericSetBudgetAction> => {
@@ -136,7 +140,9 @@ export const deleteBudgetCategory = (monthcode: string, budgetCategory: string):
 
     const totalBudget = getState().budget.totalBudget;
 
-    const newMonthlyBudget: MonthlyBudget = { ...totalBudget[monthcode] };
+    const monthCodeString = getMonthCodeString(monthcode);
+
+    const newMonthlyBudget: MonthlyBudget = { ...totalBudget[monthCodeString] };
 
     let numCategoriesDeleted = 0;
 
@@ -151,7 +157,7 @@ export const deleteBudgetCategory = (monthcode: string, budgetCategory: string):
         return dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.categoryDoesNotExist) });
     }
 
-    const newTotalBudget = { ...totalBudget, [monthcode]: newMonthlyBudget };
+    const newTotalBudget = { ...totalBudget, [monthCodeString]: newMonthlyBudget };
 
     // Save budget to local storage
     localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
@@ -248,7 +254,7 @@ export const setToBeBudgetedAmount = (
 };
 
 export const setActivityAmount = (
-    monthCode: string,
+    monthCode: MonthCode,
     budgetCategory: string,
     activity: number | ((currActivity: number) => number),
 ): GenericBudgetThunkAction => async (
@@ -259,25 +265,27 @@ export const setActivityAmount = (
 
     const totalBudget = getState().budget.totalBudget;
 
+    const monthCodeString = getMonthCodeString(monthCode);
+
     const newTotalBudget: TotalBudget = { ...totalBudget };
 
-    if (!newTotalBudget[monthCode]) {
+    if (!newTotalBudget[monthCodeString]) {
         return dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.monthDoesNotExist) });
     }
 
     let numCategoriesEdited = 0;
 
-    for (const group of Object.keys(newTotalBudget[monthCode])) {
-        if (newTotalBudget[monthCode][group][budgetCategory] !== undefined) {
+    for (const group of Object.keys(newTotalBudget[monthCodeString])) {
+        if (newTotalBudget[monthCodeString][group][budgetCategory] !== undefined) {
             ++numCategoriesEdited;
 
             if (typeof activity === "function") {
-                newTotalBudget[monthCode][group][budgetCategory].activity = activity(
-                    newTotalBudget[monthCode][group][budgetCategory].activity,
+                newTotalBudget[monthCodeString][group][budgetCategory].activity = activity(
+                    newTotalBudget[monthCodeString][group][budgetCategory].activity,
                 );
                 continue;
             }
-            newTotalBudget[monthCode][group][budgetCategory].activity = activity;
+            newTotalBudget[monthCodeString][group][budgetCategory].activity = activity;
         }
     }
 

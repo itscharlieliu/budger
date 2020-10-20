@@ -66,11 +66,7 @@ export const addTransaction = (
                 );
             } else {
                 updateBudgetResult = await dispatch(
-                    setActivityAmount(
-                        getMonthCodeString(monthCode),
-                        category,
-                        (currActivity: number) => currActivity + activity,
-                    ),
+                    setActivityAmount(monthCode, category, (currActivity: number) => currActivity + activity),
                 );
             }
 
@@ -126,7 +122,7 @@ export const deleteTransaction = (index: number): GenericTransactionThunkAction 
             } else {
                 updateBudgetResult = await dispatch(
                     setActivityAmount(
-                        getMonthCodeString(monthCode),
+                        monthCode,
                         oldTransaction[0].category,
                         (currActivity: number) => currActivity - oldTransaction[0].activity,
                     ),
