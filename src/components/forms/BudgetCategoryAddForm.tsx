@@ -4,10 +4,10 @@ import { connect, ResolveThunks } from "react-redux";
 
 import t from "../../services/i18n/language";
 import { addBudgetCategory } from "../../store/budget/budgetActions";
+import { MonthCode } from "../../utils/getMonthCode";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
-import { MonthCode } from "../../utils/getMonthCode";
 
 interface OwnProps {
     onSubmit?: () => void;

@@ -10,12 +10,12 @@ import { AllAccounts, BankAccount } from "../../store/accounts/accountsInterface
 import { TotalBudget } from "../../store/budget/budgetInterfaces";
 import { addTransaction } from "../../store/transactions/transactionActions";
 import formatMoney from "../../utils/formatMoney";
+import { getMonthCodeFromDate, getMonthCodeString, MonthCode } from "../../utils/getMonthCode";
 import Autocomplete, { AutocompleteOption } from "../common/Autocomplete";
 import Button from "../common/Button";
 import DateSelector from "../common/DateSelector";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
-import { getMonthCodeFromDate, getMonthCodeString, MonthCode } from "../../utils/getMonthCode";
 
 interface StateProps {
     allAccounts: AllAccounts;
