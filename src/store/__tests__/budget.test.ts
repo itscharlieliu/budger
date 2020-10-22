@@ -3,7 +3,7 @@ import configureMockStore from "redux-mock-store";
 import thunk, { ThunkDispatch } from "redux-thunk";
 
 import ERRORS from "../../defs/errors";
-import getMonthCode from "../../utils/getMonthCode";
+import { getMonthCodeFromDate, getMonthCodeString, MonthCode } from "../../utils/getMonthCode";
 import {
     addBudgetCategory,
     addBudgetGroup,
@@ -29,9 +29,13 @@ type Dispatch = ThunkDispatch<ApplicationState, null, AnyAction>;
 
 const mockStore = configureMockStore<unknown, Dispatch>([thunk]);
 
-const MONTH_CODE = "202009";
-
 describe("budget actions", () => {
+    const testDate = new Date();
+
+    const monthCode: MonthCode = getMonthCodeFromDate(testDate);
+
+    const monthCodeString = getMonthCodeString(monthCode);
+
     it("successfully adds new budget for a new month", () => {
         const store = mockStore({
             budget: {
@@ -39,26 +43,24 @@ describe("budget actions", () => {
             },
         });
 
-        const currDate = new Date();
-
-        store.dispatch(addBudgetMonth(getMonthCode(currDate)));
+        store.dispatch(addBudgetMonth(monthCode));
         const actions = store.getActions();
 
         expect(actions[0].type).toBe(ADDING_MONTHLY_BUDGET);
         expect(actions[1].type).toBe(ADD_MONTHLY_BUDGET_SUCCESS);
-        expect(actions[1].totalBudget[getMonthCode(currDate)]).toEqual({});
+        expect(actions[1].totalBudget[monthCodeString]).toEqual({});
     });
 
     it("doesn't add new month if month already exists", () => {
         const store = mockStore({
             budget: {
                 totalBudget: {
-                    [MONTH_CODE]: {},
+                    [monthCodeString]: {},
                 },
             },
         });
 
-        store.dispatch(addBudgetMonth(MONTH_CODE));
+        store.dispatch(addBudgetMonth(monthCode));
         const actions = store.getActions();
         expect(actions[1].type).toBe(ADD_MONTHLY_BUDGET_FAILURE);
         expect(actions[1].error.message).toBe(ERRORS.monthAlreadyExists);
@@ -69,17 +71,17 @@ describe("budget actions", () => {
         const store = mockStore({
             budget: {
                 totalBudget: {
-                    [MONTH_CODE]: {},
+                    [monthCodeString]: {},
                 },
             },
         });
-        await store.dispatch(addBudgetGroup(MONTH_CODE, "test group"));
+        await store.dispatch(addBudgetGroup(monthCode, "test group"));
         const actions = store.getActions();
 
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
         expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
         expect(actions[1].totalBudget).toEqual({
-            [MONTH_CODE]: {
+            [monthCodeString]: {
                 "test group": {},
             },
         });
@@ -89,19 +91,19 @@ describe("budget actions", () => {
         const store = mockStore({
             budget: {
                 totalBudget: {
-                    [MONTH_CODE]: {
+                    [monthCodeString]: {
                         "test group": {},
                     },
                 },
             },
         });
-        await store.dispatch(addBudgetGroup(MONTH_CODE, "test group 2"));
+        await store.dispatch(addBudgetGroup(monthCode, "test group 2"));
         const actions = store.getActions();
 
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
         expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
         expect(actions[1].totalBudget).toEqual({
-            [MONTH_CODE]: {
+            [monthCodeString]: {
                 "test group": {},
                 "test group 2": {},
             },
@@ -115,7 +117,7 @@ describe("budget actions", () => {
             },
         });
 
-        await store.dispatch(addBudgetGroup(MONTH_CODE, "test group"));
+        await store.dispatch(addBudgetGroup(monthCode, "test group"));
 
         const actions = store.getActions();
 
@@ -127,14 +129,14 @@ describe("budget actions", () => {
         const store = mockStore({
             budget: {
                 totalBudget: {
-                    [MONTH_CODE]: {
+                    [monthCodeString]: {
                         "test group": {},
                     },
                 },
             },
         });
 
-        await store.dispatch(addBudgetGroup(MONTH_CODE, "test group"));
+        await store.dispatch(addBudgetGroup(monthCode, "test group"));
 
         const actions = store.getActions();
 
@@ -147,19 +149,19 @@ describe("budget actions", () => {
         const store = mockStore({
             budget: {
                 totalBudget: {
-                    [MONTH_CODE]: {
+                    [monthCodeString]: {
                         "test group": {},
                     },
                 },
             },
         });
-        await store.dispatch(addBudgetCategory(MONTH_CODE, "test group", "test category"));
+        await store.dispatch(addBudgetCategory(monthCode, "test group", "test category"));
         const actions = store.getActions();
 
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
         expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
         expect(actions[1].totalBudget).toEqual({
-            [MONTH_CODE]: {
+            [monthCodeString]: {
                 "test group": {
                     "test category": {
                         budgeted: 0,
@@ -174,7 +176,7 @@ describe("budget actions", () => {
         const store = mockStore({
             budget: {
                 totalBudget: {
-                    [MONTH_CODE]: {
+                    [monthCodeString]: {
                         "test group": {
                             "test category": {
                                 budgeted: 0,
@@ -185,13 +187,13 @@ describe("budget actions", () => {
                 },
             },
         });
-        await store.dispatch(addBudgetCategory(MONTH_CODE, "test group", "test category 2"));
+        await store.dispatch(addBudgetCategory(monthCode, "test group", "test category 2"));
         const actions = store.getActions();
 
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
         expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
         expect(actions[1].totalBudget).toEqual({
-            [MONTH_CODE]: {
+            [monthCodeString]: {
                 "test group": {
                     "test category": {
                         activity: 0,
@@ -213,7 +215,7 @@ describe("budget actions", () => {
             },
         });
 
-        await store.dispatch(addBudgetCategory(MONTH_CODE, "test group", "test category"));
+        await store.dispatch(addBudgetCategory(monthCode, "test group", "test category"));
         const actions = store.getActions();
 
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
@@ -224,12 +226,12 @@ describe("budget actions", () => {
         const store = mockStore({
             budget: {
                 totalBudget: {
-                    [MONTH_CODE]: {},
+                    [monthCodeString]: {},
                 },
             },
         });
 
-        await store.dispatch(addBudgetCategory(MONTH_CODE, "test group", "test category"));
+        await store.dispatch(addBudgetCategory(monthCode, "test group", "test category"));
         const actions = store.getActions();
 
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
@@ -240,7 +242,7 @@ describe("budget actions", () => {
         const store = mockStore({
             budget: {
                 totalBudget: {
-                    [MONTH_CODE]: {
+                    [monthCodeString]: {
                         "test group": {
                             "test category": {},
                         },
@@ -250,7 +252,7 @@ describe("budget actions", () => {
             },
         });
 
-        await store.dispatch(addBudgetCategory(MONTH_CODE, "test group", "test category"));
+        await store.dispatch(addBudgetCategory(monthCode, "test group", "test category"));
         let actions = store.getActions();
 
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
@@ -258,7 +260,7 @@ describe("budget actions", () => {
 
         store.clearActions();
 
-        await store.dispatch(addBudgetCategory(MONTH_CODE, "test group 2", "test category"));
+        await store.dispatch(addBudgetCategory(monthCode, "test group 2", "test category"));
         actions = store.getActions();
 
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
@@ -269,7 +271,7 @@ describe("budget actions", () => {
         const store = mockStore({
             budget: {
                 totalBudget: {
-                    [MONTH_CODE]: {
+                    [monthCodeString]: {
                         "test group": {
                             "test category": {},
                         },
@@ -277,13 +279,13 @@ describe("budget actions", () => {
                 },
             },
         });
-        await store.dispatch(deleteBudgetCategory(MONTH_CODE, "test category"));
+        await store.dispatch(deleteBudgetCategory(monthCode, "test category"));
         const actions = store.getActions();
 
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
         expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
         expect(actions[1].totalBudget).toEqual({
-            [MONTH_CODE]: {
+            [monthCodeString]: {
                 "test group": {},
             },
         });
@@ -293,13 +295,13 @@ describe("budget actions", () => {
         const store = mockStore({
             budget: {
                 totalBudget: {
-                    [MONTH_CODE]: {
+                    [monthCodeString]: {
                         "test group": {},
                     },
                 },
             },
         });
-        await store.dispatch(deleteBudgetCategory(MONTH_CODE, "nonexistent test category"));
+        await store.dispatch(deleteBudgetCategory(monthCode, "nonexistent test category"));
         const actions = store.getActions();
 
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
@@ -311,19 +313,19 @@ describe("budget actions", () => {
         const store = mockStore({
             budget: {
                 totalBudget: {
-                    [MONTH_CODE]: {
+                    [monthCodeString]: {
                         "test group": {},
                     },
                 },
             },
         });
-        await store.dispatch(deleteBudgetGroup(MONTH_CODE, "test group"));
+        await store.dispatch(deleteBudgetGroup(monthCode, "test group"));
         const actions = store.getActions();
 
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
         expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
         expect(actions[1].totalBudget).toEqual({
-            [MONTH_CODE]: {},
+            [monthCodeString]: {},
         });
     });
 
@@ -331,7 +333,7 @@ describe("budget actions", () => {
         const store = mockStore({
             budget: {
                 totalBudget: {
-                    [MONTH_CODE]: {
+                    [monthCodeString]: {
                         "test group": {
                             "test category": {
                                 budgeted: 69,
@@ -341,13 +343,13 @@ describe("budget actions", () => {
                 },
             },
         });
-        await store.dispatch(editBudgetedAmount(MONTH_CODE, "test category", 420));
+        await store.dispatch(editBudgetedAmount(monthCode, "test category", 420));
         const actions = store.getActions();
 
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
         expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
         expect(actions[1].totalBudget).toEqual({
-            [MONTH_CODE]: {
+            [monthCodeString]: {
                 "test group": {
                     "test category": {
                         budgeted: 420,
@@ -361,7 +363,7 @@ describe("budget actions", () => {
         const store = mockStore({
             budget: {
                 totalBudget: {
-                    [MONTH_CODE]: {
+                    [monthCodeString]: {
                         "test group": {
                             "test category": {
                                 budgeted: 70,
@@ -372,14 +374,14 @@ describe("budget actions", () => {
                 },
             },
         });
-        await store.dispatch(setActivityAmount(MONTH_CODE, "test category", -15));
+        await store.dispatch(setActivityAmount(monthCode, "test category", -15));
 
         const actions = store.getActions();
 
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
         expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
         expect(actions[1].totalBudget).toEqual({
-            [MONTH_CODE]: {
+            [monthCodeString]: {
                 "test group": {
                     "test category": {
                         budgeted: 70,
@@ -393,7 +395,7 @@ describe("budget actions", () => {
         const store = mockStore({
             budget: {
                 totalBudget: {
-                    [MONTH_CODE]: {
+                    [monthCodeString]: {
                         "test group": {
                             "test category": {
                                 budgeted: 70,
@@ -406,7 +408,7 @@ describe("budget actions", () => {
         });
 
         await store.dispatch(
-            setActivityAmount(MONTH_CODE, "test category", (currActivityAmount: number): number => {
+            setActivityAmount(monthCode, "test category", (currActivityAmount: number): number => {
                 return currActivityAmount + 30;
             }),
         );
@@ -416,7 +418,7 @@ describe("budget actions", () => {
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
         expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
         expect(actions[1].totalBudget).toEqual({
-            [MONTH_CODE]: {
+            [monthCodeString]: {
                 "test group": {
                     "test category": {
                         budgeted: 70,
@@ -429,12 +431,18 @@ describe("budget actions", () => {
 });
 
 describe("budget reducer", () => {
+    const testDate = new Date();
+
+    const monthCode: MonthCode = getMonthCodeFromDate(testDate);
+
+    const monthCodeString = getMonthCodeString(monthCode);
+
     it("sets new budget", () => {
         const budgetState = budgetReducer(undefined, { type: SETTING_TOTAL_BUDGET });
         expect(budgetState.isSettingBudget).toEqual(true);
 
         const totalBudget: TotalBudget = {
-            [MONTH_CODE]: {
+            [monthCodeString]: {
                 "test group": {
                     "test category": {
                         budgeted: 1999,
