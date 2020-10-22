@@ -2,7 +2,7 @@ import { AnyAction } from "redux";
 import configureMockStore from "redux-mock-store";
 import thunk, { ThunkDispatch } from "redux-thunk";
 
-import getMonthCode from "../../utils/getMonthCode";
+import { getMonthCodeFromDate, getMonthCodeString, MonthCode } from "../../utils/getMonthCode";
 import {
     AccountType,
     UPDATE_ACCOUNT_SUCCESS,
@@ -31,7 +31,9 @@ const mockStore = configureMockStore<unknown, Dispatch>([thunk]);
 describe("transactions actions", () => {
     const testDate = new Date();
 
-    const monthCode = getMonthCode(testDate);
+    const monthCode: MonthCode = getMonthCodeFromDate(testDate);
+
+    const monthCodeString = getMonthCodeString(monthCode);
 
     it("successfully adds transaction", async () => {
         const store = mockStore({
@@ -51,7 +53,7 @@ describe("transactions actions", () => {
             },
             budget: {
                 totalBudget: {
-                    [monthCode]: {
+                    [monthCodeString]: {
                         "test group": {
                             "test category": {
                                 budgeted: 70,
@@ -185,7 +187,7 @@ describe("transactions actions", () => {
             },
             budget: {
                 totalBudget: {
-                    [monthCode]: {
+                    [monthCodeString]: {
                         "test group": {
                             "test category": {
                                 budgeted: 70,
@@ -257,7 +259,7 @@ describe("transactions actions", () => {
             },
             budget: {
                 totalBudget: {
-                    [monthCode]: {
+                    [monthCodeString]: {
                         "test group": {
                             "test category": {
                                 budgeted: 70,
@@ -313,7 +315,7 @@ describe("transactions actions", () => {
             },
             budget: {
                 totalBudget: {
-                    [monthCode]: {
+                    [monthCodeString]: {
                         "test group": {
                             "test category": {
                                 budgeted: 70,
@@ -364,7 +366,7 @@ describe("transactions actions", () => {
             },
             budget: {
                 totalBudget: {
-                    [monthCode]: {
+                    [monthCodeString]: {
                         "test group": {
                             "test category": {
                                 budgeted: 70,
