@@ -8,6 +8,7 @@ import {
     addBudgetCategory,
     addBudgetGroup,
     addBudgetMonth,
+    copyBudgetMonth,
     deleteBudgetCategory,
     deleteBudgetGroup,
     editBudgetedAmount,
@@ -419,6 +420,51 @@ describe("budget actions", () => {
         expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
         expect(actions[1].totalBudget).toEqual({
             [monthCodeString]: {
+                "test group": {
+                    "test category": {
+                        budgeted: 70,
+                        activity: 20,
+                    },
+                },
+            },
+        });
+    });
+
+    it("copies a monthly budget from another month", async () => {
+        const store = mockStore({
+            budget: {
+                totalBudget: {
+                    202002: {
+                        "test group": {
+                            "test category": {
+                                budgeted: 70,
+                                activity: -10,
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        const monthCodeToBeCopied: MonthCode = { year: 2020, month: 2 };
+        const monthCodeToBeOverwritten: MonthCode = { year: 2020, month: 3 };
+
+        await store.dispatch(copyBudgetMonth(monthCodeToBeCopied, monthCodeToBeOverwritten));
+
+        const actions = store.getActions();
+
+        expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
+        expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
+        expect(actions[1].totalBudget).toEqual({
+            202002: {
+                "test group": {
+                    "test category": {
+                        budgeted: 70,
+                        activity: 20,
+                    },
+                },
+            },
+            202003: {
                 "test group": {
                     "test category": {
                         budgeted: 70,
