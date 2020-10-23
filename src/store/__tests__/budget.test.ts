@@ -460,7 +460,7 @@ describe("budget actions", () => {
                 "test group": {
                     "test category": {
                         budgeted: 70,
-                        activity: 20,
+                        activity: -10,
                     },
                 },
             },
@@ -468,7 +468,7 @@ describe("budget actions", () => {
                 "test group": {
                     "test category": {
                         budgeted: 70,
-                        activity: 20,
+                        activity: -10,
                     },
                 },
             },

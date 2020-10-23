@@ -29,6 +29,27 @@ import { getMonthCodeString, MonthCode } from "../../utils/getMonthCode";
 
 type GenericBudgetThunkAction = ThunkAction<Promise<GenericBudgetAction>, ApplicationState, null, GenericBudgetAction>;
 
+export const copyBudgetMonth = (fromMonthCode: MonthCode, toMonthCode) => async (
+    dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
+    getState: () => ApplicationState,
+): Promise<GenericSetBudgetAction> => {
+    dispatch({ type: SETTING_TOTAL_BUDGET });
+
+    const totalBudget = getState().budget.totalBudget;
+
+    const sourceBudget = totalBudget[getMonthCodeString(fromMonthCode)];
+
+    // Deep copy
+    const destBudget = JSON.parse(JSON.stringify(sourceBudget));
+
+    const newTotalBudget = { ...totalBudget, [getMonthCodeString(toMonthCode)]: destBudget };
+
+    // Save budget to local storage
+    localStorage.setItem(BUDGET, JSON.stringify(newTotalBudget));
+
+    return dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
+};
+
 export const addBudgetMonth = (monthCode: MonthCode): GenericBudgetThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericAddMonthlyBudgetAction>,
     getState: () => ApplicationState,
