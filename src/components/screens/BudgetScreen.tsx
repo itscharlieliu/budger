@@ -10,7 +10,12 @@ import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg"
 import { ReactComponent as Trash } from "../../resources/images/trash.svg";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
-import { addBudgetMonth, deleteBudgetCategory, deleteBudgetGroup } from "../../store/budget/budgetActions";
+import {
+    addBudgetMonth,
+    deleteBudgetCategory,
+    deleteBudgetGroup,
+    copyBudgetMonth,
+} from "../../store/budget/budgetActions";
 import { BudgetCategory, TotalBudget } from "../../store/budget/budgetInterfaces";
 import { Transaction } from "../../store/transactions/transactionInterfaces";
 import formatMoney from "../../utils/formatMoney";
@@ -42,6 +47,7 @@ interface DispatchProps {
     deleteBudgetCategory: typeof deleteBudgetCategory;
     deleteBudgetGroup: typeof deleteBudgetGroup;
     addBudgetMonth: typeof addBudgetMonth;
+    copyBudgetMonth: typeof copyBudgetMonth;
 }
 
 type AllProps = StateProps & ResolveThunks<DispatchProps>;
@@ -65,7 +71,9 @@ interface MonthHeaderProps {
     onPrevMonth: () => void;
 }
 
-interface BudgetHeaderProps extends MonthHeaderProps {}
+interface BudgetHeaderProps extends MonthHeaderProps {
+    onCopyPreviousMonth: () => void;
+}
 
 const BudgetContainer = styled.div`
     display: grid;
@@ -130,6 +138,7 @@ const BudgetHeader = (props: BudgetHeaderProps): JSX.Element => {
                     onNextMonth={props.onNextMonth}
                     onPrevMonth={props.onPrevMonth}
                 />
+                <BudgetHeaderButton onClick={props.onCopyPreviousMonth}>TEST</BudgetHeaderButton>
             </GridHeaderContainer>
             <GridHeaderContainer>
                 <span>{t("budgeted")}</span>
@@ -208,13 +217,15 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
         : [];
 
     const handleNextMonthPress = () => {
-        console.log("next");
         setMonthCode((currMonth: MonthCode) => getNextMonthCode(currMonth));
     };
 
     const handlePrevMonthPress = () => {
-        console.log("prev");
         setMonthCode((currMonth: MonthCode) => getPrevMonthCode(currMonth));
+    };
+
+    const handleCopyPreviousMonth = () => {
+        props.copyBudgetMonth(getPrevMonthCode(monthCode), monthCode);
     };
 
     return (
@@ -224,6 +235,7 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
                     monthCode={monthCode}
                     onNextMonth={handleNextMonthPress}
                     onPrevMonth={handlePrevMonthPress}
+                    onCopyPreviousMonth={handleCopyPreviousMonth}
                 />
                 {currentMonthlyBudgetKeys.length === 0 && <InfoCard>{t("noCategories")}</InfoCard>}
                 {props.toBeBudgeted !== 0 && (
@@ -273,6 +285,7 @@ const mapDispatchToProps: DispatchProps = {
     deleteBudgetCategory,
     deleteBudgetGroup,
     addBudgetMonth,
+    copyBudgetMonth,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BudgetScreen);
