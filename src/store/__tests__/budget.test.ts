@@ -446,12 +446,12 @@ describe("budget actions", () => {
             },
         });
 
-        const monthCodeToBeCopied: MonthCode = { year: 2020, month: 2 };
-        const monthCodeToBeOverwritten: MonthCode = { year: 2020, month: 3 };
+        let monthCodeToBeCopied: MonthCode = { year: 2020, month: 2 };
+        let monthCodeToBeOverwritten: MonthCode = { year: 2020, month: 3 };
 
         await store.dispatch(copyBudgetMonth(monthCodeToBeCopied, monthCodeToBeOverwritten));
 
-        const actions = store.getActions();
+        let actions = store.getActions();
 
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
         expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
@@ -473,6 +473,19 @@ describe("budget actions", () => {
                 },
             },
         });
+
+        store.clearActions();
+
+        monthCodeToBeCopied = { year: 2020, month: 1 };
+        monthCodeToBeOverwritten = { year: 2020, month: 3 };
+
+        await store.dispatch(copyBudgetMonth(monthCodeToBeCopied, monthCodeToBeOverwritten));
+
+        actions = store.getActions();
+
+        expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
+        expect(actions[1].type).toBe(SET_TOTAL_BUDGET_FAILURE);
+        expect(actions[1].error.message).toEqual(ERRORS.monthDoesNotExist);
     });
 });
 
