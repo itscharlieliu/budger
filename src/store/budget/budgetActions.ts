@@ -29,7 +29,7 @@ import { getMonthCodeString, MonthCode } from "../../utils/getMonthCode";
 
 type GenericBudgetThunkAction = ThunkAction<Promise<GenericBudgetAction>, ApplicationState, null, GenericBudgetAction>;
 
-export const copyBudgetMonth = (fromMonthCode: MonthCode, toMonthCode) => async (
+export const copyBudgetMonth = (fromMonthCode: MonthCode, toMonthCode: MonthCode) => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
     getState: () => ApplicationState,
 ): Promise<GenericSetBudgetAction> => {
@@ -38,6 +38,10 @@ export const copyBudgetMonth = (fromMonthCode: MonthCode, toMonthCode) => async 
     const totalBudget = getState().budget.totalBudget;
 
     const sourceBudget = totalBudget[getMonthCodeString(fromMonthCode)];
+
+    if (!sourceBudget) {
+        return dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.monthDoesNotExist) });
+    }
 
     // Deep copy
     const destBudget = JSON.parse(JSON.stringify(sourceBudget));
