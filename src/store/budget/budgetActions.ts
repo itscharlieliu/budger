@@ -43,8 +43,23 @@ export const copyBudgetMonth = (fromMonthCode: MonthCode, toMonthCode: MonthCode
         return dispatch({ type: SET_TOTAL_BUDGET_FAILURE, error: new Error(ERRORS.monthDoesNotExist) });
     }
 
+    const destBudget: MonthlyBudget = {};
+
     // Deep copy
-    const destBudget = JSON.parse(JSON.stringify(sourceBudget));
+    for (const group of Object.keys(sourceBudget)) {
+        const groupObject = sourceBudget[group];
+
+        const tempBudgetGroup: BudgetGroup = {};
+        for (const category of Object.keys(groupObject)) {
+            // Make sure to set activity to zero. We don't want to copy over the activity from the previous month
+            tempBudgetGroup[category] = {
+                budgeted: groupObject[category].budgeted,
+                activity: 0,
+            };
+        }
+
+        destBudget[group] = tempBudgetGroup;
+    }
 
     const newTotalBudget = { ...totalBudget, [getMonthCodeString(toMonthCode)]: destBudget };
 
