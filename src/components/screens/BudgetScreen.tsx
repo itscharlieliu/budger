@@ -200,9 +200,6 @@ const BudgetGroupRow = (props: BudgetGroupRowProps): JSX.Element => {
 };
 
 const BudgetScreen = (props: AllProps): JSX.Element => {
-    // TODO change this to state so that we can change months
-    // const monthCode = getMonthCode(new Date());
-
     const [monthCode, setMonthCode] = useState<MonthCode>(getMonthCodeFromDate(new Date()));
 
     if (!props.totalBudget[getMonthCodeString(monthCode)] && !props.isAddingMonthlyBudget) {
