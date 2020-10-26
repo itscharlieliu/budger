@@ -27,6 +27,7 @@
     "noCategories": "It looks like you haven't added any categories yet! Try adding a category group by pressing the + button next to the Category header.",
     "noTransactions": "No transactions to show.",
     "notes": "Notes",
+    "copyPreviousMonth": "Copy previous month",
     "out": "Out",
     "remaining": "Remaining",
     "startingBalance": "Starting Balance",

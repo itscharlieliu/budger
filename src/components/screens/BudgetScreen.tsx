@@ -138,7 +138,9 @@ const BudgetHeader = (props: BudgetHeaderProps): JSX.Element => {
                     onNextMonth={props.onNextMonth}
                     onPrevMonth={props.onPrevMonth}
                 />
-                <BudgetHeaderButton onClick={props.onCopyPreviousMonth}>TEST</BudgetHeaderButton>
+                <BudgetHeaderButton onClick={props.onCopyPreviousMonth} flat>
+                    {t("copyPreviousMonth")}
+                </BudgetHeaderButton>
             </GridHeaderContainer>
             <GridHeaderContainer>
                 <span>{t("budgeted")}</span>
