@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "806a5c95332a9a292e0f46b63ec74dc2",
+    "revision": "7852348d63a6427c35eaa99993150214",
     "url": "/budger/index.html"
   },
   {
-    "revision": "afa27981d836c7960553",
+    "revision": "20fb372feb5b2893e1b7",
     "url": "/budger/static/css/main.a551cd3c.chunk.css"
   },
   {
@@ -160,12 +160,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/budger/static/js/131.94b51468.chunk.js"
   },
   {
-    "revision": "3d1c74b3ad9b6c1625fb",
-    "url": "/budger/static/js/134.da31e76b.chunk.js"
+    "revision": "ef18b93e4ec6c21d4a41",
+    "url": "/budger/static/js/134.c12dd46c.chunk.js"
   },
   {
     "revision": "c64c486544348f10a6d6c716950bc223",
-    "url": "/budger/static/js/134.da31e76b.chunk.js.LICENSE.txt"
+    "url": "/budger/static/js/134.c12dd46c.chunk.js.LICENSE.txt"
   },
   {
     "revision": "ac45306b17f508d16c08",
@@ -544,8 +544,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/budger/static/js/99.a57b3497.chunk.js"
   },
   {
-    "revision": "afa27981d836c7960553",
-    "url": "/budger/static/js/main.82791b5e.chunk.js"
+    "revision": "20fb372feb5b2893e1b7",
+    "url": "/budger/static/js/main.c4a795bc.chunk.js"
   },
   {
     "revision": "b2f4784e1a3a34ccd069",
@@ -554,6 +554,14 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "205744722abb8dbdac2737e6b49c25b4",
     "url": "/budger/static/media/BudgerLogo.20574472.svg"
+  },
+  {
+    "revision": "0b39d629c02af6b220d0706efd4f2fe1",
+    "url": "/budger/static/media/LeftArrow.0b39d629.svg"
+  },
+  {
+    "revision": "53c3199fc94b26d30ca48ad368f4368b",
+    "url": "/budger/static/media/RightArrow.53c3199f.svg"
   },
   {
     "revision": "d3490f594f0d8b6cf29d745b5667e300",
