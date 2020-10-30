@@ -35,6 +35,7 @@ import ScreenContainer from "../common/containers/ScreenContainer";
 import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
 import BudgetCategoryEditForm from "../forms/BudgetCategoryEditForm";
 import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
+import ImportDataForm from "../forms/ImportDataForm";
 
 interface StateProps {
     totalBudget: TotalBudget;
@@ -128,6 +129,11 @@ const BudgetHeader = (props: BudgetHeaderProps): JSX.Element => {
     return (
         <>
             <GridHeaderContainer>
+                {/*FOR TEST*/}
+                <Modal>
+                    <ImportDataForm />
+                </Modal>
+                {/*END TEST*/}
                 <Modal visible={isAddingGroup} onClose={() => setIsAddingGroup(false)}>
                     <BudgetGroupAddForm monthCode={props.monthCode} onSubmit={() => setIsAddingGroup(false)} />
                 </Modal>
