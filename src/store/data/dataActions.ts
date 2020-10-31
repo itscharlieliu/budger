@@ -1,5 +1,5 @@
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
-import { GenericDataAction, IMPORT_DATA_SUCCESS, IMPORTING_DATA } from "./dataInterfaces";
+import { GenericDataAction, IMPORT_DATA_SUCCESS, ImportDataSuccessAction, IMPORTING_DATA } from "./dataInterfaces";
 import ApplicationState from "../index";
 import Papa, { ParseConfig } from "papaparse";
 
@@ -9,12 +9,16 @@ export const importData = (blob: File): GenericDataThunkAction => {
     return async (dispatch: ThunkDispatch<ApplicationState, null, GenericDataAction>): Promise<GenericDataAction> => {
         dispatch({ type: IMPORTING_DATA });
 
-        const config: ParseConfig = {
-            complete: (results: unknown) => console.log(results),
-        };
+        return new Promise<GenericDataAction>((resolve) => {
+            const config: ParseConfig = {
+                complete: (results: unknown) => {
+                    console.log(results);
 
-        await Papa.parse(blob, config);
+                    resolve(dispatch({ type: IMPORT_DATA_SUCCESS }));
+                },
+            };
 
-        return dispatch({ type: IMPORT_DATA_SUCCESS });
+            Papa.parse(blob, config);
+        });
     };
 };
