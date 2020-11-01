@@ -1,11 +1,11 @@
 import React from "react";
 import { connect, ResolveThunks } from "react-redux";
 
-import { importData } from "../../store/data/dataActions";
 import Input from "../common/Input";
+import { importTransactionData } from "../../store/data/dataActions";
 
 interface DispatchProps {
-    importData: typeof importData;
+    importTransactionData: typeof importTransactionData;
 }
 
 type AllProps = ResolveThunks<DispatchProps>;
@@ -17,14 +17,14 @@ const ImportDataForm = (props: AllProps): JSX.Element => {
             return;
         }
 
-        props.importData(event.target.files[0]);
+        props.importTransactionData(event.target.files[0]);
     };
 
     return <Input type={"file"} onChange={handleFileChange} />;
 };
 
 const mapDispatch: DispatchProps = {
-    importData,
+    importTransactionData,
 };
 
 export default connect(null, mapDispatch)(ImportDataForm);
