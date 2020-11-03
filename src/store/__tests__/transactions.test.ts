@@ -17,8 +17,9 @@ import {
     SET_TO_BE_BUDGETED_SUCCESS,
 } from "../budget/budgetInterfaces";
 import ApplicationState from "../index";
-import { addTransaction, deleteTransaction } from "../transactions/transactionActions";
+import { addTransaction, bulkAddTransaction, deleteTransaction } from "../transactions/transactionActions";
 import {
+    Transaction,
     UPDATE_TRANSACTIONS_FAILURE,
     UPDATE_TRANSACTIONS_SUCCESS,
     UPDATING_TRANSACTIONS,
@@ -392,5 +393,74 @@ describe("transactions actions", () => {
         expect(actions[4].type).toBe(UPDATE_ACCOUNT_FAILURE);
 
         expect(actions[5].type).toBe(UPDATE_TRANSACTIONS_FAILURE);
+    });
+
+    it("bulk adds transactions", async () => {
+        const store = mockStore({
+            transaction: {
+                transactions: [],
+                isUpdatingTransactions: false,
+                error: null,
+            },
+            accounts: {
+                allAccounts: [
+                    {
+                        name: "test account",
+                        type: AccountType.budgeted,
+                        balance: 100,
+                    },
+                ],
+            },
+            budget: {
+                totalBudget: {
+                    [monthCodeString]: {
+                        "test group": {
+                            "test category": {
+                                budgeted: 70,
+                                activity: -15,
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        const newTransactions: Transaction[] = [
+            {
+                account: "test account",
+                date: new Date(),
+                payee: "test payee",
+                activity: 50,
+            },
+            {
+                account: "test account 2",
+                date: new Date(),
+                payee: "test payee",
+                activity: 50,
+            },
+            {
+                account: "test account 2",
+                date: new Date(),
+                payee: "test payee",
+                category: "test category",
+                activity: 50,
+            },
+            {
+                account: "test account 2",
+                date: new Date(),
+                payee: "test payee",
+                category: "test category 2",
+                activity: 50,
+            },
+        ];
+
+        await store.dispatch(bulkAddTransaction(newTransactions));
+
+        const actions = store.getActions();
+
+        expect(actions[0].type).toBe(UPDATING_TRANSACTIONS);
+
+        expect(actions[1].type).toBe(UPDATE_TRANSACTIONS_SUCCESS);
+        expect(actions[1].transactions.toEqual(newTransactions));
     });
 });
