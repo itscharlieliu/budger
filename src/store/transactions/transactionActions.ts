@@ -4,7 +4,7 @@ import { TRANSACTIONS } from "../../defs/storageKeys";
 import { getMonthCodeFromDate, MonthCode } from "../../utils/getMonthCode";
 import { setBalance } from "../accounts/accountsActions";
 import { setActivityAmount, setToBeBudgetedAmount } from "../budget/budgetActions";
-import { GenericBudgetAction } from "../budget/budgetInterfaces";
+import { BudgetCategory, GenericBudgetAction } from "../budget/budgetInterfaces";
 import ApplicationState from "../index";
 
 import {
@@ -89,6 +89,31 @@ export const addTransaction = (
             console.warn(error);
             return dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error });
         }
+    };
+};
+
+export const bulkAddTransaction = (transactions: Transaction[]) => {
+    return async (
+        dispatch: ThunkDispatch<ApplicationState, null, GenericTransactionAction>,
+        getState: () => ApplicationState,
+    ): Promise<GenericTransactionAction> => {
+        dispatch({ type: UPDATING_TRANSACTIONS });
+
+        const currentTransactions: Transaction[] = getState().transaction.transactions;
+
+        const validTransactions: Transaction[] = [];
+        // TODO Add payees support
+
+        const validCategories: BudgetCategory[] = [];
+
+        for (const transaction of transactions) {
+            validTransactions.push(transaction);
+        }
+
+        return dispatch({
+            type: UPDATE_TRANSACTIONS_SUCCESS,
+            transactions: [...currentTransactions, ...validTransactions],
+        });
     };
 };
 
