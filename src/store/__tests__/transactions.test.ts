@@ -396,9 +396,16 @@ describe("transactions actions", () => {
     });
 
     it("bulk adds transactions", async () => {
+        const existingTransaction = {
+            account: "test account",
+            date: new Date(),
+            payee: "test payee",
+            activity: 50,
+        };
+
         const store = mockStore({
             transaction: {
-                transactions: [],
+                transactions: [existingTransaction],
                 isUpdatingTransactions: false,
                 error: null,
             },
@@ -461,6 +468,6 @@ describe("transactions actions", () => {
         expect(actions[0].type).toBe(UPDATING_TRANSACTIONS);
 
         expect(actions[1].type).toBe(UPDATE_TRANSACTIONS_SUCCESS);
-        expect(actions[1].transactions.toEqual(newTransactions));
+        expect(actions[1].transactions).toEqual([existingTransaction, ...newTransactions]);
     });
 });
