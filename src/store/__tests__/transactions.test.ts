@@ -467,7 +467,11 @@ describe("transactions actions", () => {
 
         expect(actions[0].type).toBe(UPDATING_TRANSACTIONS);
 
-        expect(actions[1].type).toBe(UPDATE_TRANSACTIONS_SUCCESS);
-        expect(actions[1].transactions).toEqual([existingTransaction, ...newTransactions]);
+        // Update categories
+        expect(actions[1].type).toBe(SETTING_TOTAL_BUDGET);
+        expect(actions[2].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
+
+        expect(actions[2].type).toBe(UPDATE_TRANSACTIONS_SUCCESS);
+        expect(actions[2].transactions).toEqual([existingTransaction, ...newTransactions]);
     });
 });

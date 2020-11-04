@@ -99,14 +99,27 @@ export const bulkAddTransaction = (transactions: Transaction[]) => {
     ): Promise<GenericTransactionAction> => {
         dispatch({ type: UPDATING_TRANSACTIONS });
 
+        interface CategoriesMap {
+            toBeBudgeted: number;
+            [categoryName: string]: number; // Activity
+        }
+
         const currentTransactions: Transaction[] = getState().transaction.transactions;
 
         const validTransactions: Transaction[] = [];
         // TODO Add payees support
 
-        const validCategories: BudgetCategory[] = [];
+        const categoriesMap: CategoriesMap = { toBeBudgeted: 0 };
 
         for (const transaction of transactions) {
+            if (!transaction.category) {
+                categoriesMap.toBeBudgeted += transaction.activity;
+            } else if (categoriesMap[transaction.category]) {
+                categoriesMap[transaction.category] += transaction.activity;
+            } else {
+                categoriesMap[transaction.category] = transaction.activity;
+            }
+
             validTransactions.push(transaction);
         }
 
