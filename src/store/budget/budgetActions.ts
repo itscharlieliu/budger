@@ -172,6 +172,13 @@ export const addBudgetCategory = (
     return dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
 };
 
+export const mergeBudgets = (totalBudget: TotalBudget): GenericBudgetThunkAction => async (
+    dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
+    getState: () => ApplicationState,
+): Promise<GenericSetBudgetAction> => {
+    const existingTotalBudget = getState().budget.totalBudget;
+};
+
 export const deleteBudgetCategory = (monthcode: MonthCode, budgetCategory: string): GenericBudgetThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
     getState: () => ApplicationState,
