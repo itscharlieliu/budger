@@ -3,7 +3,7 @@ import configureMockStore from "redux-mock-store";
 import thunk, { ThunkDispatch } from "redux-thunk";
 
 import ERRORS from "../../defs/errors";
-import { getMonthCodeFromDate, getMonthCodeString, MonthCode } from "../../utils/getMonthCode";
+import { getMonthCodeFromDate, getMonthCodeString, getPrevMonthCode, MonthCode } from "../../utils/getMonthCode";
 import {
     addBudgetCategory,
     addBudgetGroup,
@@ -517,7 +517,30 @@ describe("budget actions", () => {
             },
         };
 
+        const newBudget2: TotalBudget = {
+            [monthCodeString]: {
+                "test group": {
+                    "test category": {
+                        budgeted: 40,
+                        activity: 65,
+                    },
+                },
+            },
+        };
+
+        // const newBudget3: TotalBudget = {
+        //     [getMonthCodeString(getPrevMonthCode(mon))]: {
+        //         "test group": {
+        //             "test category": {
+        //                 budgeted: 40,
+        //                 activity: 65,
+        //             },
+        //         },
+        //     },
+        // };
+
         await store.dispatch(mergeBudgets(newBudget));
+        await store.dispatch(mergeBudgets(newBudget2));
 
         const actions = store.getActions();
 
@@ -528,7 +551,7 @@ describe("budget actions", () => {
                 "test group": {
                     "test category": {
                         budgeted: 70,
-                        activity: 20,
+                        activity: -10,
                     },
                 },
                 "test group 2": {
@@ -539,6 +562,25 @@ describe("budget actions", () => {
                 },
             },
         });
+
+        // expect(actions[2].type).toBe(SETTING_TOTAL_BUDGET);
+        // expect(actions[3].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
+        // expect(actions[3].totalBudget).toEqual({
+        //     [monthCodeString]: {
+        //         "test group": {
+        //             "test category": {
+        //                 budgeted: 110,
+        //                 activity: 55,
+        //             },
+        //         },
+        //         "test group 2": {
+        //             "test category 2": {
+        //                 budgeted: 40,
+        //                 activity: 65,
+        //             },
+        //         },
+        //     },
+        // });
     });
 });
 

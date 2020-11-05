@@ -176,7 +176,49 @@ export const mergeBudgets = (totalBudget: TotalBudget): GenericBudgetThunkAction
     dispatch: ThunkDispatch<ApplicationState, null, GenericSetBudgetAction>,
     getState: () => ApplicationState,
 ): Promise<GenericSetBudgetAction> => {
-    const existingTotalBudget = getState().budget.totalBudget;
+    dispatch({ type: SETTING_TOTAL_BUDGET });
+
+    // Shallow copy total budget
+    const newTotalBudget = { ...getState().budget.totalBudget };
+
+    for (const monthCode of Object.keys(totalBudget)) {
+        if (newTotalBudget[monthCode] === undefined) {
+            // We can just copy the values to the new budget
+            newTotalBudget[monthCode] = { ...totalBudget[monthCode] };
+            continue;
+        }
+
+        // Otherwise, we need to merge category groups
+        for (const group of Object.keys(totalBudget[monthCode])) {
+            if (newTotalBudget[monthCode][group] === undefined) {
+                // Same as the monthcode check. We can just copy over the group
+                newTotalBudget[monthCode][group] = { ...totalBudget[monthCode][group] };
+                continue;
+            }
+
+            // Otherwise, we need to merge categories
+            for (const category of Object.keys(totalBudget[monthCode][group])) {
+                if (newTotalBudget[monthCode][group][category] === undefined) {
+                    // We can just copy the category
+                    newTotalBudget[monthCode][group][category] = { ...totalBudget[monthCode][group][category] };
+                    continue;
+                }
+
+                // Otherwise merge activity and budgeted amount
+
+                newTotalBudget[monthCode][group][category] = {
+                    activity:
+                        newTotalBudget[monthCode][group][category].activity +
+                        totalBudget[monthCode][group][category].activity,
+                    budgeted:
+                        newTotalBudget[monthCode][group][category].budgeted +
+                        totalBudget[monthCode][group][category].budgeted,
+                };
+            }
+        }
+    }
+
+    return dispatch({ type: SET_TOTAL_BUDGET_SUCCESS, totalBudget: newTotalBudget });
 };
 
 export const deleteBudgetCategory = (monthcode: MonthCode, budgetCategory: string): GenericBudgetThunkAction => async (
