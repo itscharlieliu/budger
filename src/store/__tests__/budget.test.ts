@@ -8,10 +8,12 @@ import {
     addBudgetCategory,
     addBudgetGroup,
     addBudgetMonth,
+    bulkAddBudgetCategory,
     copyBudgetMonth,
     deleteBudgetCategory,
     deleteBudgetGroup,
     editBudgetedAmount,
+    mergeBudgets,
     setActivityAmount,
 } from "../budget/budgetActions";
 import {
@@ -486,6 +488,57 @@ describe("budget actions", () => {
         expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
         expect(actions[1].type).toBe(SET_TOTAL_BUDGET_FAILURE);
         expect(actions[1].error.message).toEqual(ERRORS.monthDoesNotExist);
+    });
+
+    it("merges budgets", async () => {
+        const store = mockStore({
+            budget: {
+                totalBudget: {
+                    [monthCodeString]: {
+                        "test group": {
+                            "test category": {
+                                budgeted: 70,
+                                activity: -10,
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        const newBudget: TotalBudget = {
+            [monthCodeString]: {
+                "test group 2": {
+                    "test category 2": {
+                        budgeted: 40,
+                        activity: 65,
+                    },
+                },
+            },
+        };
+
+        await store.dispatch(mergeBudgets(newBudget));
+
+        const actions = store.getActions();
+
+        expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
+        expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
+        expect(actions[1].totalBudget).toEqual({
+            [monthCodeString]: {
+                "test group": {
+                    "test category": {
+                        budgeted: 70,
+                        activity: 20,
+                    },
+                },
+                "test group 2": {
+                    "test category 2": {
+                        budgeted: 40,
+                        activity: 65,
+                    },
+                },
+            },
+        });
     });
 });
 
