@@ -8,7 +8,6 @@ import {
     addBudgetCategory,
     addBudgetGroup,
     addBudgetMonth,
-    bulkAddBudgetCategory,
     copyBudgetMonth,
     deleteBudgetCategory,
     deleteBudgetGroup,
@@ -528,59 +527,99 @@ describe("budget actions", () => {
             },
         };
 
-        // const newBudget3: TotalBudget = {
-        //     [getMonthCodeString(getPrevMonthCode(mon))]: {
-        //         "test group": {
-        //             "test category": {
-        //                 budgeted: 40,
-        //                 activity: 65,
-        //             },
-        //         },
-        //     },
-        // };
-
         await store.dispatch(mergeBudgets(newBudget));
-        await store.dispatch(mergeBudgets(newBudget2));
 
-        const actions = store.getActions();
+        {
+            const actions = store.getActions();
 
-        expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
-        expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
-        expect(actions[1].totalBudget).toEqual({
-            [monthCodeString]: {
-                "test group": {
-                    "test category": {
-                        budgeted: 70,
-                        activity: -10,
+            expect(actions[0].type).toBe(SETTING_TOTAL_BUDGET);
+            expect(actions[1].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
+            expect(actions[1].totalBudget).toEqual({
+                [monthCodeString]: {
+                    "test group": {
+                        "test category": {
+                            budgeted: 70,
+                            activity: -10,
+                        },
+                    },
+                    "test group 2": {
+                        "test category 2": {
+                            budgeted: 40,
+                            activity: 65,
+                        },
                     },
                 },
-                "test group 2": {
-                    "test category 2": {
+            });
+        }
+
+        await store.dispatch(mergeBudgets(newBudget2));
+
+        {
+            const actions = store.getActions();
+
+            expect(actions[2].type).toBe(SETTING_TOTAL_BUDGET);
+            expect(actions[3].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
+            expect(actions[3].totalBudget).toEqual({
+                [monthCodeString]: {
+                    "test group": {
+                        "test category": {
+                            budgeted: 110,
+                            activity: 55,
+                        },
+                    },
+                    "test group 2": {
+                        "test category 2": {
+                            budgeted: 40,
+                            activity: 65,
+                        },
+                    },
+                },
+            });
+        }
+
+        const newBudget3: TotalBudget = {
+            [getMonthCodeString(getPrevMonthCode(monthCode))]: {
+                "test group": {
+                    "test category": {
                         budgeted: 40,
                         activity: 65,
                     },
                 },
             },
-        });
+        };
 
-        // expect(actions[2].type).toBe(SETTING_TOTAL_BUDGET);
-        // expect(actions[3].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
-        // expect(actions[3].totalBudget).toEqual({
-        //     [monthCodeString]: {
-        //         "test group": {
-        //             "test category": {
-        //                 budgeted: 110,
-        //                 activity: 55,
-        //             },
-        //         },
-        //         "test group 2": {
-        //             "test category 2": {
-        //                 budgeted: 40,
-        //                 activity: 65,
-        //             },
-        //         },
-        //     },
-        // });
+        await store.dispatch(mergeBudgets(newBudget3));
+
+        {
+            const actions = store.getActions();
+
+            expect(actions[4].type).toBe(SETTING_TOTAL_BUDGET);
+            expect(actions[5].type).toBe(SET_TOTAL_BUDGET_SUCCESS);
+            expect(actions[5].totalBudget).toEqual({
+                [monthCodeString]: {
+                    "test group": {
+                        "test category": {
+                            budgeted: 110,
+                            activity: 55,
+                        },
+                    },
+                    "test group 2": {
+                        "test category 2": {
+                            budgeted: 40,
+                            activity: 65,
+                        },
+                    },
+                },
+                [getMonthCodeString(getPrevMonthCode(monthCode))]: {
+                    "test group": {
+                        "test category": {
+                            budgeted: 40,
+                            activity: 65,
+                        },
+                    },
+                },
+            });
+        }
     });
 });
 
