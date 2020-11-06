@@ -1,10 +1,10 @@
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 
 import { TRANSACTIONS } from "../../defs/storageKeys";
-import { getMonthCodeFromDate, MonthCode } from "../../utils/getMonthCode";
+import { getMonthCodeFromDate, getMonthCodeString, MonthCode } from "../../utils/getMonthCode";
 import { setBalance } from "../accounts/accountsActions";
-import { setActivityAmount, setToBeBudgetedAmount } from "../budget/budgetActions";
-import { BudgetCategory, GenericBudgetAction } from "../budget/budgetInterfaces";
+import { mergeBudgets, setActivityAmount, setToBeBudgetedAmount } from "../budget/budgetActions";
+import { BudgetCategory, GenericBudgetAction, TotalBudget } from "../budget/budgetInterfaces";
 import ApplicationState from "../index";
 
 import {
@@ -92,7 +92,7 @@ export const addTransaction = (
     };
 };
 
-export const bulkAddTransaction = (transactions: Transaction[]) => {
+export const bulkAddTransaction = (transactions: Transaction[], targetDate: Date = new Date()) => {
     return async (
         dispatch: ThunkDispatch<ApplicationState, null, GenericTransactionAction>,
         getState: () => ApplicationState,
@@ -109,6 +109,7 @@ export const bulkAddTransaction = (transactions: Transaction[]) => {
         const validTransactions: Transaction[] = [];
         // TODO Add payees support
 
+        // Create flat map of all categories
         const categoriesMap: CategoriesMap = { toBeBudgeted: 0 };
 
         for (const transaction of transactions) {
@@ -122,6 +123,61 @@ export const bulkAddTransaction = (transactions: Transaction[]) => {
 
             validTransactions.push(transaction);
         }
+
+        const monthCode = getMonthCodeString(getMonthCodeFromDate(targetDate));
+        const currentBudget = getState().budget.totalBudget;
+
+        // Map each category to it's parent group
+        const groupMap: { [category: string]: string } = {};
+
+        // Get category groups of every existing category in the current month
+        for (const group of Object.keys(currentBudget[monthCode])) {
+            for (const category of Object.keys(currentBudget[monthCode][group])) {
+                groupMap[category] = group;
+            }
+        }
+
+        // Create new total budget from the categories we parsed
+        const newTotalBudget: TotalBudget = { [monthCode]: {} };
+
+        for (const category in Object.keys(categoriesMap)) {
+            // if category already exists in our budget, add it to the correct group
+            if (groupMap[category]) {
+                const groupName = groupMap[category];
+                if (newTotalBudget[monthCode][groupName] === undefined) {
+                    // Create a new group if it doesn't exist yet
+                    newTotalBudget[monthCode][groupName] = {
+                        [category]: {
+                            activity: categoriesMap[category],
+                            budgeted: 0,
+                        },
+                    };
+                    continue;
+                }
+                // if the group already exists, just add the category to the group
+                newTotalBudget[monthCode][groupName][category] = {
+                    activity: categoriesMap[category],
+                    budgeted: 0,
+                };
+                continue;
+            }
+            // Category does not exist in our budget. We will put it in uncategorized
+            if (newTotalBudget[monthCode]["Uncategorized"] === undefined) {
+                newTotalBudget[monthCode]["Uncategorized"] = {
+                    [category]: {
+                        activity: categoriesMap[category],
+                        budgeted: 0,
+                    },
+                };
+                continue;
+            }
+            newTotalBudget[monthCode]["Uncategorized"][category] = {
+                activity: categoriesMap[category],
+                budgeted: 0,
+            };
+        }
+
+        await dispatch(mergeBudgets(newTotalBudget));
 
         return dispatch({
             type: UPDATE_TRANSACTIONS_SUCCESS,
