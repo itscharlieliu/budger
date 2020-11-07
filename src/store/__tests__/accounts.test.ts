@@ -93,6 +93,8 @@ describe("accounts actions", () => {
         expect(actions[1].type).toBe(UPDATE_ACCOUNT_SUCCESS);
         expect(actions[1].allAccounts[0].cachedBalance).toBe(100 - 44);
     });
+
+    it("merges a list of accounts", async () => {});
 });
 
 describe("accounts reducer", () => {
