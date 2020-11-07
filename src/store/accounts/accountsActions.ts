@@ -119,3 +119,8 @@ export const setBalance = (
 
     return dispatch({ type: UPDATE_ACCOUNT_SUCCESS, allAccounts: updatedAccounts });
 };
+
+export const mergeAccounts = (accounts: AllAccounts): GenericAccountsThunkAction => async (
+    dispatch: ThunkDispatch<ApplicationState, null, GenericUpdateAccountAction>,
+    getState: () => ApplicationState,
+): Promise<GenericUpdateAccountAction> => {};
