@@ -123,4 +123,27 @@ export const setBalance = (
 export const mergeAccounts = (accounts: AllAccounts): GenericAccountsThunkAction => async (
     dispatch: ThunkDispatch<ApplicationState, null, GenericUpdateAccountAction>,
     getState: () => ApplicationState,
-): Promise<GenericUpdateAccountAction> => {};
+): Promise<GenericUpdateAccountAction> => {
+    dispatch({ type: UPDATING_ACCOUNT });
+
+    const currAccounts = getState().accounts.allAccounts;
+
+    // Get all account names and map them to their index;
+    const currAccountsMap: { [key: string]: number } = {};
+
+    for (let accountIdx = 0; accountIdx < currAccounts.length; ++accountIdx) {
+        currAccountsMap[currAccounts[accountIdx].name] = accountIdx;
+    }
+
+    for (const account of accounts) {
+        if (currAccountsMap[account.name] !== undefined) {
+            // The account already exists. Merge account balances
+            currAccounts[currAccountsMap[account.name]].cachedBalance += account.cachedBalance;
+            continue;
+        }
+
+        currAccounts.push({ ...account });
+    }
+
+    dispatch({ type: UPDATE_ACCOUNT_SUCCESS, allAccounts: currAccounts });
+};
