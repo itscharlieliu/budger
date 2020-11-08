@@ -3,7 +3,7 @@ import configureMockStore from "redux-mock-store";
 import thunk, { ThunkDispatch } from "redux-thunk";
 
 import ERRORS from "../../defs/errors";
-import { addAccount, setBalance } from "../accounts/accountsActions";
+import { addAccount, mergeAccounts, setBalance } from "../accounts/accountsActions";
 import {
     AccountType,
     UPDATE_ACCOUNT_FAILURE,
@@ -94,7 +94,35 @@ describe("accounts actions", () => {
         expect(actions[1].allAccounts[0].cachedBalance).toBe(100 - 44);
     });
 
-    it("merges a list of accounts", async () => {});
+    it("merges a list of accounts", async () => {
+        const store = mockStore({
+            accounts: {
+                allAccounts: [
+                    {
+                        name: "test account",
+                        type: AccountType.budgeted,
+                        cachedBalance: 100,
+                    },
+                ],
+            },
+        });
+
+        const newAccounts: AllAccounts = [
+            {
+                name: "test account",
+                type: AccountType.budgeted,
+                cachedBalance: 100,
+            },
+        ];
+
+        await store.dispatch(mergeAccounts(newAccounts));
+
+        const actions = store.getActions();
+
+        expect(actions[0].type).toBe(UPDATING_ACCOUNT);
+        expect(actions[1].type).toBe(UPDATE_ACCOUNT_SUCCESS);
+        // expect(actions[1].allAccounts[0].cachedBalance).toBe(100 - 44);
+    });
 });
 
 describe("accounts reducer", () => {
