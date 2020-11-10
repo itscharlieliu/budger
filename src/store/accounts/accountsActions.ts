@@ -145,5 +145,5 @@ export const mergeAccounts = (accounts: AllAccounts): GenericAccountsThunkAction
         currAccounts.push({ ...account });
     }
 
-    dispatch({ type: UPDATE_ACCOUNT_SUCCESS, allAccounts: currAccounts });
+    return dispatch({ type: UPDATE_ACCOUNT_SUCCESS, allAccounts: currAccounts });
 };
