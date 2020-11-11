@@ -13,18 +13,25 @@ export const importTransactionData = (blob: File): GenericDataThunkAction => {
         return new Promise<GenericDataAction>((resolve: (value?: GenericDataAction) => void) => {
             const config: ParseConfig = {
                 complete: (results: ParseResult<string[]>) => {
-                    const test = results.data.reduce(
-                        (previousValue: string[], currentValue: string[], index: number): string[] => {
-                            if (index > 10) {
+                    const headersMap: { [column: string]: number } = {};
+
+                    const newTransactions = results.data.reduce(
+                        (previousValue: Transaction[], currentValue: string[], index: number): Transaction[] => {
+                            // Parse header
+                            if (index === 0) {
+                                for (let columnIdx = 0; columnIdx < currentValue.length; ++columnIdx) {
+                                    headersMap[currentValue[columnIdx]] = columnIdx;
+                                }
                                 return previousValue;
                             }
-                            previousValue.push(currentValue[0]);
+
+                            // previousValue.push(currentValue[0]);
                             return previousValue;
                         },
                         [],
                     );
 
-                    console.log(test);
+                    console.log(newTransactions);
 
                     resolve(dispatch({ type: IMPORT_DATA_SUCCESS }));
                 },

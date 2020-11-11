@@ -1,6 +1,12 @@
 import dataReducer from "../data/dataReducer";
 import { IMPORT_DATA_FAILURE, IMPORT_DATA_SUCCESS, IMPORTING_DATA } from "../data/dataInterfaces";
 
+describe("data actions", () => {
+    it("imports transactions data", () => {
+        // TODO
+    });
+});
+
 describe("data reducer", () => {
     it("keeps track of import status", () => {
         const dataState = dataReducer(undefined, { type: IMPORTING_DATA });
