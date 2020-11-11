@@ -2,9 +2,9 @@ import { ThunkAction, ThunkDispatch } from "redux-thunk";
 
 import { TRANSACTIONS } from "../../defs/storageKeys";
 import { getMonthCodeFromDate, getMonthCodeString, MonthCode } from "../../utils/getMonthCode";
-import { setBalance } from "../accounts/accountsActions";
+import { mergeAccounts, setBalance } from "../accounts/accountsActions";
 import { mergeBudgets, setActivityAmount, setToBeBudgetedAmount } from "../budget/budgetActions";
-import { BudgetCategory, GenericBudgetAction, TotalBudget } from "../budget/budgetInterfaces";
+import { GenericBudgetAction, TotalBudget } from "../budget/budgetInterfaces";
 import ApplicationState from "../index";
 
 import {
@@ -14,6 +14,7 @@ import {
     UPDATE_TRANSACTIONS_SUCCESS,
     UPDATING_TRANSACTIONS,
 } from "./transactionInterfaces";
+import { AccountType, AllAccounts } from "../accounts/accountsInterfaces";
 
 export type GenericTransactionThunkAction = ThunkAction<
     Promise<GenericTransactionAction>,
@@ -104,6 +105,10 @@ export const bulkAddTransaction = (transactions: Transaction[], targetDate: Date
             [categoryName: string]: number; // Activity
         }
 
+        interface AccountsMap {
+            [accountName: string]: number; // Activity
+        }
+
         const currentTransactions: Transaction[] = getState().transaction.transactions;
 
         const validTransactions: Transaction[] = [];
@@ -111,6 +116,9 @@ export const bulkAddTransaction = (transactions: Transaction[], targetDate: Date
 
         // Create flat map of all categories
         const categoriesMap: CategoriesMap = { toBeBudgeted: 0 };
+
+        // Create map of accounts
+        const accountsMap: CategoriesMap = { toBeBudgeted: 0 };
 
         for (const transaction of transactions) {
             if (!transaction.category) {
@@ -122,6 +130,12 @@ export const bulkAddTransaction = (transactions: Transaction[], targetDate: Date
             }
 
             validTransactions.push(transaction);
+
+            if (accountsMap[transaction.account] !== undefined) {
+                accountsMap[transaction.account] += transaction.activity;
+            } else {
+                accountsMap[transaction.account] = transaction.activity;
+            }
         }
 
         const monthCode = getMonthCodeString(getMonthCodeFromDate(targetDate));
@@ -178,6 +192,18 @@ export const bulkAddTransaction = (transactions: Transaction[], targetDate: Date
         }
 
         await dispatch(mergeBudgets(newTotalBudget));
+
+        // Create new accounts
+        const newAccounts: AllAccounts = [];
+        for (const account of Object.keys(accountsMap)) {
+            newAccounts.push({
+                name: account,
+                type: AccountType.budgeted,
+                cachedBalance: accountsMap[account],
+            });
+        }
+
+        await dispatch(mergeAccounts(newAccounts));
 
         return dispatch({
             type: UPDATE_TRANSACTIONS_SUCCESS,
