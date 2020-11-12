@@ -1,9 +1,22 @@
 import dataReducer from "../data/dataReducer";
 import { IMPORT_DATA_FAILURE, IMPORT_DATA_SUCCESS, IMPORTING_DATA } from "../data/dataInterfaces";
+import { AccountType } from "../accounts/accountsInterfaces";
+import thunk, { ThunkDispatch } from "redux-thunk";
+import ApplicationState from "../index";
+import { AnyAction } from "redux";
+import configureMockStore from "redux-mock-store";
+import { importTransactionData } from "../data/dataActions";
+
+type Dispatch = ThunkDispatch<ApplicationState, null, AnyAction>;
+
+const mockStore = configureMockStore<unknown, Dispatch>([thunk]);
 
 describe("data actions", () => {
     it("imports transactions data", () => {
         // TODO
+        const store = mockStore({});
+
+        await store.dispatch(importTransactionData());
     });
 });
 
