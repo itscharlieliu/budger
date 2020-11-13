@@ -6,7 +6,7 @@ import { Transaction } from "../transactions/transactionInterfaces";
 
 export type GenericDataThunkAction = ThunkAction<Promise<GenericDataAction>, ApplicationState, null, GenericDataAction>;
 
-export const importTransactionData = (blob: File): GenericDataThunkAction => {
+export const importTransactionData = (input: string | File | NodeJS.ReadableStream): GenericDataThunkAction => {
     return async (dispatch: ThunkDispatch<ApplicationState, null, GenericDataAction>): Promise<GenericDataAction> => {
         dispatch({ type: IMPORTING_DATA });
 
@@ -37,7 +37,7 @@ export const importTransactionData = (blob: File): GenericDataThunkAction => {
                 },
             };
 
-            Papa.parse(blob, config);
+            Papa.parse(input, config);
         });
     };
 };

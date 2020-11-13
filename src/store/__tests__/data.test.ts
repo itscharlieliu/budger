@@ -12,11 +12,19 @@ type Dispatch = ThunkDispatch<ApplicationState, null, AnyAction>;
 const mockStore = configureMockStore<unknown, Dispatch>([thunk]);
 
 describe("data actions", () => {
-    it("imports transactions data", () => {
+    it("imports transactions data", async () => {
         // TODO
         const store = mockStore({});
 
-        await store.dispatch(importTransactionData());
+        console.log("test");
+
+        const response = await fetch("/budger/testFiles/testTransactions.csv");
+        const testFile = await response.text();
+
+        await store.dispatch(importTransactionData(testFile));
+        const actions = store.getActions();
+
+        console.log(actions);
     });
 });
 
