@@ -13,17 +13,34 @@ export const importTransactionData = (input: string | File | NodeJS.ReadableStre
         return new Promise<GenericDataAction>((resolve: (value?: GenericDataAction) => void) => {
             const config: ParseConfig = {
                 complete: (results: ParseResult<string[]>) => {
-                    const headersMap: { [column: string]: number } = {};
+                    interface HeaderColumnsMap {
+                        Account?: number;
+                        Date?: number;
+                        Payee?: number;
+                        "Category Group"?: number;
+                        Category?: number;
+                        Memo?: number;
+                        Outflow?: number;
+                        Inflow?: number;
+
+                        [other: string]: number | undefined;
+                    }
+
+                    const headerColumnsMap: HeaderColumnsMap = {};
 
                     const newTransactions = results.data.reduce(
                         (previousValue: Transaction[], currentValue: string[], index: number): Transaction[] => {
                             // Parse header
                             if (index === 0) {
                                 for (let columnIdx = 0; columnIdx < currentValue.length; ++columnIdx) {
-                                    headersMap[currentValue[columnIdx]] = columnIdx;
+                                    headerColumnsMap[currentValue[columnIdx]] = columnIdx;
                                 }
                                 return previousValue;
                             }
+
+                            const newTransaction: Transaction = {
+                                account: currentValue[headerColumnsMap["Account"]],
+                            };
 
                             // previousValue.push(currentValue[0]);
                             return previousValue;
