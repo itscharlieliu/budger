@@ -13,44 +13,46 @@ export const importTransactionData = (input: string | File | NodeJS.ReadableStre
         return new Promise<GenericDataAction>((resolve: (value?: GenericDataAction) => void) => {
             const config: ParseConfig = {
                 complete: (results: ParseResult<string[]>) => {
-                    interface HeaderColumnsMap {
-                        Account?: number;
-                        Date?: number;
-                        Payee?: number;
-                        "Category Group"?: number;
-                        Category?: number;
-                        Memo?: number;
-                        Outflow?: number;
-                        Inflow?: number;
-
-                        [other: string]: number | undefined;
-                    }
-
-                    const headerColumnsMap: HeaderColumnsMap = {};
-
-                    const newTransactions = results.data.reduce(
-                        (previousValue: Transaction[], currentValue: string[], index: number): Transaction[] => {
-                            // Parse header
-                            if (index === 0) {
-                                for (let columnIdx = 0; columnIdx < currentValue.length; ++columnIdx) {
-                                    headerColumnsMap[currentValue[columnIdx]] = columnIdx;
-                                }
-                                return previousValue;
-                            }
-
-                            const newTransaction: Transaction = {
-                                account: currentValue[headerColumnsMap["Account"]],
-                            };
-
-                            // previousValue.push(currentValue[0]);
-                            return previousValue;
-                        },
-                        [],
-                    );
-
-                    console.log(newTransactions);
-
-                    resolve(dispatch({ type: IMPORT_DATA_SUCCESS }));
+                    console.log(results);
+                    // interface HeaderColumnsMap {
+                    //     Account?: number;
+                    //     Date?: number;
+                    //     Payee?: number;
+                    //     "Category Group"?: number;
+                    //     Category?: number;
+                    //     Memo?: number;
+                    //     Outflow?: number;
+                    //     Inflow?: number;
+                    //
+                    //     [other: string]: number | undefined;
+                    // }
+                    //
+                    // const headerColumnsMap: HeaderColumnsMap = {};
+                    //
+                    // const newTransactions = results.data.reduce(
+                    //     (previousValue: Transaction[], currentValue: string[], index: number): Transaction[] => {
+                    //         // Parse header
+                    //         if (index === 0) {
+                    //             for (let columnIdx = 0; columnIdx < currentValue.length; ++columnIdx) {
+                    //                 headerColumnsMap[currentValue[columnIdx]] = columnIdx;
+                    //             }
+                    //             return previousValue;
+                    //         }
+                    //
+                    //         const newTransaction: Transaction = {
+                    //             account: headerColumnsMap["Account"] ? currentValue[headerColumnsMap["Account"]] : undefined,
+                    //             date: currentValue[headerColumnsMap["Date"]]
+                    //         };
+                    //
+                    //         // previousValue.push(currentValue[0]);
+                    //         return previousValue;
+                    //     },
+                    //     [],
+                    // );
+                    //
+                    // console.log(newTransactions);
+                    //
+                    // resolve(dispatch({ type: IMPORT_DATA_SUCCESS }));
                 },
             };
 
