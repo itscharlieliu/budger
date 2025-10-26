@@ -24,7 +24,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./app/src/*"]
     }
   },
   "include": [
@@ -32,7 +32,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/types/**/*.d.ts"
+    "app/src/types/**/*.d.ts"
   ],
   "exclude": [
     "node_modules"

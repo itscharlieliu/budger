@@ -4,18 +4,18 @@ import React from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
-import AppBar from "../../src/components/AppBar";
-import NavigationDrawer from "../../src/components/NavigationDrawer";
-import { I18N_DEFAULT_OPTIONS } from "../../src/defs/i18n";
-import { language } from "../../src/services/i18n/language";
-import ApplicationState from "../../src/store";
+import AppBar from "./AppBar";
+import NavigationDrawer from "./NavigationDrawer";
+import { I18N_DEFAULT_OPTIONS } from "../defs/i18n";
+import { language } from "../services/i18n/language";
+import ApplicationState from "../store";
 import {
     initAccounts,
     initBudget,
     initTransactions,
     setLanguageInitialized,
-} from "../../src/store/initialization/initializationActions";
-import useMount from "../../src/utils/useMount";
+} from "../store/initialization/initializationActions";
+import useMount from "../utils/useMount";
 
 interface StateProps {
     translationInitialized: boolean;

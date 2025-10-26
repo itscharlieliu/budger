@@ -132,9 +132,9 @@ const BudgetHeader = (props: BudgetHeaderProps): JSX.Element => {
         <>
             <GridHeaderContainer>
                 {/*FOR TEST*/}
-                <Modal>
+                {/* <Modal>
                     <ImportDataForm />
-                </Modal>
+                </Modal> */}
                 {/*END TEST*/}
                 <Modal visible={isAddingGroup} onClose={() => setIsAddingGroup(false)}>
                     <BudgetGroupAddForm monthCode={props.monthCode} onSubmit={() => setIsAddingGroup(false)} />

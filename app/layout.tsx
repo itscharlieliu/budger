@@ -1,6 +1,6 @@
 import React from "react";
 import { Providers } from "./providers";
-import "../src/index.css";
+import "./src/index.css";
 
 export const metadata = {
     title: "Budger",
