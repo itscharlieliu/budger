@@ -1,21 +1,21 @@
+"use client";
+
 import React from "react";
 import { connect, ResolveThunks } from "react-redux";
-import { HashRouter } from "react-router-dom";
 import styled from "styled-components";
 
-import AppBar from "./components/AppBar";
-import NavigationDrawer from "./components/NavigationDrawer";
-import Router from "./components/Router";
-import { I18N_DEFAULT_OPTIONS } from "./defs/i18n";
-import { language } from "./services/i18n/language";
-import ApplicationState from "./store";
+import AppBar from "../../src/components/AppBar";
+import NavigationDrawer from "../../src/components/NavigationDrawer";
+import { I18N_DEFAULT_OPTIONS } from "../../src/defs/i18n";
+import { language } from "../../src/services/i18n/language";
+import ApplicationState from "../../src/store";
 import {
     initAccounts,
     initBudget,
     initTransactions,
     setLanguageInitialized,
-} from "./store/initialization/initializationActions";
-import useMount from "./utils/useMount";
+} from "../../src/store/initialization/initializationActions";
+import useMount from "../../src/utils/useMount";
 
 interface StateProps {
     translationInitialized: boolean;
@@ -45,7 +45,12 @@ const BodyContainer = styled.div`
     overflow: hidden;
 `;
 
-function App(props: AllProps): JSX.Element {
+const ContentArea = styled.div`
+    flex-grow: 1;
+    overflow: auto;
+`;
+
+function AppLayout({ children, ...props }: AllProps & { children: React.ReactNode }): JSX.Element {
     useMount(() => {
         // initialize everything on app mount
         language
@@ -63,14 +68,11 @@ function App(props: AllProps): JSX.Element {
 
     return (
         <AppContainer>
-            <HashRouter basename={"/"}>
-                <AppBar />
-
-                <BodyContainer>
-                    <NavigationDrawer />
-                    <Router />
-                </BodyContainer>
-            </HashRouter>
+            <AppBar />
+            <BodyContainer>
+                <NavigationDrawer />
+                <ContentArea>{children}</ContentArea>
+            </BodyContainer>
         </AppContainer>
     );
 }
@@ -86,4 +88,4 @@ const mapDispatchToProps: DispatchProps = {
     initAccounts,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(AppLayout);

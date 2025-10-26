@@ -10,7 +10,7 @@ export const importTransactionData = (input: string | File | NodeJS.ReadableStre
     return async (dispatch: ThunkDispatch<ApplicationState, null, GenericDataAction>): Promise<GenericDataAction> => {
         dispatch({ type: IMPORTING_DATA });
 
-        return new Promise<GenericDataAction>((resolve: (value?: GenericDataAction) => void) => {
+        return new Promise<GenericDataAction>((resolve) => {
             const config: ParseConfig = {
                 complete: (results: ParseResult<string[]>) => {
                     console.log(results);

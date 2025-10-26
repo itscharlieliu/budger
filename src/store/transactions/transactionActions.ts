@@ -88,7 +88,7 @@ export const addTransaction = (
             return dispatch({ type: UPDATE_TRANSACTIONS_SUCCESS, transactions: newTransactions });
         } catch (error) {
             console.warn(error);
-            return dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error });
+            return dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error: error as Error });
         }
     };
 };
@@ -269,7 +269,7 @@ export const deleteTransaction = (index: number): GenericTransactionThunkAction 
             return dispatch({ type: UPDATE_TRANSACTIONS_SUCCESS, transactions: newTransactions });
         } catch (error) {
             console.warn(error);
-            return dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error });
+            return dispatch({ type: UPDATE_TRANSACTIONS_FAILURE, error: error as Error });
         }
     };
 };

@@ -1,13 +1,15 @@
+"use client";
+
 import React, { useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
 import { theme } from "../../defs/theme";
-import { ReactComponent as LeftArrow } from "../../resources/images/LeftArrow.svg";
-import { ReactComponent as RightArrow } from "../../resources/images/RightArrow.svg";
-import { ReactComponent as Edit } from "../../resources/images/edit.svg";
-import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
-import { ReactComponent as Trash } from "../../resources/images/trash.svg";
+import LeftArrow from "../../resources/images/LeftArrow.svg";
+import RightArrow from "../../resources/images/RightArrow.svg";
+import Edit from "../../resources/images/edit.svg";
+import PlusIcon from "../../resources/images/plusIcon.svg";
+import Trash from "../../resources/images/trash.svg";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
 import {

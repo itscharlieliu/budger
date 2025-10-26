@@ -1,12 +1,14 @@
+"use client";
+
 import React, { useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { usePathname, useRouter } from "next/navigation";
 import styled from "styled-components";
 
 import { ACCOUNTS, BUDGET, TRANSACTIONS } from "../defs/routerPaths";
-import { ReactComponent as AccountsIcon } from "../resources/images/accounts.svg";
-import { ReactComponent as PlusIcon } from "../resources/images/plusIcon.svg";
-import { ReactComponent as RecieptIcon } from "../resources/images/reciept.svg";
-import { ReactComponent as WalletIcon } from "../resources/images/wallet.svg";
+import AccountsIcon from "../resources/images/accounts.svg";
+import PlusIcon from "../resources/images/plusIcon.svg";
+import RecieptIcon from "../resources/images/reciept.svg";
+import WalletIcon from "../resources/images/wallet.svg";
 import t from "../services/i18n/language";
 
 import Button from "./common/Button";
@@ -26,8 +28,8 @@ const VersionContainer = styled.div`
 
 const NavigationDrawer = (): JSX.Element => {
     const [isAddingTransaction, setIsAddingTransaction] = useState(false);
-    const location = useLocation();
-    const history = useHistory();
+    const pathname = usePathname();
+    const router = useRouter();
 
     return (
         <Drawer>
@@ -43,16 +45,16 @@ const NavigationDrawer = (): JSX.Element => {
             <DrawerButton onClick={() => setIsAddingTransaction(true)} icon={<PlusIcon />}>
                 {t("addTransaction")}
             </DrawerButton>
-            <DrawerListItem isHighlighted={location.pathname === BUDGET} isButton onClick={() => history.push(BUDGET)}>
+            <DrawerListItem isHighlighted={pathname === BUDGET} isButton onClick={() => router.push(BUDGET)}>
                 <Icon edge={"left"}>
                     <WalletIcon />
                 </Icon>
                 {t("budget")}
             </DrawerListItem>
             <DrawerListItem
-                isHighlighted={location.pathname === TRANSACTIONS}
+                isHighlighted={pathname === TRANSACTIONS}
                 isButton
-                onClick={() => history.push(TRANSACTIONS)}
+                onClick={() => router.push(TRANSACTIONS)}
             >
                 <Icon edge={"left"}>
                     <RecieptIcon />
@@ -60,18 +62,14 @@ const NavigationDrawer = (): JSX.Element => {
                 {t("transactions")}
             </DrawerListItem>
 
-            <DrawerListItem
-                isHighlighted={location.pathname === ACCOUNTS}
-                isButton
-                onClick={() => history.push(ACCOUNTS)}
-            >
+            <DrawerListItem isHighlighted={pathname === ACCOUNTS} isButton onClick={() => router.push(ACCOUNTS)}>
                 <Icon edge={"left"}>
                     <AccountsIcon />
                 </Icon>
                 {t("accounts")}
             </DrawerListItem>
 
-            <VersionContainer>v{process.env.REACT_APP_VERSION}</VersionContainer>
+            <VersionContainer>v{process.env.NEXT_PUBLIC_VERSION || "0.3.0"}</VersionContainer>
         </Drawer>
     );
 };

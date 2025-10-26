@@ -14,19 +14,34 @@ interface SwitchProps extends React.InputHTMLAttributes<HTMLInputElement> {
     spaced?: boolean;
 }
 
-const SwitchContainer = styled.label`
+interface SwitchContainerProps {
+    spaced?: boolean;
+}
+
+interface LabelContainerProps {
+    error?: boolean;
+}
+
+interface SwitchInputProps {
+    error?: boolean;
+}
+
+interface SwitchSliderProps {
+    error?: boolean;
+}
+
+const SwitchContainer = styled.label<SwitchContainerProps>`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: ${(props: SwitchProps) => (props.spaced ? "space-between" : "unset")};
-    width: ${(props: SwitchProps) => (props.spaced ? "unset" : "min-content")};
+    justify-content: ${(props) => (props.spaced ? "space-between" : "unset")};
+    width: ${(props) => (props.spaced ? "unset" : "min-content")};
     margin: 4px;
     cursor: pointer;
 `;
 
-const LabelContainer = styled.span`
-    color: ${(props: SwitchProps): string =>
-        props.error ? theme.palette.error.main : theme.palette.background.contrast};
+const LabelContainer = styled.span<LabelContainerProps>`
+    color: ${(props): string => (props.error ? theme.palette.error.main : theme.palette.background.contrast)};
     margin-right: 8px;
 `;
 
@@ -37,14 +52,13 @@ const SliderContainer = styled.div`
     height: ${SWITCH_HEIGHT};
 `;
 
-const SwitchInput = styled.input`
+const SwitchInput = styled.input<SwitchInputProps>`
     opacity: 0;
     width: 0;
     height: 0;
 
     &:checked + span {
-        background-color: ${(props: SwitchProps): string =>
-            props.error ? theme.palette.error.light : theme.palette.primary.main};
+        background-color: ${(props): string => (props.error ? theme.palette.error.light : theme.palette.primary.main)};
     }
 
     &:checked + span:before {
@@ -64,15 +78,14 @@ const SwitchInput = styled.input`
     }
 `;
 
-const SwitchSlider = styled.span`
+const SwitchSlider = styled.span<SwitchSliderProps>`
     position: absolute;
     border-radius: ${SWITCH_RADIUS};
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: ${(props: SwitchProps): string =>
-        props.error ? theme.palette.error.light : theme.palette.switch.inactive};
+    background-color: ${(props): string => (props.error ? theme.palette.error.light : theme.palette.switch.inactive)};
     -webkit-transition: 0.4s;
     transition: background-color 0.2s ease, box-shadow 0.1s ease-in;
 

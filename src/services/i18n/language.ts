@@ -22,7 +22,7 @@ const language = {
             debug: options.debug || false,
         };
 
-        const response = await fetch(`/budger/translations/${locale}.json`);
+        const response = await fetch(`/translations/${locale}.json`);
         const resources = await response.json();
         await date.init(locale);
         const i18nextOpt = {

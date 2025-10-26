@@ -1,10 +1,12 @@
+"use client";
+
 import React, { useState } from "react";
 import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
 import { theme } from "../../defs/theme";
-import { ReactComponent as PlusIcon } from "../../resources/images/plusIcon.svg";
-import { ReactComponent as Trash } from "../../resources/images/trash.svg";
+import PlusIcon from "../../resources/images/plusIcon.svg";
+import Trash from "../../resources/images/trash.svg";
 import t from "../../services/i18n/language";
 import ApplicationState from "../../store";
 import { deleteTransaction } from "../../store/transactions/transactionActions";

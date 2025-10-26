@@ -54,7 +54,7 @@ export const initBudget = (): GenericInitializationThunkAction => async (
 
         dispatch({ type: SET_BUDGET_INITIALIZED_SUCCESS, totalBudget, toBeBudgeted });
     } catch (error) {
-        dispatch({ type: SET_BUDGET_INITIALIZED_FAILURE, error });
+        dispatch({ type: SET_BUDGET_INITIALIZED_FAILURE, error: error as Error });
     }
 };
 
@@ -87,7 +87,7 @@ export const initTransactions = (): GenericInitializationThunkAction => async (
 
         dispatch({ type: SET_TRANSACTIONS_INITIALIZED_SUCCESS, transactions });
     } catch (error) {
-        dispatch({ type: SET_TRANSACTIONS_INITIALIZED_FAILURE, error });
+        dispatch({ type: SET_TRANSACTIONS_INITIALIZED_FAILURE, error: error as Error });
     }
 };
 
@@ -109,6 +109,6 @@ export const initAccounts = (): GenericInitializationThunkAction => async (
 
         dispatch({ type: SET_ACCOUNTS_INITIALIZED_SUCCESS, accounts });
     } catch (error) {
-        dispatch({ type: SET_ACCOUNTS_INITIALIZED_FAILURE, error });
+        dispatch({ type: SET_ACCOUNTS_INITIALIZED_FAILURE, error: error as Error });
     }
 };
