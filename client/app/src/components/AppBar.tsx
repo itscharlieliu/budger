@@ -1,12 +1,10 @@
 import React from "react";
-import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
 import { theme, UNIT_LENGTH } from "../defs/theme";
 import BudgerLogo from "../resources/images/BudgerLogo.svg";
 import t from "../services/i18n/language";
-import ApplicationState from "../store";
-import { logoutUser } from "../store/auth/authActions";
+import { useAuth } from "../contexts/AuthContext";
 import Button from "./common/Button";
 
 const AppBarContainer = styled.div`
@@ -56,19 +54,11 @@ const UserInfo = styled.div`
     }
 `;
 
-interface StateProps {
-    user: any;
-}
+const AppBar = (): JSX.Element => {
+    const { user, logout } = useAuth();
 
-interface DispatchProps {
-    logoutUser: typeof logoutUser;
-}
-
-type AllProps = StateProps & ResolveThunks<DispatchProps>;
-
-const AppBar = ({ user, logoutUser }: AllProps): JSX.Element => {
     const handleLogout = () => {
-        logoutUser();
+        logout();
     };
 
     return (
@@ -93,12 +83,4 @@ const AppBar = ({ user, logoutUser }: AllProps): JSX.Element => {
     );
 };
 
-const mapStateToProps = (state: ApplicationState): StateProps => ({
-    user: state.auth.user,
-});
-
-const mapDispatchToProps: DispatchProps = {
-    logoutUser,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AppBar);
+export default AppBar;

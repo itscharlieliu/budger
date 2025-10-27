@@ -1,15 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
 import { theme } from "../../defs/theme";
 import PlusIcon from "../../resources/images/plusIcon.svg";
 import Trash from "../../resources/images/trash.svg";
 import t from "../../services/i18n/language";
-import ApplicationState from "../../store";
-import { deleteTransaction } from "../../store/transactions/transactionActions";
 import { Transaction } from "../../store/transactions/transactionInterfaces";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
@@ -17,16 +14,7 @@ import GridBoxContainer from "../common/containers/GridBoxContainer";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 import ScreenContainer from "../common/containers/ScreenContainer";
 import TransactionAddForm from "../forms/TransactionAddForm";
-
-interface StateProps {
-    transactions: Transaction[];
-}
-
-interface DispatchProps {
-    deleteTransaction: typeof deleteTransaction;
-}
-
-type AllProps = StateProps & ResolveThunks<DispatchProps>;
+import { useTransactions } from "../../hooks/useTransactions";
 
 interface TransactionsRowProps extends Transaction {
     onDelete: () => void;
@@ -123,17 +111,19 @@ const TransactionsRow = (props: TransactionsRowProps): JSX.Element => {
     );
 };
 
-const TransactionsScreen = (props: AllProps): JSX.Element => {
+const TransactionsScreen = (): JSX.Element => {
+    const { transactions, deleteTransaction } = useTransactions();
+
     return (
         <ScreenContainer>
             <TransactionsContainer>
                 <TransactionsHeader />
-                {props.transactions.length === 0 && <InfoCard>{t("noTransactions")}</InfoCard>}
+                {transactions.length === 0 && <InfoCard>{t("noTransactions")}</InfoCard>}
 
-                {props.transactions.map((transaction: Transaction, index: number) => (
+                {transactions.map((transaction: Transaction, index: number) => (
                     <TransactionsRow
                         key={"transaction" + index}
-                        onDelete={() => props.deleteTransaction(index)}
+                        onDelete={() => deleteTransaction(index.toString())}
                         {...transaction}
                     />
                 ))}
@@ -142,12 +132,4 @@ const TransactionsScreen = (props: AllProps): JSX.Element => {
     );
 };
 
-const mapStateToProps = (state: ApplicationState): StateProps => ({
-    transactions: state.transaction.transactions,
-});
-
-const mapDispatchToProps: DispatchProps = {
-    deleteTransaction,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(TransactionsScreen);
+export default TransactionsScreen;

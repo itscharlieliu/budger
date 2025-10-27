@@ -1,13 +1,12 @@
 import React from "react";
 import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
-import { connect, ResolveThunks } from "react-redux";
 
 import t from "../../services/i18n/language";
-import { addBudgetCategory } from "../../store/budget/budgetActions";
 import { MonthCode } from "../../utils/getMonthCode";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
+import { useBudget } from "../../hooks/useBudget";
 
 interface OwnProps {
     onSubmit?: () => void;
@@ -15,19 +14,17 @@ interface OwnProps {
     monthCode: MonthCode;
 }
 
-interface DispatchProps {
-    addBudgetCategory: typeof addBudgetCategory;
-}
-
-type AllProps = OwnProps & ResolveThunks<DispatchProps>;
-
 interface FormValues {
     categoryName?: string;
 }
 
-const BudgetCategoryAddForm = (props: AllProps): JSX.Element => {
+const BudgetCategoryAddForm = (props: OwnProps): JSX.Element => {
+    const { addBudgetCategory } = useBudget();
+
     const handleAddCategoryGroup = (values: FormValues) => {
-        values.categoryName && props.addBudgetCategory(props.monthCode, props.group, values.categoryName);
+        if (values.categoryName) {
+            addBudgetCategory(props.monthCode, props.group, values.categoryName);
+        }
         props.onSubmit && props.onSubmit();
     };
 
@@ -54,8 +51,4 @@ const BudgetCategoryAddForm = (props: AllProps): JSX.Element => {
     );
 };
 
-const mapDispatchToProps = {
-    addBudgetCategory,
-};
-
-export default connect(null, mapDispatchToProps)(BudgetCategoryAddForm);
+export default BudgetCategoryAddForm;

@@ -2,24 +2,15 @@
 
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { connect, ResolveThunks } from "react-redux";
+import { useAuth } from "../contexts/AuthContext";
 
-import ApplicationState from "../store";
-import { restoreUserSession } from "../store/auth/authActions";
-
-interface StateProps {
-    isAuthenticated: boolean;
-    isLoading: boolean;
+interface ProtectedRouteProps {
+    children: React.ReactNode;
 }
 
-interface DispatchProps {
-    restoreUserSession: typeof restoreUserSession;
-}
-
-type AllProps = StateProps & ResolveThunks<DispatchProps> & { children: React.ReactNode };
-
-function ProtectedRoute({ children, isAuthenticated, isLoading, restoreUserSession }: AllProps) {
+export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     const router = useRouter();
+    const { isAuthenticated, isLoading, restoreUserSession } = useAuth();
 
     useEffect(() => {
         restoreUserSession();
@@ -53,14 +44,3 @@ function ProtectedRoute({ children, isAuthenticated, isLoading, restoreUserSessi
 
     return <>{children}</>;
 }
-
-const mapStateToProps = (state: ApplicationState): StateProps => ({
-    isAuthenticated: state.auth.isAuthenticated,
-    isLoading: state.auth.isLoading,
-});
-
-const mapDispatchToProps: DispatchProps = {
-    restoreUserSession,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProtectedRoute);

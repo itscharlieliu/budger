@@ -1,14 +1,13 @@
 import React from "react";
 import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
-import { connect, ResolveThunks } from "react-redux";
 
 import t from "../../services/i18n/language";
-import { editBudgetedAmount } from "../../store/budget/budgetActions";
 import formatMoney from "../../utils/formatMoney";
 import { MonthCode } from "../../utils/getMonthCode";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
+import { useBudget } from "../../hooks/useBudget";
 
 interface OwnProps {
     onSubmit?: () => void;
@@ -17,23 +16,16 @@ interface OwnProps {
     defaultValue?: string;
 }
 
-interface DispatchProps {
-    editBudgetedAmount: typeof editBudgetedAmount;
-}
-
-type AllProps = OwnProps & ResolveThunks<DispatchProps>;
-
 interface FormValues {
     budgeted?: string;
 }
-const BudgetCategoryEditForm = (props: AllProps): JSX.Element => {
+
+const BudgetCategoryEditForm = (props: OwnProps): JSX.Element => {
+    const { editBudgetedAmount } = useBudget();
+
     const handleAddCategoryGroup = (values: FormValues) => {
         const updatedBudgetAmount = parseFloat(values.budgeted ? values.budgeted : "0");
-        props.editBudgetedAmount(
-            props.monthCode,
-            props.budgetCategory,
-            isNaN(updatedBudgetAmount) ? 0 : updatedBudgetAmount,
-        );
+        editBudgetedAmount(props.monthCode, props.budgetCategory, isNaN(updatedBudgetAmount) ? 0 : updatedBudgetAmount);
         props.onSubmit && props.onSubmit();
     };
 
@@ -69,8 +61,4 @@ const BudgetCategoryEditForm = (props: AllProps): JSX.Element => {
     );
 };
 
-const mapDispatchToProps = {
-    editBudgetedAmount,
-};
-
-export default connect(null, mapDispatchToProps)(BudgetCategoryEditForm);
+export default BudgetCategoryEditForm;

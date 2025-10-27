@@ -1,25 +1,18 @@
 import React from "react";
 import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
-import { connect, ResolveThunks } from "react-redux";
 
 import t from "../../services/i18n/language";
-import { addAccount } from "../../store/accounts/accountsActions";
-import { AccountType } from "../../store/accounts/accountsInterfaces";
+import { AccountType, BankAccount } from "../../store/accounts/accountsInterfaces";
 import formatMoney from "../../utils/formatMoney";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import Switch from "../common/Switch";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
+import { useAccounts } from "../../hooks/useAccounts";
 
 interface OwnProps {
     onSubmit?: () => void;
 }
-
-interface DispatchProps {
-    addAccount: typeof addAccount;
-}
-
-type AllProps = OwnProps & ResolveThunks<DispatchProps>;
 
 interface FormValues {
     accountName?: string;
@@ -33,16 +26,20 @@ interface FormErrors {
     startingBalance?: string;
 }
 
-const AccountAddForm = (props: AllProps): JSX.Element => {
-    const handleAddAccount = (values: FormValues) => {
-        const startingBalace = parseFloat(values.startingBalance ? values.startingBalance : "0");
+const AccountAddForm = (props: OwnProps): JSX.Element => {
+    const { addAccount } = useAccounts();
 
-        values.accountName &&
-            props.addAccount(
-                values.accountName,
-                values.budgeted ? AccountType.budgeted : AccountType.unbudgeted,
-                isNaN(startingBalace) ? 0 : startingBalace,
-            );
+    const handleAddAccount = (values: FormValues) => {
+        const startingBalance = parseFloat(values.startingBalance ? values.startingBalance : "0");
+
+        if (values.accountName) {
+            const account: BankAccount = {
+                name: values.accountName,
+                type: values.budgeted ? AccountType.budgeted : AccountType.unbudgeted,
+                cachedBalance: isNaN(startingBalance) ? 0 : startingBalance,
+            };
+            addAccount(account);
+        }
         props.onSubmit && props.onSubmit();
     };
 
@@ -95,8 +92,4 @@ const AccountAddForm = (props: AllProps): JSX.Element => {
     );
 };
 
-const mapDispatchToProps = {
-    addAccount,
-};
-
-export default connect(null, mapDispatchToProps)(AccountAddForm);
+export default AccountAddForm;

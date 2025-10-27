@@ -1,14 +1,12 @@
 import React, { useRef, useState } from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
-import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
 import t from "../../services/i18n/language";
-import ApplicationState from "../../store";
 import { AllAccounts, BankAccount } from "../../store/accounts/accountsInterfaces";
 import { TotalBudget } from "../../store/budget/budgetInterfaces";
-import { addTransaction } from "../../store/transactions/transactionActions";
+import { Transaction } from "../../store/transactions/transactionInterfaces";
 import formatMoney from "../../utils/formatMoney";
 import { getMonthCodeFromDate, getMonthCodeString, MonthCode } from "../../utils/getMonthCode";
 import Autocomplete, { AutocompleteOption } from "../common/Autocomplete";
@@ -16,15 +14,9 @@ import Button from "../common/Button";
 import DateSelector from "../common/DateSelector";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
-
-interface StateProps {
-    allAccounts: AllAccounts;
-    totalBudget: TotalBudget;
-}
-
-interface DispatchProps {
-    addTransaction: typeof addTransaction;
-}
+import { useAccounts } from "../../hooks/useAccounts";
+import { useBudget } from "../../hooks/useBudget";
+import { useTransactions } from "../../hooks/useTransactions";
 
 interface OwnProps {
     onSubmit: () => void;
@@ -50,111 +42,122 @@ interface FormErrors {
     note?: string;
 }
 
-type AllProps = OwnProps & StateProps & ResolveThunks<DispatchProps>;
-
 const ButtonContainer = styled.div`
     display: flex;
     flex-direction: row;
 `;
 
 const AddFormButton = styled(Button)`
-    margin: 4px;
+    margin: 16px 8px;
 `;
 
-const TransactionAddForm = (props: AllProps): JSX.Element => {
+const TransactionAddForm = (props: OwnProps): JSX.Element => {
+    const { allAccounts } = useAccounts();
+    const { totalBudget } = useBudget();
+    const { addTransaction } = useTransactions();
+    const [monthCode, setMonthCode] = useState<MonthCode>(getMonthCodeFromDate(new Date()));
+
+    const toFromInputRef = useRef<HTMLInputElement>(null);
     const accountInputRef = useRef<HTMLInputElement>(null);
     const categoryInputRef = useRef<HTMLInputElement>(null);
     const dateInputRef = useRef<DayPickerInput>(null);
     const outInputRef = useRef<HTMLInputElement>(null);
 
-    const [monthCode, setMonthCode] = useState<MonthCode>(getMonthCodeFromDate(new Date()));
-
-    const monthCodeString = getMonthCodeString(monthCode);
-
-    const handleSubmit = (values: FormValues) => {
-        if (!values.toFrom || !values.account || !values.category || !values.date) {
-            console.warn(t("didNotProvideAllValues"));
-            return;
-        }
-
-        const inflow = parseFloat(values.inFlow ? values.inFlow : "0");
-        const outflow = parseFloat(values.outFlow ? values.outFlow : "0");
-
-        props.addTransaction(
-            values.toFrom.value,
-            values.account.value,
-            values.date,
-            (isNaN(inflow) ? 0 : inflow) - (isNaN(outflow) ? 0 : outflow),
-            values.note,
-            values.category.value,
-        );
-        props.onSubmit();
-    };
-
-    const validateCategories = (category?: AutocompleteOption): string | undefined => {
-        if (!category) {
-            return;
-        }
-
-        if (category.value.length === 0) {
-            return;
-        }
-
-        if (!props.totalBudget[monthCodeString]) {
-            return t("categoryDoesNotExist");
-        }
-
-        for (const group of Object.keys(props.totalBudget[monthCodeString])) {
-            for (const budgetCategory of Object.keys(props.totalBudget[monthCodeString][group])) {
-                console.log(budgetCategory, category);
-                if (budgetCategory === category.value) {
-                    return;
-                }
-            }
-        }
-
-        return t("categoryDoesNotExist");
-    };
-
-    const handleValidation = (values: FormValues) => {
+    const validate = (values: FormValues): FormErrors => {
         const errors: FormErrors = {};
 
-        if (!values.toFrom || (values.toFrom.label === "" && values.toFrom.value === "")) {
-            errors.toFrom = t("cannotBeEmpty");
-        }
-        if (!values.account) {
-            errors.account = t("cannotBeEmpty");
-        }
-        if (!values.date) {
-            errors.date = t("invalidDate");
+        if (!values.toFrom) {
+            errors.toFrom = t("required");
         }
 
-        if (
-            !props.allAccounts.some((account: BankAccount) => values.account && account.name === values.account.value)
-        ) {
-            errors.account = t("accountDoesNotExist");
+        if (!values.account) {
+            errors.account = t("required");
+        }
+
+        if (!values.category) {
+            errors.category = t("required");
+        }
+
+        if (!values.date) {
+            errors.date = t("required");
+        }
+
+        if (!values.inFlow && !values.outFlow) {
+            errors.inFlow = t("required");
+            errors.outFlow = t("required");
         }
 
         return errors;
     };
 
+    const onSubmit = (values: FormValues) => {
+        const activity = (parseFloat(values.inFlow || "0") - parseFloat(values.outFlow || "0")) * 100;
+
+        const transaction: Transaction = {
+            account: values.account!.value,
+            date: values.date!,
+            payee: values.toFrom!.value,
+            category: values.category!.value,
+            note: values.note,
+            activity,
+        };
+
+        addTransaction(transaction);
+        props.onSubmit();
+    };
+
+    const getAccountOptions = (): AutocompleteOption[] => {
+        return allAccounts.map((account: BankAccount) => ({
+            value: account.name,
+            label: account.name,
+        }));
+    };
+
+    const getCategoryOptions = (): AutocompleteOption[] => {
+        const monthCodeString = getMonthCodeString(monthCode);
+        const monthlyBudget = totalBudget[monthCodeString];
+
+        if (!monthlyBudget) {
+            return [];
+        }
+
+        const categories: AutocompleteOption[] = [];
+
+        for (const group of Object.keys(monthlyBudget)) {
+            for (const category of Object.keys(monthlyBudget[group])) {
+                categories.push({
+                    value: category,
+                    label: category,
+                });
+            }
+        }
+
+        return categories;
+    };
+
     return (
         <Form
-            onSubmit={handleSubmit}
-            validate={handleValidation}
-            component={({ handleSubmit }: FormRenderProps) => (
+            onSubmit={onSubmit}
+            validate={validate}
+            render={({ handleSubmit, submitting }: FormRenderProps<FormValues>) => (
                 <ModalFormContainer onSubmit={handleSubmit}>
                     <Field name={"toFrom"}>
                         {({ input, meta }: FieldRenderProps<AutocompleteOption, HTMLElement>) => (
                             <Autocomplete
                                 {...input}
-                                helperText={meta.touched && meta.error}
-                                error={meta.touched && meta.error}
-                                label={t("toFrom")}
-                                autoFocus
-                                value={input.value || { value: "", label: "" }}
+                                value={input.value}
+                                onChange={(value: AutocompleteOption | React.ChangeEvent<HTMLInputElement>) => {
+                                    if ("value" in value) {
+                                        input.onChange(value);
+                                    }
+                                }}
+                                onBlur={input.onBlur}
                                 options={[]}
-                                onSelectedItemChange={() => accountInputRef.current && accountInputRef.current.focus()}
+                                error={meta.touched && meta.error}
+                                helperText={meta.touched && meta.error}
+                                label={t("toFrom")}
+                                onFocus={() => accountInputRef.current && accountInputRef.current.focus()}
+                                ref={toFromInputRef}
                             />
                         )}
                     </Field>
@@ -162,42 +165,38 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
                         {({ input, meta }: FieldRenderProps<AutocompleteOption, HTMLElement>) => (
                             <Autocomplete
                                 {...input}
-                                helperText={meta.touched && meta.error}
+                                value={input.value}
+                                onChange={(value: AutocompleteOption | React.ChangeEvent<HTMLInputElement>) => {
+                                    if ("value" in value) {
+                                        input.onChange(value);
+                                    }
+                                }}
+                                onBlur={input.onBlur}
+                                options={getAccountOptions()}
                                 error={meta.touched && meta.error}
+                                helperText={meta.touched && meta.error}
                                 label={t("account")}
-                                value={input.value || { value: "", label: "" }}
-                                options={props.allAccounts.map((account: BankAccount) => ({
-                                    value: account.name,
-                                    label: account.name,
-                                }))}
-                                onSelectedItemChange={() =>
-                                    categoryInputRef.current && categoryInputRef.current.focus()
-                                }
+                                onFocus={() => categoryInputRef.current && categoryInputRef.current.focus()}
                                 ref={accountInputRef}
                             />
                         )}
                     </Field>
-                    <Field name={"category"} validate={validateCategories}>
+                    <Field name={"category"}>
                         {({ input, meta }: FieldRenderProps<AutocompleteOption, HTMLElement>) => (
                             <Autocomplete
                                 {...input}
-                                helperText={meta.touched && meta.error}
-                                error={meta.touched && meta.error}
-                                label={t("category")}
-                                value={input.value || { value: "", label: "" }}
-                                options={Object.keys(
-                                    props.totalBudget[monthCodeString] ? props.totalBudget[monthCodeString] : {},
-                                ).reduce((categories: AutocompleteOption[], budgetGroup: string) => {
-                                    for (const category of Object.keys(
-                                        props.totalBudget[monthCodeString][budgetGroup],
-                                    )) {
-                                        categories.push({ value: category, label: category });
+                                value={input.value}
+                                onChange={(value: AutocompleteOption | React.ChangeEvent<HTMLInputElement>) => {
+                                    if ("value" in value) {
+                                        input.onChange(value);
                                     }
-                                    return categories;
-                                }, [])}
-                                onSelectedItemChange={() =>
-                                    dateInputRef.current && dateInputRef.current.getInput().focus()
-                                }
+                                }}
+                                onBlur={input.onBlur}
+                                options={getCategoryOptions()}
+                                error={meta.touched && meta.error}
+                                helperText={meta.touched && meta.error}
+                                label={t("category")}
+                                onFocus={() => dateInputRef.current && dateInputRef.current.getInput().focus()}
                                 ref={categoryInputRef}
                             />
                         )}
@@ -266,13 +265,4 @@ const TransactionAddForm = (props: AllProps): JSX.Element => {
     );
 };
 
-const mapStateToProps = (state: ApplicationState): StateProps => ({
-    allAccounts: state.accounts.allAccounts,
-    totalBudget: state.budget.totalBudget,
-});
-
-const mapDispatchToProps = {
-    addTransaction,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(TransactionAddForm);
+export default TransactionAddForm;

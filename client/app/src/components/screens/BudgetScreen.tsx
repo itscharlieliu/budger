@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
 import { theme } from "../../defs/theme";
@@ -11,15 +10,7 @@ import Edit from "../../resources/images/edit.svg";
 import PlusIcon from "../../resources/images/plusIcon.svg";
 import Trash from "../../resources/images/trash.svg";
 import t from "../../services/i18n/language";
-import ApplicationState from "../../store";
-import {
-    addBudgetMonth,
-    deleteBudgetCategory,
-    deleteBudgetGroup,
-    copyBudgetMonth,
-} from "../../store/budget/budgetActions";
-import { BudgetCategory, TotalBudget } from "../../store/budget/budgetInterfaces";
-import { Transaction } from "../../store/transactions/transactionInterfaces";
+import { BudgetCategory } from "../../store/budget/budgetInterfaces";
 import formatMoney from "../../utils/formatMoney";
 import {
     getDateFromMonthCode,
@@ -37,23 +28,8 @@ import ScreenContainer from "../common/containers/ScreenContainer";
 import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
 import BudgetCategoryEditForm from "../forms/BudgetCategoryEditForm";
 import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
-import ImportDataForm from "../forms/ImportDataForm";
-
-interface StateProps {
-    totalBudget: TotalBudget;
-    toBeBudgeted: number;
-    transactions: Transaction[];
-    isAddingMonthlyBudget: boolean;
-}
-
-interface DispatchProps {
-    deleteBudgetCategory: typeof deleteBudgetCategory;
-    deleteBudgetGroup: typeof deleteBudgetGroup;
-    addBudgetMonth: typeof addBudgetMonth;
-    copyBudgetMonth: typeof copyBudgetMonth;
-}
-
-type AllProps = StateProps & ResolveThunks<DispatchProps>;
+import { useBudget } from "../../hooks/useBudget";
+import { useTransactions } from "../../hooks/useTransactions";
 
 interface BudgetCategoryRowProps extends BudgetCategory {
     onDeleteCategory: () => void;
@@ -99,129 +75,117 @@ const MonthDisplayContainer = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 16px;
 `;
 
-const MonthText = styled.span`
-    margin-left: 16px;
+const MonthDisplay = styled.div`
+    font-size: 1.5rem;
+    font-weight: ${theme.font.weight.bold};
+    color: ${theme.palette.background.contrast};
 `;
 
 const InfoCard = styled.div`
-    border-radius: 4px;
-    ${theme.shadow.low};
-    margin: 16px;
-    padding: 16px;
-
     grid-column-start: 1;
     grid-column-end: 5;
+    padding: 16px;
+    background: ${theme.palette.background.main};
+    border-radius: 8px;
+    margin: 8px 0;
+    text-align: center;
+    color: ${theme.palette.background.contrast};
 `;
-
-const MonthDisplay = (props: MonthHeaderProps): JSX.Element => {
-    return (
-        <MonthDisplayContainer>
-            <BudgetHeaderButton flat icon={<LeftArrow />} onClick={props.onPrevMonth} />
-            <BudgetHeaderButton flat icon={<RightArrow />} onClick={props.onNextMonth} />
-            <MonthText>{t("month", { date: getDateFromMonthCode(props.monthCode) })}</MonthText>
-        </MonthDisplayContainer>
-    );
-};
-
-const BudgetHeader = (props: BudgetHeaderProps): JSX.Element => {
-    const [isAddingGroup, setIsAddingGroup] = useState(false);
-
-    return (
-        <>
-            <GridHeaderContainer>
-                {/*FOR TEST*/}
-                {/* <Modal>
-                    <ImportDataForm />
-                </Modal> */}
-                {/*END TEST*/}
-                <Modal visible={isAddingGroup} onClose={() => setIsAddingGroup(false)}>
-                    <BudgetGroupAddForm monthCode={props.monthCode} onSubmit={() => setIsAddingGroup(false)} />
-                </Modal>
-                <span>{t("category")}</span>
-                <BudgetHeaderButton icon={<PlusIcon />} flat onClick={() => setIsAddingGroup(true)} />
-                <MonthDisplay
-                    monthCode={props.monthCode}
-                    onNextMonth={props.onNextMonth}
-                    onPrevMonth={props.onPrevMonth}
-                />
-                <BudgetHeaderButton onClick={props.onCopyPreviousMonth} flat>
-                    {t("copyPreviousMonth")}
-                </BudgetHeaderButton>
-            </GridHeaderContainer>
-            <GridHeaderContainer>
-                <span>{t("budgeted")}</span>
-            </GridHeaderContainer>
-            <GridHeaderContainer>
-                <span>{t("activity")}</span>
-            </GridHeaderContainer>
-            <GridHeaderContainer>
-                <span>{t("remaining")}</span>
-            </GridHeaderContainer>
-        </>
-    );
-};
 
 const BudgetCategoryRow = (props: BudgetCategoryRowProps): JSX.Element => {
     const [isEditingCategory, setIsEditingCategory] = useState(false);
 
     return (
         <>
+            <Modal visible={isEditingCategory} onClose={() => setIsEditingCategory(false)}>
+                <BudgetCategoryEditForm
+                    budgetCategory={props.categoryName}
+                    monthCode={props.monthCode}
+                    onSubmit={() => setIsEditingCategory(false)}
+                />
+            </Modal>
             <GridBoxContainer>
-                <Modal visible={isEditingCategory} onClose={() => setIsEditingCategory(false)}>
-                    <BudgetCategoryEditForm
-                        onSubmit={() => setIsEditingCategory(false)}
-                        budgetCategory={props.categoryName}
-                        defaultValue={formatMoney(props.budgeted.toString(), 2)}
-                        monthCode={props.monthCode}
-                    />
-                </Modal>
-                {props.categoryName}
-                <BudgetHeaderButton icon={<Edit />} onClick={() => setIsEditingCategory(true)} flat />
-                <BudgetHeaderButton icon={<Trash />} onClick={() => props.onDeleteCategory()} flat />
+                <GridHeaderContainer>
+                    <Button icon={<Edit />} onClick={() => setIsEditingCategory(true)} flat />
+                    {props.categoryName}
+                    <Button icon={<Trash />} onClick={() => props.onDeleteCategory()} flat />
+                </GridHeaderContainer>
             </GridBoxContainer>
-            <GridBoxContainer>{props.budgeted}</GridBoxContainer>
-            <GridBoxContainer>{props.activity}</GridBoxContainer>
-            <GridBoxContainer>{props.budgeted + props.activity}</GridBoxContainer>
+            <GridBoxContainer>{formatMoney(props.budgeted, 2)}</GridBoxContainer>
+            <GridBoxContainer>{formatMoney(props.activity, 2)}</GridBoxContainer>
+            <GridBoxContainer>{formatMoney(props.budgeted + props.activity, 2)}</GridBoxContainer>
         </>
     );
 };
 
 const BudgetGroupRow = (props: BudgetGroupRowProps): JSX.Element => {
+    const [isAddingGroup, setIsAddingGroup] = useState(false);
     const [isAddingCategory, setIsAddingCategory] = useState(false);
 
     return (
         <>
+            <Modal visible={isAddingGroup} onClose={() => setIsAddingGroup(false)}>
+                <BudgetGroupAddForm monthCode={props.monthCode} onSubmit={() => setIsAddingGroup(false)} />
+            </Modal>
+            <Modal visible={isAddingCategory} onClose={() => setIsAddingCategory(false)}>
+                <BudgetCategoryAddForm group={props.groupName} monthCode={props.monthCode} />
+            </Modal>
             <BudgetGroupContainer>
-                <Modal visible={isAddingCategory} onClose={() => setIsAddingCategory(false)}>
-                    <BudgetCategoryAddForm
-                        onSubmit={() => setIsAddingCategory(false)}
-                        group={props.groupName}
-                        monthCode={props.monthCode}
-                    />
-                </Modal>
-                {props.groupName}
-                <BudgetHeaderButton icon={<PlusIcon />} onClick={() => setIsAddingCategory(true)} flat />
-                <BudgetHeaderButton icon={<Trash />} onClick={() => props.onDeleteGroup()} flat />
+                <GridHeaderContainer>
+                    <BudgetHeaderButton icon={<PlusIcon />} onClick={() => setIsAddingGroup(true)} flat />
+                    {props.groupName}
+                    <BudgetHeaderButton icon={<PlusIcon />} onClick={() => setIsAddingCategory(true)} flat />
+                    <BudgetHeaderButton icon={<Trash />} onClick={() => props.onDeleteGroup()} flat />
+                </GridHeaderContainer>
             </BudgetGroupContainer>
         </>
     );
 };
 
-const BudgetScreen = (props: AllProps): JSX.Element => {
-    const [monthCode, setMonthCode] = useState<MonthCode>(getMonthCodeFromDate(new Date()));
+const BudgetHeader = (props: BudgetHeaderProps): JSX.Element => {
+    return (
+        <>
+            <GridHeaderContainer>
+                <MonthDisplayContainer>
+                    <Button icon={<LeftArrow />} onClick={props.onPrevMonth} flat />
+                    <MonthDisplay>{getDateFromMonthCode(props.monthCode).toLocaleDateString()}</MonthDisplay>
+                    <Button icon={<RightArrow />} onClick={props.onNextMonth} flat />
+                </MonthDisplayContainer>
+                <Button onClick={props.onCopyPreviousMonth} flat>
+                    {t("copyPreviousMonth")}
+                </Button>
+            </GridHeaderContainer>
+            <GridBoxContainer>{t("category")}</GridBoxContainer>
+            <GridBoxContainer>{t("budgeted")}</GridBoxContainer>
+            <GridBoxContainer>{t("activity")}</GridBoxContainer>
+            <GridBoxContainer>{t("available")}</GridBoxContainer>
+        </>
+    );
+};
 
-    if (!props.totalBudget[getMonthCodeString(monthCode)] && !props.isAddingMonthlyBudget) {
-        // Month does not exist yet and we are not in the process of creating it, so create it
-        props.addBudgetMonth(monthCode);
+const BudgetScreen = (): JSX.Element => {
+    const [monthCode, setMonthCode] = useState<MonthCode>(getMonthCodeFromDate(new Date()));
+    const {
+        totalBudget,
+        toBeBudgeted,
+        addBudgetMonth,
+        deleteBudgetCategory,
+        deleteBudgetGroup,
+        copyBudgetMonth,
+    } = useBudget();
+    const { transactions } = useTransactions();
+
+    if (!totalBudget[getMonthCodeString(monthCode)]) {
+        // Month does not exist yet, so create it
+        addBudgetMonth(monthCode);
     }
 
     const monthCodeString = getMonthCodeString(monthCode);
 
-    const currentMonthlyBudgetKeys = props.totalBudget[monthCodeString]
-        ? Object.keys(props.totalBudget[monthCodeString])
-        : [];
+    const currentMonthlyBudgetKeys = totalBudget[monthCodeString] ? Object.keys(totalBudget[monthCodeString]) : [];
 
     const handleNextMonthPress = () => {
         setMonthCode((currMonth: MonthCode) => getNextMonthCode(currMonth));
@@ -232,7 +196,7 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
     };
 
     const handleCopyPreviousMonth = () => {
-        props.copyBudgetMonth(getPrevMonthCode(monthCode), monthCode);
+        copyBudgetMonth(getPrevMonthCode(monthCode), monthCode);
     };
 
     return (
@@ -245,54 +209,35 @@ const BudgetScreen = (props: AllProps): JSX.Element => {
                     onCopyPreviousMonth={handleCopyPreviousMonth}
                 />
                 {currentMonthlyBudgetKeys.length === 0 && <InfoCard>{t("noCategories")}</InfoCard>}
-                {props.toBeBudgeted !== 0 && (
+                {toBeBudgeted !== 0 && (
                     <InfoCard>
-                        {t("toBeBudgeted")} {formatMoney(props.toBeBudgeted, 2)}
+                        {t("toBeBudgeted")} {formatMoney(toBeBudgeted, 2)}
                     </InfoCard>
                 )}
                 {currentMonthlyBudgetKeys.map((budgetGroupName: string, index: number) => (
-                    <>
+                    <React.Fragment key={"budgetGroup" + index}>
                         <BudgetGroupRow
-                            key={"budgetGroup" + index}
                             groupName={budgetGroupName}
-                            onDeleteGroup={() => props.deleteBudgetGroup(monthCode, budgetGroupName)}
+                            onDeleteGroup={() => deleteBudgetGroup(monthCode, budgetGroupName)}
                             monthCode={monthCode}
                         />
-                        {Object.keys(props.totalBudget[monthCodeString][budgetGroupName]).map(
-                            (categoryName: string, index: number) => (
+                        {Object.keys(totalBudget[monthCodeString][budgetGroupName]).map(
+                            (categoryName: string, categoryIndex: number) => (
                                 <BudgetCategoryRow
-                                    key={categoryName + index}
+                                    key={categoryName + categoryIndex}
                                     categoryName={categoryName}
                                     monthCode={monthCode}
-                                    onDeleteCategory={() => props.deleteBudgetCategory(monthCode, categoryName)}
-                                    activity={
-                                        props.totalBudget[monthCodeString][budgetGroupName][categoryName].activity
-                                    }
-                                    budgeted={
-                                        props.totalBudget[monthCodeString][budgetGroupName][categoryName].budgeted
-                                    }
+                                    onDeleteCategory={() => deleteBudgetCategory(monthCode, categoryName)}
+                                    activity={totalBudget[monthCodeString][budgetGroupName][categoryName].activity}
+                                    budgeted={totalBudget[monthCodeString][budgetGroupName][categoryName].budgeted}
                                 />
                             ),
                         )}
-                    </>
+                    </React.Fragment>
                 ))}
             </BudgetContainer>
         </ScreenContainer>
     );
 };
 
-const mapStateToProps = (state: ApplicationState): StateProps => ({
-    totalBudget: state.budget.totalBudget,
-    toBeBudgeted: state.budget.toBeBudgeted,
-    transactions: state.transaction.transactions,
-    isAddingMonthlyBudget: state.budget.isAddingMonthlyBudget,
-});
-
-const mapDispatchToProps: DispatchProps = {
-    deleteBudgetCategory,
-    deleteBudgetGroup,
-    addBudgetMonth,
-    copyBudgetMonth,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(BudgetScreen);
+export default BudgetScreen;

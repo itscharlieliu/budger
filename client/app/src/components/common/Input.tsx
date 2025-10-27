@@ -50,7 +50,9 @@ const TextContainer = styled.input<TextContainerProps>`
     transition: border-bottom-color 0.2s;
 `;
 
-const LabelText = styled.span<LabelTextProps>`
+const LabelText = styled.span.withConfig({
+    shouldForwardProp: (prop) => prop !== "focused",
+})<LabelTextProps>`
     display: inline-block;
     overflow: visible;
     height: 1em;

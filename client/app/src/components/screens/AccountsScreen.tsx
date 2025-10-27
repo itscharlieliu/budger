@@ -1,17 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { connect, ResolveThunks } from "react-redux";
 import styled from "styled-components";
 
 import { theme } from "../../defs/theme";
 import PlusIcon from "../../resources/images/plusIcon.svg";
 import Trash from "../../resources/images/trash.svg";
 import t from "../../services/i18n/language";
-import ApplicationState from "../../store";
-import { deleteAccount } from "../../store/accounts/accountsActions";
-import { AccountType, AllAccounts, BankAccount } from "../../store/accounts/accountsInterfaces";
-import { Transaction } from "../../store/transactions/transactionInterfaces";
+import { AccountType, BankAccount } from "../../store/accounts/accountsInterfaces";
 import formatMoney from "../../utils/formatMoney";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
@@ -19,17 +15,7 @@ import GridBoxContainer from "../common/containers/GridBoxContainer";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
 import ScreenContainer from "../common/containers/ScreenContainer";
 import AccountAddForm from "../forms/AccountAddForm";
-
-interface StateProps {
-    allAccounts: AllAccounts;
-    transactions: Transaction[];
-}
-
-interface DispatchProps {
-    deleteAccount: typeof deleteAccount;
-}
-
-type AllProps = StateProps & ResolveThunks<DispatchProps>;
+import { useAccounts } from "../../hooks/useAccounts";
 
 interface AccountsRowProps extends BankAccount {
     onDelete: () => void;
@@ -102,19 +88,21 @@ const AccountsRow = (props: AccountsRowProps): JSX.Element => {
     );
 };
 
-const AccountScreens = (props: AllProps): JSX.Element => {
+const AccountsScreen = (): JSX.Element => {
+    const { allAccounts, deleteAccount } = useAccounts();
+
     return (
         <ScreenContainer>
             <AccountsContainer>
                 <AccountsHeader />
-                {props.allAccounts.length === 0 && <InfoCard>{t("noAccounts")}</InfoCard>}
-                {props.allAccounts.map((bankAccount: BankAccount, index: number) => {
+                {allAccounts.length === 0 && <InfoCard>{t("noAccounts")}</InfoCard>}
+                {allAccounts.map((bankAccount: BankAccount, index: number) => {
                     return (
                         <AccountsRow
                             key={"bankAccount" + index}
                             name={bankAccount.name}
                             type={bankAccount.type}
-                            onDelete={() => props.deleteAccount(bankAccount.name)}
+                            onDelete={() => deleteAccount(index)}
                             cachedBalance={bankAccount.cachedBalance}
                         />
                     );
@@ -124,13 +112,4 @@ const AccountScreens = (props: AllProps): JSX.Element => {
     );
 };
 
-const mapStateToProps = (state: ApplicationState): StateProps => ({
-    allAccounts: state.accounts.allAccounts,
-    transactions: state.transaction.transactions,
-});
-
-const mapDispatchToProps: DispatchProps = {
-    deleteAccount,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AccountScreens);
+export default AccountsScreen;

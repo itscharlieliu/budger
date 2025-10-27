@@ -59,7 +59,9 @@ const RaisedButton = styled(FlatButton)`
     }
 `;
 
-const ButtonContent = styled.div<ButtonTextProps>`
+const ButtonContent = styled.div.withConfig({
+    shouldForwardProp: (prop) => prop !== "hasIcon",
+})<ButtonTextProps>`
     margin-left: ${(props: ButtonTextProps): string => (props.hasIcon ? "16px" : "")};
 `;
 

@@ -1,36 +1,14 @@
 "use client";
 
-import React from "react";
-import { connect, ResolveThunks } from "react-redux";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import AppBar from "./AppBar";
 import NavigationDrawer from "./NavigationDrawer";
 import { I18N_DEFAULT_OPTIONS } from "../defs/i18n";
 import { language } from "../services/i18n/language";
-import ApplicationState from "../store";
-import {
-    initAccounts,
-    initBudget,
-    initTransactions,
-    setLanguageInitialized,
-} from "../store/initialization/initializationActions";
-import { restoreUserSession } from "../store/auth/authActions";
+import { useAuth } from "../contexts/AuthContext";
 import useMount from "../utils/useMount";
-
-interface StateProps {
-    translationInitialized: boolean;
-}
-
-interface DispatchProps {
-    setLanguageInitialized: typeof setLanguageInitialized;
-    initBudget: typeof initBudget;
-    initTransactions: typeof initTransactions;
-    initAccounts: typeof initAccounts;
-    restoreUserSession: typeof restoreUserSession;
-}
-
-type AllProps = StateProps & ResolveThunks<DispatchProps>;
 
 const AppContainer = styled.div`
     width: 100vw;
@@ -52,22 +30,26 @@ const ContentArea = styled.div`
     overflow: auto;
 `;
 
-function AppLayout({ children, ...props }: AllProps & { children: React.ReactNode }): JSX.Element {
+interface AppLayoutProps {
+    children: React.ReactNode;
+}
+
+export default function AppLayout({ children }: AppLayoutProps): JSX.Element {
+    const [translationInitialized, setTranslationInitialized] = useState(false);
+    const { restoreUserSession } = useAuth();
+
     useMount(() => {
         // Initialize authentication first
-        props.restoreUserSession();
+        restoreUserSession();
 
         // initialize everything on app mount
         language
             .init(I18N_DEFAULT_OPTIONS)
-            .then(() => props.setLanguageInitialized(true))
+            .then(() => setTranslationInitialized(true))
             .catch((e: Error) => console.error(e));
-        props.initBudget();
-        props.initTransactions();
-        props.initAccounts();
     });
 
-    if (!props.translationInitialized) {
+    if (!translationInitialized) {
         return <div>No init</div>;
     }
 
@@ -81,17 +63,3 @@ function AppLayout({ children, ...props }: AllProps & { children: React.ReactNod
         </AppContainer>
     );
 }
-
-const mapStateToProps = (state: ApplicationState): StateProps => ({
-    translationInitialized: state.initialization.translationInitialized,
-});
-
-const mapDispatchToProps: DispatchProps = {
-    setLanguageInitialized,
-    initBudget,
-    initTransactions,
-    initAccounts,
-    restoreUserSession,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AppLayout);
