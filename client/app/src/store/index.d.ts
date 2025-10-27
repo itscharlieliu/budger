@@ -1,4 +1,5 @@
 import { AccountsState } from "./accounts/accountsInterfaces";
+import { AuthState } from "./auth/authInterfaces";
 import { BudgetState } from "./budget/budgetInterfaces";
 import { InitializationState } from "./initialization/initializationInterfaces";
 import { TransactionState } from "./transactions/transactionInterfaces";
@@ -10,4 +11,5 @@ export default interface ApplicationState {
     initialization: InitializationState;
     accounts: AccountsState;
     data: DataState;
+    auth: AuthState;
 }

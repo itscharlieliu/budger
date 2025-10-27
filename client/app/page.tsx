@@ -7,7 +7,7 @@ export default function HomePage() {
     const router = useRouter();
 
     useEffect(() => {
-        router.push("/budget");
+        router.push("/login");
     }, [router]);
 
     return <div>Redirecting...</div>;

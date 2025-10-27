@@ -15,6 +15,7 @@ import {
     initTransactions,
     setLanguageInitialized,
 } from "../store/initialization/initializationActions";
+import { restoreUserSession } from "../store/auth/authActions";
 import useMount from "../utils/useMount";
 
 interface StateProps {
@@ -26,6 +27,7 @@ interface DispatchProps {
     initBudget: typeof initBudget;
     initTransactions: typeof initTransactions;
     initAccounts: typeof initAccounts;
+    restoreUserSession: typeof restoreUserSession;
 }
 
 type AllProps = StateProps & ResolveThunks<DispatchProps>;
@@ -52,6 +54,9 @@ const ContentArea = styled.div`
 
 function AppLayout({ children, ...props }: AllProps & { children: React.ReactNode }): JSX.Element {
     useMount(() => {
+        // Initialize authentication first
+        props.restoreUserSession();
+
         // initialize everything on app mount
         language
             .init(I18N_DEFAULT_OPTIONS)
@@ -86,6 +91,7 @@ const mapDispatchToProps: DispatchProps = {
     initBudget,
     initTransactions,
     initAccounts,
+    restoreUserSession,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppLayout);

@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 
 import accountsReducer from "./accounts/accountsReducer";
+import authReducer from "./auth/authReducer";
 import budgetReducer from "./budget/budgetReducer";
 import initializationReducer from "./initialization/initializationReducer";
 import transactionReducer from "./transactions/transactionReducer";
@@ -14,6 +15,7 @@ const rootReducer = combineReducers<ApplicationState>({
     initialization: initializationReducer,
     accounts: accountsReducer,
     data: dataReducer,
+    auth: authReducer,
 });
 
 export default rootReducer;
