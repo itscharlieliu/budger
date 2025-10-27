@@ -3,11 +3,12 @@
 -- Create database (run this manually)
 -- CREATE DATABASE budger;
 
--- Users table
+-- Users table with authentication
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     name VARCHAR(255) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -38,9 +39,10 @@ CREATE TABLE IF NOT EXISTS transactions (
 );
 
 -- Insert sample data for testing. TODO Remove
-INSERT INTO users (email, name) VALUES 
-    ('john@example.com', 'John Doe'),
-    ('jane@example.com', 'Jane Smith')
+-- Note: These are hashed passwords for 'password123'
+INSERT INTO users (email, name, password_hash) VALUES 
+    ('john@example.com', 'John Doe', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
+    ('jane@example.com', 'Jane Smith', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi')
 ON CONFLICT (email) DO NOTHING;
 
 INSERT INTO accounts (user_id, name, account_type, balance) VALUES 
