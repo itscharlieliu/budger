@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import styled from "styled-components";
 
@@ -13,7 +11,7 @@ import Button from "../common/Button";
 import Modal from "../common/Modal";
 import GridBoxContainer from "../common/containers/GridBoxContainer";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
-import ScreenContainer from "../common/containers/ScreenContainer";
+import SecureScreenContainer from "../common/containers/SecureScreenContainer";
 import AccountAddForm from "../forms/AccountAddForm";
 import { useAccounts } from "../../hooks/useAccounts";
 
@@ -92,7 +90,7 @@ const AccountsScreen = (): JSX.Element => {
     const { allAccounts, deleteAccount } = useAccounts();
 
     return (
-        <ScreenContainer>
+        <SecureScreenContainer>
             <AccountsContainer>
                 <AccountsHeader />
                 {allAccounts.length === 0 && <InfoCard>{t("noAccounts")}</InfoCard>}
@@ -108,7 +106,7 @@ const AccountsScreen = (): JSX.Element => {
                     );
                 })}
             </AccountsContainer>
-        </ScreenContainer>
+        </SecureScreenContainer>
     );
 };
 

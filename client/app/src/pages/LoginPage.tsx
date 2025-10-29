@@ -1,13 +1,11 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import Button from "../src/components/common/Button";
-import Input from "../src/components/common/Input";
-import { theme } from "../src/defs/theme";
-import { useAuth, LoginCredentials, RegisterCredentials } from "../src/contexts/AuthContext";
+import Button from "../components/common/Button";
+import Input from "../components/common/Input";
+import { theme } from "../defs/theme";
+import { useAuth, LoginCredentials, RegisterCredentials } from "../contexts/AuthContext";
 
 const LoginContainer = styled.div`
     display: flex;
@@ -86,7 +84,7 @@ const ToggleMode = styled.div`
 `;
 
 export default function LoginPage() {
-    const router = useRouter();
+    const navigate = useNavigate();
     const { isLoading, error, isAuthenticated, login, register } = useAuth();
     const [isLoginMode, setIsLoginMode] = useState(true);
     const [formData, setFormData] = useState({
@@ -95,22 +93,12 @@ export default function LoginPage() {
         password: "",
     });
 
-    // // Restore session on mount
-    // useEffect(() => {
-    //     restoreUserSession();
-    // }, [restoreUserSession]);
-
     // Redirect if already authenticated
     useEffect(() => {
         if (isAuthenticated) {
-            router.push("/budget");
+            navigate("/budget");
         }
-    }, [isAuthenticated, router]);
-
-    // // Clear error when switching modes
-    // useEffect(() => {
-    //     clearError();
-    // }, [isLoginMode, clearError]);
+    }, [isAuthenticated, navigate]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;

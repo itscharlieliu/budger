@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import styled from "styled-components";
 
@@ -12,7 +10,7 @@ import Button from "../common/Button";
 import Modal from "../common/Modal";
 import GridBoxContainer from "../common/containers/GridBoxContainer";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
-import ScreenContainer from "../common/containers/ScreenContainer";
+import SecureScreenContainer from "../common/containers/SecureScreenContainer";
 import TransactionAddForm from "../forms/TransactionAddForm";
 import { useTransactions } from "../../hooks/useTransactions";
 
@@ -115,7 +113,7 @@ const TransactionsScreen = (): JSX.Element => {
     const { transactions, deleteTransaction } = useTransactions();
 
     return (
-        <ScreenContainer>
+        <SecureScreenContainer>
             <TransactionsContainer>
                 <TransactionsHeader />
                 {transactions.length === 0 && <InfoCard>{t("noTransactions")}</InfoCard>}
@@ -128,7 +126,7 @@ const TransactionsScreen = (): JSX.Element => {
                     />
                 ))}
             </TransactionsContainer>
-        </ScreenContainer>
+        </SecureScreenContainer>
     );
 };
 

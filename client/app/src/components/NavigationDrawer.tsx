@@ -1,7 +1,5 @@
-"use client";
-
 import React, { useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { ACCOUNTS, BUDGET, TRANSACTIONS } from "../defs/routerPaths";
@@ -28,8 +26,8 @@ const VersionContainer = styled.div`
 
 const NavigationDrawer = (): JSX.Element => {
     const [isAddingTransaction, setIsAddingTransaction] = useState(false);
-    const pathname = usePathname();
-    const router = useRouter();
+    const location = useLocation();
+    const navigate = useNavigate();
 
     return (
         <Drawer>
@@ -45,16 +43,16 @@ const NavigationDrawer = (): JSX.Element => {
             <DrawerButton onClick={() => setIsAddingTransaction(true)} icon={<PlusIcon />}>
                 {t("addTransaction")}
             </DrawerButton>
-            <DrawerListItem isHighlighted={pathname === BUDGET} isButton onClick={() => router.push(BUDGET)}>
+            <DrawerListItem isHighlighted={location.pathname === BUDGET} isButton onClick={() => navigate(BUDGET)}>
                 <Icon edge={"left"}>
                     <WalletIcon />
                 </Icon>
                 {t("budget")}
             </DrawerListItem>
             <DrawerListItem
-                isHighlighted={pathname === TRANSACTIONS}
+                isHighlighted={location.pathname === TRANSACTIONS}
                 isButton
-                onClick={() => router.push(TRANSACTIONS)}
+                onClick={() => navigate(TRANSACTIONS)}
             >
                 <Icon edge={"left"}>
                     <RecieptIcon />
@@ -62,14 +60,14 @@ const NavigationDrawer = (): JSX.Element => {
                 {t("transactions")}
             </DrawerListItem>
 
-            <DrawerListItem isHighlighted={pathname === ACCOUNTS} isButton onClick={() => router.push(ACCOUNTS)}>
+            <DrawerListItem isHighlighted={location.pathname === ACCOUNTS} isButton onClick={() => navigate(ACCOUNTS)}>
                 <Icon edge={"left"}>
                     <AccountsIcon />
                 </Icon>
                 {t("accounts")}
             </DrawerListItem>
 
-            <VersionContainer>v{process.env.NEXT_PUBLIC_VERSION || "0.3.0"}</VersionContainer>
+            <VersionContainer>v{import.meta.env?.VITE_VERSION || "0.3.0"}</VersionContainer>
         </Drawer>
     );
 };

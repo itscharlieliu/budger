@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import styled from "styled-components";
 
@@ -24,7 +22,7 @@ import Button from "../common/Button";
 import Modal from "../common/Modal";
 import GridBoxContainer from "../common/containers/GridBoxContainer";
 import GridHeaderContainer from "../common/containers/GridHeaderContainer";
-import ScreenContainer from "../common/containers/ScreenContainer";
+import SecureScreenContainer from "../common/containers/SecureScreenContainer";
 import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
 import BudgetCategoryEditForm from "../forms/BudgetCategoryEditForm";
 import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
@@ -200,7 +198,7 @@ const BudgetScreen = (): JSX.Element => {
     };
 
     return (
-        <ScreenContainer>
+        <SecureScreenContainer>
             <BudgetContainer>
                 <BudgetHeader
                     monthCode={monthCode}
@@ -236,7 +234,7 @@ const BudgetScreen = (): JSX.Element => {
                     </React.Fragment>
                 ))}
             </BudgetContainer>
-        </ScreenContainer>
+        </SecureScreenContainer>
     );
 };
 
