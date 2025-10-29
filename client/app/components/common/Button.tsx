@@ -59,9 +59,7 @@ const RaisedButton = styled(FlatButton)`
     }
 `;
 
-const ButtonContent = styled.div.withConfig({
-    shouldForwardProp: (prop) => prop !== "hasIcon",
-})<ButtonTextProps>`
+const ButtonContent = styled.div<ButtonTextProps>`
     margin-left: ${(props: ButtonTextProps): string => (props.hasIcon ? "16px" : "")};
 `;
 
@@ -72,19 +70,19 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Button = (props: ButtonProps): JSX.Element => {
-    const { children, ...otherProps } = props;
-    if (props.flat) {
+    const { children, flat, icon, noMargin, ...otherProps } = props;
+    if (flat) {
         return (
             <FlatButton {...otherProps}>
-                {props.icon}
-                {children && <ButtonContent hasIcon={!!props.icon}>{children}</ButtonContent>}
+                {icon}
+                {children && <ButtonContent hasIcon={!!icon}>{children}</ButtonContent>}
             </FlatButton>
         );
     }
     return (
         <RaisedButton {...otherProps}>
-            {props.icon}
-            {children && <ButtonContent hasIcon={!!props.icon}>{children}</ButtonContent>}
+            {icon}
+            {children && <ButtonContent hasIcon={!!icon}>{children}</ButtonContent>}
         </RaisedButton>
     );
 };

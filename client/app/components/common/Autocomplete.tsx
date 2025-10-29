@@ -34,6 +34,11 @@ const DropDown = styled.div`
     z-index: ${ZIndex.dropdown};
 `;
 
+// const ButtonContent = styled.div.withConfig({
+//     shouldForwardProp: (prop) => prop !== "hasIcon",
+// })<ButtonTextProps>`
+
+// Global shouldForwardProp handles filtering automatically
 const DropDownOption = styled.div<DropDownOptionProps>`
     padding: 16px;
     background-color: ${(props: DropDownOptionProps) =>
