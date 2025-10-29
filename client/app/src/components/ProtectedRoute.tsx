@@ -12,9 +12,10 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     const router = useRouter();
     const { isAuthenticated, isLoading, restoreUserSession } = useAuth();
 
-    useEffect(() => {
-        restoreUserSession();
-    }, [restoreUserSession]);
+    // TODO Fix this
+    // useEffect(() => {
+    //     restoreUserSession();
+    // }, [restoreUserSession]);
 
     useEffect(() => {
         if (!isLoading && !isAuthenticated) {
