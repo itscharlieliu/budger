@@ -5,6 +5,7 @@ export const UPDATE_TRANSACTIONS_SUCCESS = "UPDATE_TRANSACTIONS_SUCCESS";
 export const UPDATE_TRANSACTIONS_FAILURE = "UPDATE_TRANSACTIONS_FAILURE";
 
 export interface Transaction {
+    id?: string;
     account: string;
     date: Date;
     payee: string;

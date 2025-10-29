@@ -43,7 +43,7 @@ const ModalContainer = styled.div`
 `;
 
 const Modal = (props: ModalProps): JSX.Element | null => {
-    const [isShowing, setIsShowing] = useState<boolean>(false);
+    // const [isShowing, setIsShowing] = useState<boolean>(false);
 
     const visible = props.visible === undefined ? true : props.visible;
 
@@ -55,28 +55,12 @@ const Modal = (props: ModalProps): JSX.Element | null => {
         props.visible && props.onClose !== undefined,
     );
 
-    // Initialize opacity at 0, so we fade in when user activates component
-    useEffect(() => {
-        if (visible) {
-            // We need to add a timeout here because sometimes react sets the state synchronously,
-            // which disables the animation
-            const timeout = setTimeout(() => {
-                setIsShowing(true);
-            }, 10);
-            return () => clearTimeout(timeout);
-        }
-        const timeout = setTimeout(() => setIsShowing(false), FADE_DURATION_MS);
-        return () => {
-            clearTimeout(timeout);
-        };
-    }, [visible]);
-
-    if (!visible && !isShowing) {
+    if (!visible) {
         return null;
     }
 
     return (
-        <ModalBackground opacity={visible && isShowing ? 1 : 0}>
+        <ModalBackground opacity={visible ? 1 : 0}>
             <ModalContainer ref={modalRef}>{props.children}</ModalContainer>
         </ModalBackground>
     );

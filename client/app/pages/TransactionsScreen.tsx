@@ -12,6 +12,7 @@ import GridHeaderContainer from "../components/common/containers/GridHeaderConta
 import SecureScreenContainer from "../components/common/containers/SecureScreenContainer";
 import TransactionAddForm from "../components/forms/TransactionAddForm";
 import { useTransactions } from "../hooks/useTransactions";
+import formatMoney from "../utils/formatMoney";
 
 interface TransactionsRowProps extends Transaction {
     onDelete: () => void;
@@ -77,8 +78,9 @@ const TransactionsHeader = (): JSX.Element => {
 };
 
 const TransactionsRow = (props: TransactionsRowProps): JSX.Element => {
-    const inFlow = props.activity > 0 ? props.activity : 0;
-    const outFlow = props.activity < 0 ? -props.activity : 0;
+    // activity is in cents, so divide by 100 to get dollars for display
+    const inFlow = props.activity > 0 ? props.activity / 100 : 0;
+    const outFlow = props.activity < 0 ? -props.activity / 100 : 0;
 
     return (
         <>
@@ -96,10 +98,10 @@ const TransactionsRow = (props: TransactionsRowProps): JSX.Element => {
                 <span>{props.date.toLocaleDateString()}</span>
             </GridBoxContainer>
             <GridBoxContainer>
-                <span>{inFlow}</span>
+                <span>{inFlow > 0 ? formatMoney(inFlow, 2) : ""}</span>
             </GridBoxContainer>
             <GridBoxContainer>
-                <span>{outFlow}</span>
+                <span>{outFlow > 0 ? formatMoney(outFlow, 2) : ""}</span>
             </GridBoxContainer>
             <GridBoxContainer>
                 <span>{props.note}</span>
@@ -109,18 +111,23 @@ const TransactionsRow = (props: TransactionsRowProps): JSX.Element => {
 };
 
 const TransactionsScreen = (): JSX.Element => {
-    const { transactions, deleteTransaction } = useTransactions();
+    const { transactions, deleteTransaction, isLoading } = useTransactions();
+
+    const handleDelete = async (transactionId: string) => {
+        await deleteTransaction(transactionId);
+    };
 
     return (
         <SecureScreenContainer>
             <TransactionsContainer>
                 <TransactionsHeader />
-                {transactions.length === 0 && <InfoCard>No transactions to show.</InfoCard>}
+                {isLoading && <InfoCard>Loading transactions...</InfoCard>}
+                {!isLoading && transactions.length === 0 && <InfoCard>No transactions to show.</InfoCard>}
 
-                {transactions.map((transaction: Transaction, index: number) => (
+                {transactions.map((transaction: Transaction) => (
                     <TransactionsRow
-                        key={"transaction" + index}
-                        onDelete={() => deleteTransaction(index.toString())}
+                        key={transaction.id || `transaction-${transaction.date.getTime()}`}
+                        onDelete={() => transaction.id && handleDelete(transaction.id)}
                         {...transaction}
                     />
                 ))}

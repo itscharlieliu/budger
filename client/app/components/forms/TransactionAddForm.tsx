@@ -89,7 +89,7 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
         return errors;
     };
 
-    const onSubmit = (values: FormValues) => {
+    const onSubmit = async (values: FormValues) => {
         const activity = (parseFloat(values.inFlow || "0") - parseFloat(values.outFlow || "0")) * 100;
 
         const transaction: Transaction = {
@@ -101,7 +101,7 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
             activity,
         };
 
-        addTransaction(transaction);
+        await addTransaction(transaction);
         props.onSubmit();
     };
 
@@ -241,7 +241,7 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
                             />
                         )}
                     </Field>
-                    <Field name={"notes"}>
+                    <Field name={"note"}>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
                             <Input
                                 {...input}
