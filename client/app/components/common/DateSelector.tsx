@@ -6,8 +6,6 @@ import DayPickerInput from "react-day-picker/DayPickerInput";
 import styled from "styled-components";
 
 import { ZIndex } from "../../defs/theme";
-import t from "../../services/i18n/language";
-
 import Input, { InputProps } from "./Input";
 
 interface DateSelectorProps extends DayPickerInputProps {
@@ -44,14 +42,12 @@ const DateSelector = React.forwardRef(
                 <DayPickerInput
                     ref={ref}
                     component={forwardRef(function DateInput(inputProps: InputProps, ref: Ref<HTMLInputElement>) {
-                        return (
-                            <Input ref={ref} label={t("date")} error={error} helperText={helperText} {...inputProps} />
-                        );
+                        return <Input ref={ref} label="Date" error={error} helperText={helperText} {...inputProps} />;
                     })}
                     onDayChange={handleDayChange}
                     placeholder={""}
                     format={moment.localeData().longDateFormat("L")}
-                    formatDate={(date: Date) => t("fullDate", { date })}
+                    formatDate={(date: Date) => moment(date).format("L")}
                     parseDate={(dateString: string, format: string) => {
                         const newDate = moment(dateString, format, true);
                         if (newDate.isValid()) {

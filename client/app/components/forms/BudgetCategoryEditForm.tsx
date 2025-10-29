@@ -1,7 +1,6 @@
 import React from "react";
 import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
 
-import t from "../../services/i18n/language";
 import formatMoney from "../../utils/formatMoney";
 import { MonthCode } from "../../utils/getMonthCode";
 import Button from "../common/Button";
@@ -45,7 +44,7 @@ const BudgetCategoryEditForm = (props: OwnProps): JSX.Element => {
                                 {...input}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
-                                label={t("budgeted")}
+                                label="Budgeted"
                                 autoFocus
                                 onFocus={(event: React.FocusEvent<HTMLInputElement>) => {
                                     event.target.select();

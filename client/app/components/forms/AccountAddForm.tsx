@@ -1,7 +1,6 @@
 import React from "react";
 import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
 
-import t from "../../services/i18n/language";
 import { AccountType, BankAccount } from "../../store/accounts/accountsInterfaces";
 import formatMoney from "../../utils/formatMoney";
 import Button from "../common/Button";
@@ -47,7 +46,7 @@ const AccountAddForm = (props: OwnProps): JSX.Element => {
         const errors: FormErrors = {};
 
         if (!values.accountName) {
-            errors.accountName = t("cannotBeEmpty");
+            errors.accountName = "This field cannot be empty";
         }
 
         return errors;
@@ -65,14 +64,14 @@ const AccountAddForm = (props: OwnProps): JSX.Element => {
                                 {...input}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
-                                label={t("accountName")}
+                                label="Account Name"
                                 autoFocus
                             />
                         )}
                     </Field>
                     <Field name={"budgeted"} type={"checkbox"}>
                         {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Switch {...input} spaced error={meta.touched && meta.error} label={t("budgeted")} />
+                            <Switch {...input} spaced error={meta.touched && meta.error} label="Budgeted" />
                         )}
                     </Field>
                     <Field name={"startingBalance"} format={(value: string) => formatMoney(value, 2)} formatOnBlur>
@@ -81,7 +80,7 @@ const AccountAddForm = (props: OwnProps): JSX.Element => {
                                 {...input}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
-                                label={t("startingBalance")}
+                                label="Starting Balance"
                             />
                         )}
                     </Field>

@@ -7,7 +7,6 @@ import RightArrow from "../resources/images/RightArrow.svg";
 import Edit from "../resources/images/edit.svg";
 import PlusIcon from "../resources/images/plusIcon.svg";
 import Trash from "../resources/images/trash.svg";
-import t from "../services/i18n/language";
 import { BudgetCategory } from "../store/budget/budgetInterfaces";
 import formatMoney from "../utils/formatMoney";
 import {
@@ -153,13 +152,13 @@ const BudgetHeader = (props: BudgetHeaderProps): JSX.Element => {
                     <Button icon={<RightArrow />} onClick={props.onNextMonth} flat />
                 </MonthDisplayContainer>
                 <Button onClick={props.onCopyPreviousMonth} flat>
-                    {t("copyPreviousMonth")}
+                    Copy previous month
                 </Button>
             </GridHeaderContainer>
-            <GridBoxContainer>{t("category")}</GridBoxContainer>
-            <GridBoxContainer>{t("budgeted")}</GridBoxContainer>
-            <GridBoxContainer>{t("activity")}</GridBoxContainer>
-            <GridBoxContainer>{t("available")}</GridBoxContainer>
+            <GridBoxContainer>Category</GridBoxContainer>
+            <GridBoxContainer>Budgeted</GridBoxContainer>
+            <GridBoxContainer>Activity</GridBoxContainer>
+            <GridBoxContainer>Remaining</GridBoxContainer>
         </>
     );
 };
@@ -206,11 +205,14 @@ const BudgetScreen = (): JSX.Element => {
                     onPrevMonth={handlePrevMonthPress}
                     onCopyPreviousMonth={handleCopyPreviousMonth}
                 />
-                {currentMonthlyBudgetKeys.length === 0 && <InfoCard>{t("noCategories")}</InfoCard>}
-                {toBeBudgeted !== 0 && (
+                {currentMonthlyBudgetKeys.length === 0 && (
                     <InfoCard>
-                        {t("toBeBudgeted")} {formatMoney(toBeBudgeted, 2)}
+                        It looks like you haven't added any categories yet! Try adding a category group by pressing the
+                        + button next to the Category header.
                     </InfoCard>
+                )}
+                {toBeBudgeted !== 0 && (
+                    <InfoCard>This amount still needs to be budgeted: {formatMoney(toBeBudgeted, 2)}</InfoCard>
                 )}
                 {currentMonthlyBudgetKeys.map((budgetGroupName: string, index: number) => (
                     <React.Fragment key={"budgetGroup" + index}>

@@ -3,7 +3,6 @@ import DayPickerInput from "react-day-picker/DayPickerInput";
 import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
 import styled from "styled-components";
 
-import t from "../../services/i18n/language";
 import { AllAccounts, BankAccount } from "../../store/accounts/accountsInterfaces";
 import { TotalBudget } from "../../store/budget/budgetInterfaces";
 import { Transaction } from "../../store/transactions/transactionInterfaces";
@@ -67,24 +66,24 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
         const errors: FormErrors = {};
 
         if (!values.toFrom) {
-            errors.toFrom = t("required");
+            errors.toFrom = "Required";
         }
 
         if (!values.account) {
-            errors.account = t("required");
+            errors.account = "Required";
         }
 
         if (!values.category) {
-            errors.category = t("required");
+            errors.category = "Required";
         }
 
         if (!values.date) {
-            errors.date = t("required");
+            errors.date = "Required";
         }
 
         if (!values.inFlow && !values.outFlow) {
-            errors.inFlow = t("required");
-            errors.outFlow = t("required");
+            errors.inFlow = "Required";
+            errors.outFlow = "Required";
         }
 
         return errors;
@@ -155,7 +154,7 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
                                 options={[]}
                                 error={meta.touched && meta.error}
                                 helperText={meta.touched && meta.error}
-                                label={t("toFrom")}
+                                label="To / From"
                                 onFocus={() => accountInputRef.current && accountInputRef.current.focus()}
                                 ref={toFromInputRef}
                             />
@@ -175,7 +174,7 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
                                 options={getAccountOptions()}
                                 error={meta.touched && meta.error}
                                 helperText={meta.touched && meta.error}
-                                label={t("account")}
+                                label="Account"
                                 onFocus={() => categoryInputRef.current && categoryInputRef.current.focus()}
                                 ref={accountInputRef}
                             />
@@ -195,7 +194,7 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
                                 options={getCategoryOptions()}
                                 error={meta.touched && meta.error}
                                 helperText={meta.touched && meta.error}
-                                label={t("category")}
+                                label="Category"
                                 onFocus={() => dateInputRef.current && dateInputRef.current.getInput().focus()}
                                 ref={categoryInputRef}
                             />
@@ -226,7 +225,7 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
                                 value={input.value || ""}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
-                                label={t("out")}
+                                label="Out"
                                 ref={outInputRef}
                             />
                         )}
@@ -238,7 +237,7 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
                                 value={input.value || ""}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
-                                label={t("in")}
+                                label="In"
                             />
                         )}
                     </Field>
@@ -248,15 +247,15 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
                                 {...input}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
-                                label={t("notes")}
+                                label="Notes"
                             />
                         )}
                     </Field>
 
                     <ButtonContainer>
-                        <AddFormButton type={"submit"}>{t("add")}</AddFormButton>
+                        <AddFormButton type={"submit"}>Add</AddFormButton>
                         <AddFormButton type={"button"} onClick={() => props.onSubmit()}>
-                            {t("cancel")}
+                            Cancel
                         </AddFormButton>
                     </ButtonContainer>
                 </ModalFormContainer>

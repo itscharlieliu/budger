@@ -7,7 +7,6 @@ import AccountsIcon from "../resources/images/accounts.svg";
 import PlusIcon from "../resources/images/plusIcon.svg";
 import RecieptIcon from "../resources/images/reciept.svg";
 import WalletIcon from "../resources/images/wallet.svg";
-import t from "../services/i18n/language";
 
 import Button from "./common/Button";
 import Drawer from "./common/Drawer";
@@ -41,13 +40,13 @@ const NavigationDrawer = (): JSX.Element => {
             </Modal>
 
             <DrawerButton onClick={() => setIsAddingTransaction(true)} icon={<PlusIcon />}>
-                {t("addTransaction")}
+                Add Transaction
             </DrawerButton>
             <DrawerListItem isHighlighted={location.pathname === BUDGET} isButton onClick={() => navigate(BUDGET)}>
                 <Icon edge={"left"}>
                     <WalletIcon />
                 </Icon>
-                {t("budget")}
+                Budget
             </DrawerListItem>
             <DrawerListItem
                 isHighlighted={location.pathname === TRANSACTIONS}
@@ -57,14 +56,14 @@ const NavigationDrawer = (): JSX.Element => {
                 <Icon edge={"left"}>
                     <RecieptIcon />
                 </Icon>
-                {t("transactions")}
+                Transactions
             </DrawerListItem>
 
             <DrawerListItem isHighlighted={location.pathname === ACCOUNTS} isButton onClick={() => navigate(ACCOUNTS)}>
                 <Icon edge={"left"}>
                     <AccountsIcon />
                 </Icon>
-                {t("accounts")}
+                Accounts
             </DrawerListItem>
 
             <VersionContainer>v{import.meta.env?.VITE_VERSION || "0.3.0"}</VersionContainer>

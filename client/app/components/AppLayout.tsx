@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import AppBar from "./AppBar";
 import NavigationDrawer from "./NavigationDrawer";
-import { I18N_DEFAULT_OPTIONS } from "../defs/i18n";
-import { language } from "../services/i18n/language";
 import { useAuth } from "../contexts/AuthContext";
 import useMount from "../utils/useMount";
 
@@ -33,23 +31,12 @@ interface AppLayoutProps {
 }
 
 export default function AppLayout({ children }: AppLayoutProps): JSX.Element {
-    const [translationInitialized, setTranslationInitialized] = useState(false);
     const { restoreUserSession } = useAuth();
 
     useMount(() => {
         // Initialize authentication first
         restoreUserSession();
-
-        // initialize everything on app mount
-        language
-            .init(I18N_DEFAULT_OPTIONS)
-            .then(() => setTranslationInitialized(true))
-            .catch((e: Error) => console.error(e));
     });
-
-    if (!translationInitialized) {
-        return <div>No init</div>;
-    }
 
     return (
         <AppContainer>

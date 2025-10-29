@@ -4,8 +4,6 @@ import { BankAccount } from "../accounts/accountsInterfaces";
 import { TotalBudget } from "../budget/budgetInterfaces";
 import { Transaction } from "../transactions/transactionInterfaces";
 
-export const SET_TRANSLATION_INITIALIZED = "SET_TRANSLATION_INITIALIZED";
-
 export const SETTING_BUDGET_INITIALIZED = "SETTING_BUDGET_INITIALIZED";
 export const SET_BUDGET_INITIALIZED_SUCCESS = "SET_BUDGET_INITIALIZED_SUCCESS";
 export const SET_BUDGET_INITIALIZED_FAILURE = "SET_BUDGET_INITIALIZED_FAILURE";
@@ -19,7 +17,6 @@ export const SET_ACCOUNTS_INITIALIZED_SUCCESS = "SET_ACCOUNTS_INITIALIZED_SUCCES
 export const SET_ACCOUNTS_INITIALIZED_FAILURE = "SET_ACCOUNTS_INITIALIZED_FAILURE";
 
 export interface InitializationState {
-    translationInitialized: boolean;
     budgetInitialized: boolean;
     transactionsInitialized: boolean;
     accountsInitialized: boolean;
@@ -27,10 +24,6 @@ export interface InitializationState {
     isSettingTransactionsInitialized: boolean;
     isSettingAccountsInitialized: boolean;
     error: Error | null;
-}
-
-export interface SetTranslationInitializedAction extends Action<typeof SET_TRANSLATION_INITIALIZED> {
-    translationInitialized: boolean;
 }
 
 export interface SettingBudgetInitializedAction extends Action<typeof SETTING_BUDGET_INITIALIZED> {}
@@ -80,7 +73,6 @@ export type GenericSetAccountsInitializedAction =
     | SetAccountsInitializedFailureAction;
 
 export type GenericInitializationAction =
-    | SetTranslationInitializedAction
     | GenericSetBudgetInitializedAction
     | GenericSetTransactionsInitializedAction
     | GenericSetAccountsInitializedAction;

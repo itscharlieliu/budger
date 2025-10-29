@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { theme } from "../defs/theme";
 import PlusIcon from "../resources/images/plusIcon.svg";
 import Trash from "../resources/images/trash.svg";
-import t from "../services/i18n/language";
 import { Transaction } from "../store/transactions/transactionInterfaces";
 import Button from "../components/common/Button";
 import Modal from "../components/common/Modal";
@@ -52,26 +51,26 @@ const TransactionsHeader = (): JSX.Element => {
                 >
                     <TransactionAddForm onSubmit={() => setIsAddingTransaction(false)} />
                 </Modal>
-                <span>{t("toFrom")}</span>
+                <span>To / From</span>
                 <TransactionRowButton icon={<PlusIcon />} flat onClick={() => setIsAddingTransaction(true)} />
             </GridHeaderContainer>
             <GridHeaderContainer>
-                <span>{t("account")}</span>
+                <span>Account</span>
             </GridHeaderContainer>
             <GridHeaderContainer>
-                <span>{t("category")}</span>
+                <span>Category</span>
             </GridHeaderContainer>
             <GridHeaderContainer>
-                <span>{t("date")}</span>
+                <span>Date</span>
             </GridHeaderContainer>
             <GridHeaderContainer>
-                <span>{t("in")}</span>
+                <span>In</span>
             </GridHeaderContainer>
             <GridHeaderContainer>
-                <span>{t("out")}</span>
+                <span>Out</span>
             </GridHeaderContainer>
             <GridHeaderContainer>
-                <span>{t("notes")}</span>
+                <span>Notes</span>
             </GridHeaderContainer>
         </>
     );
@@ -94,7 +93,7 @@ const TransactionsRow = (props: TransactionsRowProps): JSX.Element => {
                 <span>{props.category}</span>
             </GridBoxContainer>
             <GridBoxContainer>
-                <span>{t("fullDate", { date: props.date })}</span>
+                <span>{props.date.toLocaleDateString()}</span>
             </GridBoxContainer>
             <GridBoxContainer>
                 <span>{inFlow}</span>
@@ -116,7 +115,7 @@ const TransactionsScreen = (): JSX.Element => {
         <SecureScreenContainer>
             <TransactionsContainer>
                 <TransactionsHeader />
-                {transactions.length === 0 && <InfoCard>{t("noTransactions")}</InfoCard>}
+                {transactions.length === 0 && <InfoCard>No transactions to show.</InfoCard>}
 
                 {transactions.map((transaction: Transaction, index: number) => (
                     <TransactionsRow

@@ -1,7 +1,6 @@
 import React from "react";
 import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
 
-import t from "../../services/i18n/language";
 import { MonthCode } from "../../utils/getMonthCode";
 import Button from "../common/Button";
 import Input from "../common/Input";
@@ -38,7 +37,7 @@ const BudgetGroupAddForm = (props: OwnProps): JSX.Element => {
                                 {...input}
                                 helperText={meta.touched && meta.error}
                                 error={meta.touched && meta.error}
-                                label={t("newGroup")}
+                                label="New Group"
                                 autoFocus
                             />
                         )}

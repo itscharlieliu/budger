@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import { theme, UNIT_LENGTH } from "../defs/theme";
 import BudgerLogo from "../resources/images/BudgerLogo.svg";
-import t from "../services/i18n/language";
 import { useAuth } from "../contexts/AuthContext";
 import Button from "./common/Button";
 
@@ -65,7 +64,7 @@ const AppBar = (): JSX.Element => {
         <AppBarContainer>
             <LeftSection>
                 <StyledBudgerIcon />
-                {t("budger")}
+                Budger
             </LeftSection>
 
             <RightSection>

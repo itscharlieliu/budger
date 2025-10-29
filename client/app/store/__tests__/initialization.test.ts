@@ -4,12 +4,8 @@ import thunk, { ThunkDispatch } from "redux-thunk";
 
 import { BUDGET, TO_BE_BUDGETED } from "../../defs/storageKeys";
 import ApplicationState from "../index";
-import { initBudget, setLanguageInitialized } from "../initialization/initializationActions";
-import {
-    SET_BUDGET_INITIALIZED_SUCCESS,
-    SET_TRANSLATION_INITIALIZED,
-    SETTING_BUDGET_INITIALIZED,
-} from "../initialization/initializationInterfaces";
+import { initBudget } from "../initialization/initializationActions";
+import { SET_BUDGET_INITIALIZED_SUCCESS, SETTING_BUDGET_INITIALIZED } from "../initialization/initializationInterfaces";
 
 type Dispatch = ThunkDispatch<ApplicationState, null, AnyAction>;
 
@@ -18,19 +14,6 @@ const mockStore = configureMockStore<unknown, Dispatch>([thunk]);
 describe("initialization actions", () => {
     beforeEach(() => {
         localStorage.clear();
-    });
-
-    it("successfully initializes language", () => {
-        const store = mockStore({
-            initialization: {
-                translationInitialized: false,
-            },
-        });
-        store.dispatch(setLanguageInitialized(true));
-        const actions = store.getActions();
-
-        expect(actions[0].type).toBe(SET_TRANSLATION_INITIALIZED);
-        expect(actions[0].translationInitialized).toBe(true);
     });
 
     it("successfully initializes budget", async () => {

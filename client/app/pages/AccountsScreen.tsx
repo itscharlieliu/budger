@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { theme } from "../defs/theme";
 import PlusIcon from "../resources/images/plusIcon.svg";
 import Trash from "../resources/images/trash.svg";
-import t from "../services/i18n/language";
 import { AccountType, BankAccount } from "../store/accounts/accountsInterfaces";
 import formatMoney from "../utils/formatMoney";
 import Button from "../components/common/Button";
@@ -51,11 +50,11 @@ const AccountsHeader = (): JSX.Element => {
                 <AccountAddForm onSubmit={() => setIsAddingAccount(false)} />
             </Modal>
             <GridHeaderContainer>
-                {t("accountName")}
+                Account Name
                 <AccountAddButton icon={<PlusIcon />} flat onClick={() => setIsAddingAccount(true)} />
             </GridHeaderContainer>
-            <GridHeaderContainer>{t("type")}</GridHeaderContainer>
-            <GridHeaderContainer>{t("balance")}</GridHeaderContainer>
+            <GridHeaderContainer>Type</GridHeaderContainer>
+            <GridHeaderContainer>Balance</GridHeaderContainer>
         </>
     );
 };
@@ -65,13 +64,13 @@ const AccountsRow = (props: AccountsRowProps): JSX.Element => {
 
     switch (props.type) {
         case AccountType.budgeted:
-            accountType = t("budgeted");
+            accountType = "Budgeted";
             break;
         case AccountType.unbudgeted:
-            accountType = t("unbudgeted");
+            accountType = "Unbudgeted";
             break;
         default:
-            accountType = t("unknown");
+            accountType = "Unknown";
     }
 
     return (
@@ -93,7 +92,7 @@ const AccountsScreen = (): JSX.Element => {
         <SecureScreenContainer>
             <AccountsContainer>
                 <AccountsHeader />
-                {allAccounts.length === 0 && <InfoCard>{t("noAccounts")}</InfoCard>}
+                {allAccounts.length === 0 && <InfoCard>No accounts added.</InfoCard>}
                 {allAccounts.map((bankAccount: BankAccount, index: number) => {
                     return (
                         <AccountsRow
