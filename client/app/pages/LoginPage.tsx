@@ -96,7 +96,7 @@ export default function LoginPage() {
     // Redirect if already authenticated
     useEffect(() => {
         if (isAuthenticated) {
-            navigate("/budget");
+            navigate("/transactions");
         }
     }, [isAuthenticated, navigate]);
 

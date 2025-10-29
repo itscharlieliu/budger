@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import { ACCOUNTS, BUDGET, TRANSACTIONS } from "../defs/routerPaths";
+import { ACCOUNTS, TRANSACTIONS } from "../defs/routerPaths";
 import AccountsIcon from "../resources/images/accounts.svg";
 import PlusIcon from "../resources/images/plusIcon.svg";
 import RecieptIcon from "../resources/images/reciept.svg";
-import WalletIcon from "../resources/images/wallet.svg";
 
 import Button from "./common/Button";
 import Drawer from "./common/Drawer";
@@ -42,12 +41,6 @@ const NavigationDrawer = (): JSX.Element => {
             <DrawerButton onClick={() => setIsAddingTransaction(true)} icon={<PlusIcon />}>
                 Add Transaction
             </DrawerButton>
-            <DrawerListItem isHighlighted={location.pathname === BUDGET} isButton onClick={() => navigate(BUDGET)}>
-                <Icon edge={"left"}>
-                    <WalletIcon />
-                </Icon>
-                Budget
-            </DrawerListItem>
             <DrawerListItem
                 isHighlighted={location.pathname === TRANSACTIONS}
                 isButton
