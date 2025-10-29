@@ -1,4 +1,4 @@
-import { API_URL } from "@/defs/urls";
+import { API_URL } from "../defs/urls";
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 export interface User {

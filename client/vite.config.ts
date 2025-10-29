@@ -18,7 +18,7 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            "@": path.resolve(__dirname, "./app/src"),
+            "@": path.resolve(__dirname, "./app"),
         },
     },
     base: process.env.NODE_ENV === "production" ? "/budger" : "/",

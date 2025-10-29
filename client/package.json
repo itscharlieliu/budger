@@ -47,8 +47,8 @@
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint-fix": "eslint . --ext ts,tsx --fix",
-    "pretty": "prettier --check \"app/src/**/*.{ts,tsx}\"",
-    "pretty-fix": "prettier --write \"app/src/**/*.{ts,tsx}\"",
+    "pretty": "prettier --check \"app/**/*.{ts,tsx}\"",
+    "pretty-fix": "prettier --write \"app/**/*.{ts,tsx}\"",
     "test": "jest",
     "type-check": "tsc --noEmit"
   }

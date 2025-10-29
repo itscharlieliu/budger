@@ -2,9 +2,9 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import LoginPage from "./pages/LoginPage";
-import BudgetScreen from "./components/screens/BudgetScreen";
-import AccountsScreen from "./components/screens/AccountsScreen";
-import TransactionsScreen from "./components/screens/TransactionsScreen";
+import BudgetScreen from "./pages/BudgetScreen";
+import AccountsScreen from "./pages/AccountsScreen";
+import TransactionsScreen from "./pages/TransactionsScreen";
 import { BUDGET, ACCOUNTS, TRANSACTIONS } from "./defs/routerPaths";
 
 function App() {

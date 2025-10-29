@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { theme } from "../../defs/theme";
-import LeftArrow from "../../resources/images/LeftArrow.svg";
-import RightArrow from "../../resources/images/RightArrow.svg";
-import Edit from "../../resources/images/edit.svg";
-import PlusIcon from "../../resources/images/plusIcon.svg";
-import Trash from "../../resources/images/trash.svg";
-import t from "../../services/i18n/language";
-import { BudgetCategory } from "../../store/budget/budgetInterfaces";
-import formatMoney from "../../utils/formatMoney";
+import { theme } from "../defs/theme";
+import LeftArrow from "../resources/images/LeftArrow.svg";
+import RightArrow from "../resources/images/RightArrow.svg";
+import Edit from "../resources/images/edit.svg";
+import PlusIcon from "../resources/images/plusIcon.svg";
+import Trash from "../resources/images/trash.svg";
+import t from "../services/i18n/language";
+import { BudgetCategory } from "../store/budget/budgetInterfaces";
+import formatMoney from "../utils/formatMoney";
 import {
     getDateFromMonthCode,
     getMonthCodeFromDate,
@@ -17,17 +17,17 @@ import {
     getNextMonthCode,
     getPrevMonthCode,
     MonthCode,
-} from "../../utils/getMonthCode";
-import Button from "../common/Button";
-import Modal from "../common/Modal";
-import GridBoxContainer from "../common/containers/GridBoxContainer";
-import GridHeaderContainer from "../common/containers/GridHeaderContainer";
-import SecureScreenContainer from "../common/containers/SecureScreenContainer";
-import BudgetCategoryAddForm from "../forms/BudgetCategoryAddForm";
-import BudgetCategoryEditForm from "../forms/BudgetCategoryEditForm";
-import BudgetGroupAddForm from "../forms/BudgetGroupAddForm";
-import { useBudget } from "../../hooks/useBudget";
-import { useTransactions } from "../../hooks/useTransactions";
+} from "../utils/getMonthCode";
+import Button from "../components/common/Button";
+import Modal from "../components/common/Modal";
+import GridBoxContainer from "../components/common/containers/GridBoxContainer";
+import GridHeaderContainer from "../components/common/containers/GridHeaderContainer";
+import SecureScreenContainer from "../components/common/containers/SecureScreenContainer";
+import BudgetCategoryAddForm from "../components/forms/BudgetCategoryAddForm";
+import BudgetCategoryEditForm from "../components/forms/BudgetCategoryEditForm";
+import BudgetGroupAddForm from "../components/forms/BudgetGroupAddForm";
+import { useBudget } from "../hooks/useBudget";
+import { useTransactions } from "../hooks/useTransactions";
 
 interface BudgetCategoryRowProps extends BudgetCategory {
     onDeleteCategory: () => void;

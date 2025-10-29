@@ -19,15 +19,15 @@
     "jsx": "react-jsx",
     "incremental": true,
     "paths": {
-      "@/*": ["./app/src/*"]
+      "@/*": ["./app/*"]
     },
     "types": ["vite/client"]
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    "app/src/types/**/*.d.ts",
-    "app/src/vite-env.d.ts"
+    "app/types/**/*.d.ts",
+    "app/vite-env.d.ts"
   ],
   "exclude": [
     "node_modules",

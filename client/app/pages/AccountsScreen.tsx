@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { theme } from "../../defs/theme";
-import PlusIcon from "../../resources/images/plusIcon.svg";
-import Trash from "../../resources/images/trash.svg";
-import t from "../../services/i18n/language";
-import { AccountType, BankAccount } from "../../store/accounts/accountsInterfaces";
-import formatMoney from "../../utils/formatMoney";
-import Button from "../common/Button";
-import Modal from "../common/Modal";
-import GridBoxContainer from "../common/containers/GridBoxContainer";
-import GridHeaderContainer from "../common/containers/GridHeaderContainer";
-import SecureScreenContainer from "../common/containers/SecureScreenContainer";
-import AccountAddForm from "../forms/AccountAddForm";
-import { useAccounts } from "../../hooks/useAccounts";
+import { theme } from "../defs/theme";
+import PlusIcon from "../resources/images/plusIcon.svg";
+import Trash from "../resources/images/trash.svg";
+import t from "../services/i18n/language";
+import { AccountType, BankAccount } from "../store/accounts/accountsInterfaces";
+import formatMoney from "../utils/formatMoney";
+import Button from "../components/common/Button";
+import Modal from "../components/common/Modal";
+import GridBoxContainer from "../components/common/containers/GridBoxContainer";
+import GridHeaderContainer from "../components/common/containers/GridHeaderContainer";
+import SecureScreenContainer from "../components/common/containers/SecureScreenContainer";
+import AccountAddForm from "../components/forms/AccountAddForm";
+import { useAccounts } from "../hooks/useAccounts";
 
 interface AccountsRowProps extends BankAccount {
     onDelete: () => void;
