@@ -9,8 +9,6 @@ const useOutsideClick = (ref: RefObject<HTMLElement>, onOutsideClick: () => void
             isJustEnabled.current = true;
 
             const handleClick = (event: MouseEvent) => {
-                console.log("handleClick", event);
-
                 if (event.defaultPrevented) {
                     return;
                 }

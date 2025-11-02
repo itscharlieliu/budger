@@ -122,6 +122,7 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        console.log("handleSubmit", values);
         const newErrors = validate(values);
         setErrors(newErrors);
         setTouched({
@@ -159,33 +160,33 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
                 name="toFrom"
                 value={values.toFrom}
                 onChange={handleChange("toFrom")}
-                onBlur={handleBlur("toFrom")}
+                // onBlur={handleBlur("toFrom")}
                 error={touched.toFrom && !!errors.toFrom}
                 helperText={touched.toFrom ? errors.toFrom : undefined}
                 label="To / From"
-                onFocus={() => accountInputRef.current && accountInputRef.current.focus()}
+                // onFocus={() => accountInputRef.current && accountInputRef.current.focus()}
                 ref={toFromInputRef}
             />
             <Input
                 name="account"
                 value={values.account}
                 onChange={handleChange("account")}
-                onBlur={handleBlur("account")}
+                // onBlur={handleBlur("account")}
                 error={touched.account && !!errors.account}
                 helperText={touched.account ? errors.account : undefined}
                 label="Account"
-                onFocus={() => categoryInputRef.current && categoryInputRef.current.focus()}
+                // onFocus={() => categoryInputRef.current && categoryInputRef.current.focus()}
                 ref={accountInputRef}
             />
             <Input
                 name="category"
                 value={values.category}
                 onChange={handleChange("category")}
-                onBlur={handleBlur("category")}
+                // onBlur={handleBlur("category")}
                 error={touched.category && !!errors.category}
                 helperText={touched.category ? errors.category : undefined}
                 label="Category"
-                onFocus={() => dateInputRef.current && dateInputRef.current.getInput().focus()}
+                // onFocus={() => dateInputRef.current && dateInputRef.current.getInput().focus()}
                 ref={categoryInputRef}
             />
             <DateSelector
@@ -204,12 +205,12 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
                         }
                     }) as any
                 }
-                onBlur={(event: React.FocusEvent<HTMLDivElement>) => {
-                    if (values.date) {
-                        setMonthCode(getMonthCodeFromDate(values.date));
-                    }
-                    handleBlur("date")();
-                }}
+                // onBlur={(event: React.FocusEvent<HTMLDivElement>) => {
+                //     if (values.date) {
+                //         setMonthCode(getMonthCodeFromDate(values.date));
+                //     }
+                //     handleBlur("date")();
+                // }}
                 value={values.date}
                 error={touched.date && !!errors.date}
                 helperText={touched.date ? errors.date : undefined}
@@ -220,7 +221,7 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
                 name="outFlow"
                 value={values.outFlow}
                 onChange={handleChange("outFlow")}
-                onBlur={formatMoneyOnBlur("outFlow")}
+                // // onBlur={formatMoneyOnBlur("outFlow")}
                 error={touched.outFlow && !!errors.outFlow}
                 helperText={touched.outFlow ? errors.outFlow : undefined}
                 label="Out"
@@ -230,7 +231,7 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
                 name="inFlow"
                 value={values.inFlow}
                 onChange={handleChange("inFlow")}
-                onBlur={formatMoneyOnBlur("inFlow")}
+                // // onBlur={formatMoneyOnBlur("inFlow")}
                 error={touched.inFlow && !!errors.inFlow}
                 helperText={touched.inFlow ? errors.inFlow : undefined}
                 label="In"
@@ -239,7 +240,7 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
                 name="note"
                 value={values.note}
                 onChange={handleChange("note")}
-                onBlur={handleBlur("note")}
+                // onBlur={handleBlur("note")}
                 error={touched.note && !!errors.note}
                 helperText={touched.note ? errors.note : undefined}
                 label="Notes"
