@@ -6,8 +6,9 @@ import { useAuth } from "../contexts/AuthContext";
 interface ServerTransaction {
     id: number;
     amount: number;
-    description: string;
-    category: string | null;
+    payee: string | null;
+    description: string | null;
+    category_name: string | null;
     transaction_type: string;
     transaction_date: string;
     account_id: number;
@@ -24,6 +25,7 @@ export interface UseTransactionsReturn {
 }
 
 // Convert server transaction to client transaction format
+// TODO Migrate so that server and client have the same format
 const convertServerTransaction = (serverTransaction: ServerTransaction): Transaction => {
     // Determine activity: positive for income, negative for expense (in cents)
     let activity = serverTransaction.amount * 100; // Convert dollars to cents
@@ -31,15 +33,10 @@ const convertServerTransaction = (serverTransaction: ServerTransaction): Transac
         activity = -activity;
     }
 
-    // Extract payee and note from description (format: "payee" or "payee - note")
-    let payee = serverTransaction.description;
-    let note: string | undefined = undefined;
-    const noteSeparator = " - ";
-    if (serverTransaction.description.includes(noteSeparator)) {
-        const parts = serverTransaction.description.split(noteSeparator);
-        payee = parts[0];
-        note = parts.slice(1).join(noteSeparator);
-    }
+    const payee = serverTransaction.payee || "";
+    // Note is stored in description field for new transactions
+    // For old transactions (where payee was in description), note should be undefined
+    const note = serverTransaction.description || undefined;
 
     return {
         id: serverTransaction.id.toString(),
@@ -47,7 +44,7 @@ const convertServerTransaction = (serverTransaction: ServerTransaction): Transac
         account_id: serverTransaction.account_id,
         date: new Date(serverTransaction.transaction_date),
         payee,
-        category: serverTransaction.category || undefined,
+        category: serverTransaction.category_name || undefined,
         note,
         activity,
     };

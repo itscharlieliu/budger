@@ -7,6 +7,7 @@ const router = Router();
 interface Transaction {
   id: number;
   amount: number;
+  payee: string | null;
   description: string;
   category_id: number | null;
   category_name?: string | null;
@@ -40,6 +41,7 @@ router.get(
       SELECT 
         t.id,
         t.amount,
+        t.payee,
         t.description,
         t.category_id,
         c.name as category_name,
@@ -147,19 +149,17 @@ router.post(
       // Parse date
       const transactionDate = new Date(date);
 
-      // Combine payee and note for description
-      let description = payee;
-      if (note && note.trim() !== "" && note !== payee) {
-        description = `${payee} - ${note}`;
-      }
+      // Set description to note if provided, otherwise null
+      const description = note && note.trim() !== "" ? note : null;
 
       // Create transaction (category_id is null if not provided)
       const result = await pool.query<Transaction>(
-        `INSERT INTO transactions (user_id, account_id, amount, description, category_id, transaction_type, transaction_date)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
+        `INSERT INTO transactions (user_id, account_id, amount, payee, description, category_id, transaction_type, transaction_date)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
        RETURNING 
          id, 
          amount, 
+         payee,
          description, 
          category_id, 
          transaction_type, 
@@ -171,6 +171,7 @@ router.post(
           req.user!.id,
           account_id,
           amount,
+          payee,
           description,
           category_id || null,
           transactionType,

@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS transactions (
     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     account_id INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
     amount DECIMAL(15,2) NOT NULL,
+    payee VARCHAR(255),
     description TEXT,
     category_id INTEGER REFERENCES categories(id) ON DELETE SET NULL,
     transaction_type VARCHAR(20) NOT NULL, -- 'income', 'expense', 'transfer'
