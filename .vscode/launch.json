@@ -1,0 +1,44 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug Server",
+        "type": "node",
+        "request": "launch",
+        "runtimeExecutable": "nodemon",
+        "runtimeArgs": [
+          "--exec",
+          "node",
+          "--inspect-brk",
+          "-r",
+          "ts-node/register"
+        ],
+        "args": [
+          "${workspaceFolder}/server/index.ts"
+        ],
+        "cwd": "${workspaceFolder}/server",
+        "restart": true,
+        "protocol": "inspector",
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "env": {
+          "NODE_ENV": "development"
+        },
+        "sourceMaps": true,
+        "skipFiles": ["<node_internals>/**"]
+      },
+      {
+        "name": "Attach to Server",
+        "type": "node",
+        "request": "attach",
+        "port": 9229,
+        "restart": true,
+        "protocol": "inspector",
+        "sourceMaps": true,
+        "skipFiles": ["<node_internals>/**"],
+        "localRoot": "${workspaceFolder}/server",
+        "remoteRoot": "${workspaceFolder}/server"
+      }
+    ]
+  }
+  

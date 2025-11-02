@@ -8,7 +8,8 @@ interface Transaction {
   id: number;
   amount: number;
   description: string;
-  category: string | null;
+  category_id: number | null;
+  category_name?: string | null;
   transaction_type: "income" | "expense" | "transfer";
   transaction_date: Date;
   created_at: Date;
@@ -24,7 +25,7 @@ interface CreateTransactionBody {
   account_id: number;
   payee: string;
   date: string;
-  category?: string;
+  category_id?: number;
   note?: string;
   activity: number;
 }
@@ -40,7 +41,8 @@ router.get(
         t.id,
         t.amount,
         t.description,
-        t.category,
+        t.category_id,
+        c.name as category_name,
         t.transaction_type,
         t.transaction_date,
         t.created_at,
@@ -53,6 +55,7 @@ router.get(
       FROM transactions t
       JOIN users u ON t.user_id = u.id
       JOIN accounts a ON t.account_id = a.id
+      LEFT JOIN categories c ON t.category_id = c.id
       WHERE t.user_id = $1
       ORDER BY t.transaction_date DESC, t.created_at DESC
     `;
@@ -87,7 +90,7 @@ router.post(
         account_id,
         payee,
         date,
-        category,
+        category_id,
         note,
         activity,
       }: CreateTransactionBody = req.body;
@@ -115,6 +118,22 @@ router.post(
         return;
       }
 
+      // Verify category exists and belongs to user if category_id is provided
+      if (category_id !== undefined && category_id !== null) {
+        const categoryResult = await pool.query<{ id: number }>(
+          "SELECT id FROM categories WHERE id = $1 AND user_id = $2",
+          [category_id, req.user!.id]
+        );
+
+        if (categoryResult.rows.length === 0) {
+          res.status(404).json({
+            success: false,
+            error: "Category not found",
+          });
+          return;
+        }
+      }
+
       // Determine transaction_type and amount from activity
       // activity is in cents (positive for income, negative for expense)
       const amount = Math.abs(activity) / 100; // Convert cents to dollars
@@ -134,15 +153,15 @@ router.post(
         description = `${payee} - ${note}`;
       }
 
-      // Create transaction
+      // Create transaction (category_id is null if not provided)
       const result = await pool.query<Transaction>(
-        `INSERT INTO transactions (user_id, account_id, amount, description, category, transaction_type, transaction_date)
+        `INSERT INTO transactions (user_id, account_id, amount, description, category_id, transaction_type, transaction_date)
        VALUES ($1, $2, $3, $4, $5, $6, $7)
        RETURNING 
          id, 
          amount, 
          description, 
-         category, 
+         category_id, 
          transaction_type, 
          transaction_date, 
          created_at, 
@@ -153,16 +172,31 @@ router.post(
           account_id,
           amount,
           description,
-          category || null,
+          category_id || null,
           transactionType,
           transactionDate,
         ]
       );
 
+      // Fetch the transaction with category name if category_id exists
+      let transactionWithCategory = result.rows[0];
+      if (transactionWithCategory.category_id) {
+        const categoryResult = await pool.query<{ name: string }>(
+          "SELECT name FROM categories WHERE id = $1",
+          [transactionWithCategory.category_id]
+        );
+        if (categoryResult.rows.length > 0) {
+          transactionWithCategory = {
+            ...transactionWithCategory,
+            category_name: categoryResult.rows[0].name,
+          };
+        }
+      }
+
       res.status(201).json({
         success: true,
         message: "Transaction created successfully",
-        data: result.rows[0],
+        data: transactionWithCategory,
       });
     } catch (error) {
       console.error("Error creating transaction:", error);

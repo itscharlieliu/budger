@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import usersRoutes from "./routes/users";
 import accountsRoutes from "./routes/accounts";
 import transactionsRoutes from "./routes/transactions";
+import categoriesRoutes from "./routes/categories";
 import healthRoutes from "./routes/health";
 
 dotenv.config();
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use("/users", usersRoutes);
 app.use("/accounts", accountsRoutes);
 app.use("/transactions", transactionsRoutes);
+app.use("/categories", categoriesRoutes);
 app.use("/health", healthRoutes);
 
 // Start server
