@@ -11,7 +11,6 @@ interface Transaction {
   description: string;
   category_id: number | null;
   category_name?: string | null;
-  transaction_type: "income" | "expense" | "transfer";
   transaction_date: Date;
   created_at: Date;
   updated_at: Date;
@@ -45,7 +44,6 @@ router.get(
         t.description,
         t.category_id,
         c.name as category_name,
-        t.transaction_type,
         t.transaction_date,
         t.created_at,
         t.updated_at,
@@ -136,15 +134,9 @@ router.post(
         }
       }
 
-      // Determine transaction_type and amount from activity
+      // Determine amount from activity
       // activity is in cents (positive for income, negative for expense)
-      const amount = Math.abs(activity) / 100; // Convert cents to dollars
-      let transactionType: "income" | "expense" | "transfer" = "expense";
-      if (activity > 0) {
-        transactionType = "income";
-      } else if (activity === 0) {
-        transactionType = "transfer";
-      }
+      const amount = activity / 100; // Convert cents to dollars
 
       // Parse date
       const transactionDate = new Date(date);
@@ -154,15 +146,14 @@ router.post(
 
       // Create transaction (category_id is null if not provided)
       const result = await pool.query<Transaction>(
-        `INSERT INTO transactions (user_id, account_id, amount, payee, description, category_id, transaction_type, transaction_date)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        `INSERT INTO transactions (user_id, account_id, amount, payee, description, category_id, transaction_date)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
        RETURNING 
          id, 
          amount, 
          payee,
          description, 
          category_id, 
-         transaction_type, 
          transaction_date, 
          created_at, 
          updated_at,
@@ -174,7 +165,6 @@ router.post(
           payee,
           description,
           category_id || null,
-          transactionType,
           transactionDate,
         ]
       );

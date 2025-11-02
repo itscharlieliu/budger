@@ -9,7 +9,6 @@ interface ServerTransaction {
     payee: string | null;
     description: string | null;
     category_name: string | null;
-    transaction_type: string;
     transaction_date: string;
     account_id: number;
     account_name: string;
@@ -29,9 +28,6 @@ export interface UseTransactionsReturn {
 const convertServerTransaction = (serverTransaction: ServerTransaction): Transaction => {
     // Determine activity: positive for income, negative for expense (in cents)
     let activity = serverTransaction.amount * 100; // Convert dollars to cents
-    if (serverTransaction.transaction_type === "expense") {
-        activity = -activity;
-    }
 
     const payee = serverTransaction.payee || "";
     // Note is stored in description field for new transactions

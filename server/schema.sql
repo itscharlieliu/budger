@@ -43,7 +43,6 @@ CREATE TABLE IF NOT EXISTS transactions (
     payee VARCHAR(255),
     description TEXT,
     category_id INTEGER REFERENCES categories(id) ON DELETE SET NULL,
-    transaction_type VARCHAR(20) NOT NULL, -- 'income', 'expense', 'transfer'
     transaction_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
