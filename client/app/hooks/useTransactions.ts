@@ -10,6 +10,7 @@ interface ServerTransaction {
     category: string | null;
     transaction_type: string;
     transaction_date: string;
+    account_id: number;
     account_name: string;
 }
 
@@ -43,6 +44,7 @@ const convertServerTransaction = (serverTransaction: ServerTransaction): Transac
     return {
         id: serverTransaction.id.toString(),
         account: serverTransaction.account_name,
+        account_id: serverTransaction.account_id,
         date: new Date(serverTransaction.transaction_date),
         payee,
         category: serverTransaction.category || undefined,
@@ -115,7 +117,7 @@ export const useTransactions = (): UseTransactionsReturn => {
                         Authorization: `Bearer ${token}`,
                     },
                     body: JSON.stringify({
-                        account: transaction.account,
+                        account_id: transaction.account_id,
                         payee: transaction.payee,
                         date: transaction.date.toISOString(),
                         category: transaction.category,

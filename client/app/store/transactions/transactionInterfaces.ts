@@ -6,7 +6,8 @@ export const UPDATE_TRANSACTIONS_FAILURE = "UPDATE_TRANSACTIONS_FAILURE";
 
 export interface Transaction {
     id?: string;
-    account: string;
+    account: string; // Account name for display
+    account_id?: number; // Account ID for API calls
     date: Date;
     payee: string;
     category?: string;

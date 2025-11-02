@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import styled from "styled-components";
 
@@ -10,14 +10,22 @@ import DateSelector from "../common/DateSelector";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
 import { useTransactions } from "../../hooks/useTransactions";
+import { useAuth } from "../../contexts/AuthContext";
+import { API_URL } from "../../defs/urls";
+import { theme } from "../../defs/theme";
 
 interface OwnProps {
     onSubmit: () => void;
 }
 
+interface Account {
+    id: number;
+    name: string;
+}
+
 interface FormValues {
     toFrom: string;
-    account: string;
+    account_id: string;
     category: string;
     date: Date | undefined;
     inFlow: string;
@@ -44,13 +52,64 @@ const AddFormButton = styled(Button)`
     margin: 16px 8px;
 `;
 
+const SelectContainer = styled.div<{ error?: boolean }>`
+    display: flex;
+    flex-direction: column;
+    margin: 4px;
+    color: ${(props): string => (props.error ? theme.palette.error.main : theme.palette.background.contrast)};
+`;
+
+const SelectElement = styled.select<{ error?: boolean }>`
+    outline: none;
+    font-size: 1em;
+    border-width: 2px;
+    border-style: none none solid none;
+    border-color: ${(props): string => (props.error ? theme.palette.error.light : theme.palette.input.inactive)};
+    background-color: ${theme.palette.input.background};
+    padding: 8px 0;
+    cursor: pointer;
+
+    &:focus {
+        border-color: ${(props): string => (props.error ? theme.palette.error.main : theme.palette.input.active)};
+    }
+
+    transition: border-bottom-color 0.2s;
+`;
+
+const LabelText = styled.span<{ focused: boolean; error?: boolean }>`
+    display: inline-block;
+    overflow: visible;
+    height: 1em;
+    font-weight: ${theme.font.weight.bold};
+    color: ${(props): string => {
+        if (props.error) {
+            return props.focused ? theme.palette.error.main : theme.palette.error.light;
+        }
+        return props.focused ? theme.palette.input.active : theme.palette.input.inactive;
+    }};
+    transform-origin: left;
+    transform: ${(props): string => (props.focused ? "scale(.75)" : "translateY(calc(8px + 1em))")};
+
+    transition: transform 0.2s, font-size 0.2s, color 0.2s;
+`;
+
+const HelpText = styled.span`
+    font-size: 0.75em;
+    word-wrap: break-word;
+    height: 1em;
+    overflow: visible;
+`;
+
 const TransactionAddForm = (props: OwnProps): JSX.Element => {
     const { addTransaction } = useTransactions();
+    const { token } = useAuth();
     const [monthCode, setMonthCode] = useState<MonthCode>(getMonthCodeFromDate(new Date()));
+    const [accounts, setAccounts] = useState<Account[]>([]);
+    const [isLoadingAccounts, setIsLoadingAccounts] = useState(true);
 
     const [values, setValues] = useState<FormValues>({
         toFrom: "",
-        account: "",
+        account_id: "",
         category: "",
         date: undefined,
         inFlow: "",
@@ -60,12 +119,45 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
 
     const [errors, setErrors] = useState<FormErrors>({});
     const [touched, setTouched] = useState<Record<string, boolean>>({});
+    const [accountFocused, setAccountFocused] = useState(false);
 
     const toFromInputRef = useRef<HTMLInputElement>(null);
-    const accountInputRef = useRef<HTMLInputElement>(null);
+    const accountSelectRef = useRef<HTMLSelectElement>(null);
     const categoryInputRef = useRef<HTMLInputElement>(null);
     const dateInputRef = useRef<DayPickerInput>(null);
     const outInputRef = useRef<HTMLInputElement>(null);
+
+    // Fetch accounts on mount
+    useEffect(() => {
+        if (!token) {
+            setIsLoadingAccounts(false);
+            return;
+        }
+
+        const fetchAccounts = async () => {
+            try {
+                const response = await fetch(`${API_URL}/accounts`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                const data = await response.json();
+
+                if (data.success && Array.isArray(data.data)) {
+                    setAccounts(data.data);
+                } else {
+                    console.error("Failed to load accounts:", data.error);
+                }
+            } catch (error) {
+                console.error("Error fetching accounts:", error);
+            } finally {
+                setIsLoadingAccounts(false);
+            }
+        };
+
+        fetchAccounts();
+    }, [token]);
 
     const validate = (vals: FormValues): FormErrors => {
         const errs: FormErrors = {};
@@ -74,7 +166,7 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
             errs.toFrom = "Required";
         }
 
-        if (!vals.account) {
+        if (!vals.account_id) {
             errs.account = "Required";
         }
 
@@ -99,16 +191,19 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
     ) => {
         const value = event.target.value;
         setValues((prev) => ({ ...prev, [name]: value }));
-        if (touched[name]) {
+        if (touched[name === "account_id" ? "account" : name]) {
             const newErrors = validate({ ...values, [name]: value });
-            setErrors((prev) => ({ ...prev, [name]: newErrors[name] }));
+            const errorKey = name === "account_id" ? "account" : name;
+            setErrors((prev) => ({ ...prev, [errorKey]: newErrors[errorKey] }));
         }
     };
 
-    const handleBlur = (name: keyof FormValues) => () => {
-        setTouched((prev) => ({ ...prev, [name]: true }));
+    const handleBlur = (name: keyof FormValues | "account") => () => {
+        const touchedKey = name === "account" ? "account" : name;
+        setTouched((prev) => ({ ...prev, [touchedKey]: true }));
         const newErrors = validate(values);
-        setErrors((prev) => ({ ...prev, [name]: newErrors[name] }));
+        const errorKey = name === "account" || name === "account_id" ? "account" : name;
+        setErrors((prev) => ({ ...prev, [errorKey]: newErrors[errorKey] }));
     };
 
     const formatMoneyOnBlur = (name: "inFlow" | "outFlow") => () => {
@@ -141,8 +236,12 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
 
         const activity = (parseFloat(values.inFlow || "0") - parseFloat(values.outFlow || "0")) * 100;
 
+        // Find account name for display
+        const selectedAccount = accounts.find((acc) => acc.id.toString() === values.account_id);
+
         const transaction: Transaction = {
-            account: values.account,
+            account: selectedAccount?.name || "",
+            account_id: parseInt(values.account_id, 10),
             date: values.date!,
             payee: values.toFrom,
             category: values.category,
@@ -167,17 +266,39 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
                 // onFocus={() => accountInputRef.current && accountInputRef.current.focus()}
                 ref={toFromInputRef}
             />
-            <Input
-                name="account"
-                value={values.account}
-                onChange={handleChange("account")}
-                // onBlur={handleBlur("account")}
-                error={touched.account && !!errors.account}
-                helperText={touched.account ? errors.account : undefined}
-                label="Account"
-                // onFocus={() => categoryInputRef.current && categoryInputRef.current.focus()}
-                ref={accountInputRef}
-            />
+            <SelectContainer error={touched.account && !!errors.account}>
+                <LabelText error={touched.account && !!errors.account} focused={!!values.account_id || accountFocused}>
+                    Account
+                </LabelText>
+                <SelectElement
+                    ref={accountSelectRef}
+                    value={values.account_id}
+                    onChange={(e) => {
+                        setValues((prev) => ({ ...prev, account_id: e.target.value }));
+                        if (touched.account) {
+                            const newErrors = validate({ ...values, account_id: e.target.value });
+                            setErrors((prev) => ({ ...prev, account: newErrors.account }));
+                        }
+                    }}
+                    onFocus={() => {
+                        setAccountFocused(true);
+                    }}
+                    onBlur={() => {
+                        setAccountFocused(false);
+                        handleBlur("account")();
+                    }}
+                    error={touched.account && !!errors.account}
+                    disabled={isLoadingAccounts}
+                >
+                    <option value="">Select an account</option>
+                    {accounts.map((account) => (
+                        <option key={account.id} value={account.id}>
+                            {account.name}
+                        </option>
+                    ))}
+                </SelectElement>
+                <HelpText>{touched.account ? errors.account : undefined}</HelpText>
+            </SelectContainer>
             <Input
                 name="category"
                 value={values.category}

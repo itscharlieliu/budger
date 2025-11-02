@@ -13,6 +13,7 @@ interface Transaction {
   transaction_date: Date;
   created_at: Date;
   updated_at: Date;
+  account_id: number;
   user_name?: string;
   user_email?: string;
   account_name?: string;
@@ -20,7 +21,7 @@ interface Transaction {
 }
 
 interface CreateTransactionBody {
-  account: string;
+  account_id: number;
   payee: string;
   date: string;
   category?: string;
@@ -44,6 +45,7 @@ router.get(
         t.transaction_date,
         t.created_at,
         t.updated_at,
+        t.account_id,
         u.name as user_name,
         u.email as user_email,
         a.name as account_name,
@@ -82,7 +84,7 @@ router.post(
   async (req: AuthenticatedRequest, res: Response): Promise<void> => {
     try {
       const {
-        account,
+        account_id,
         payee,
         date,
         category,
@@ -91,18 +93,18 @@ router.post(
       }: CreateTransactionBody = req.body;
 
       // Validate required fields
-      if (!account || !payee || !date) {
+      if (!account_id || !payee || !date) {
         res.status(400).json({
           success: false,
-          error: "Account, payee, and date are required",
+          error: "Account ID, payee, and date are required",
         });
         return;
       }
 
-      // Look up account_id from account name
+      // Verify account exists and belongs to user
       const accountResult = await pool.query<{ id: number }>(
-        "SELECT id FROM accounts WHERE name = $1 AND user_id = $2",
-        [account, req.user!.id]
+        "SELECT id FROM accounts WHERE id = $1 AND user_id = $2",
+        [account_id, req.user!.id]
       );
 
       if (accountResult.rows.length === 0) {
@@ -112,8 +114,6 @@ router.post(
         });
         return;
       }
-
-      const accountId = accountResult.rows[0].id;
 
       // Determine transaction_type and amount from activity
       // activity is in cents (positive for income, negative for expense)
@@ -138,10 +138,19 @@ router.post(
       const result = await pool.query<Transaction>(
         `INSERT INTO transactions (user_id, account_id, amount, description, category, transaction_type, transaction_date)
        VALUES ($1, $2, $3, $4, $5, $6, $7)
-       RETURNING id, amount, description, category, transaction_type, transaction_date, created_at, updated_at`,
+       RETURNING 
+         id, 
+         amount, 
+         description, 
+         category, 
+         transaction_type, 
+         transaction_date, 
+         created_at, 
+         updated_at,
+         account_id`,
         [
           req.user!.id,
-          accountId,
+          account_id,
           amount,
           description,
           category || null,
