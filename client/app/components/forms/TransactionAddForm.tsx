@@ -3,18 +3,13 @@ import DayPickerInput from "react-day-picker/DayPickerInput";
 import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
 import styled from "styled-components";
 
-import { AllAccounts, BankAccount } from "../../store/accounts/accountsInterfaces";
-import { TotalBudget } from "../../store/budget/budgetInterfaces";
 import { Transaction } from "../../store/transactions/transactionInterfaces";
 import formatMoney from "../../utils/formatMoney";
-import { getMonthCodeFromDate, getMonthCodeString, MonthCode } from "../../utils/getMonthCode";
-import Autocomplete, { AutocompleteOption } from "../common/Autocomplete";
+import { getMonthCodeFromDate, MonthCode } from "../../utils/getMonthCode";
 import Button from "../common/Button";
 import DateSelector from "../common/DateSelector";
 import Input from "../common/Input";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
-import { useAccounts } from "../../hooks/useAccounts";
-import { useBudget } from "../../hooks/useBudget";
 import { useTransactions } from "../../hooks/useTransactions";
 
 interface OwnProps {
@@ -22,9 +17,9 @@ interface OwnProps {
 }
 
 interface FormValues {
-    toFrom?: AutocompleteOption;
-    account?: AutocompleteOption;
-    category?: AutocompleteOption;
+    toFrom?: string;
+    account?: string;
+    category?: string;
     date?: Date;
     inFlow?: string;
     outFlow?: string;
@@ -51,8 +46,6 @@ const AddFormButton = styled(Button)`
 `;
 
 const TransactionAddForm = (props: OwnProps): JSX.Element => {
-    const { allAccounts } = useAccounts();
-    const { totalBudget } = useBudget();
     const { addTransaction } = useTransactions();
     const [monthCode, setMonthCode] = useState<MonthCode>(getMonthCodeFromDate(new Date()));
 
@@ -93,45 +86,16 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
         const activity = (parseFloat(values.inFlow || "0") - parseFloat(values.outFlow || "0")) * 100;
 
         const transaction: Transaction = {
-            account: values.account!.value,
+            account: values.account!,
             date: values.date!,
-            payee: values.toFrom!.value,
-            category: values.category!.value,
+            payee: values.toFrom!,
+            category: values.category!,
             note: values.note,
             activity,
         };
 
         await addTransaction(transaction);
         props.onSubmit();
-    };
-
-    const getAccountOptions = (): AutocompleteOption[] => {
-        return allAccounts.map((account: BankAccount) => ({
-            value: account.name,
-            label: account.name,
-        }));
-    };
-
-    const getCategoryOptions = (): AutocompleteOption[] => {
-        const monthCodeString = getMonthCodeString(monthCode);
-        const monthlyBudget = totalBudget[monthCodeString];
-
-        if (!monthlyBudget) {
-            return [];
-        }
-
-        const categories: AutocompleteOption[] = [];
-
-        for (const group of Object.keys(monthlyBudget)) {
-            for (const category of Object.keys(monthlyBudget[group])) {
-                categories.push({
-                    value: category,
-                    label: category,
-                });
-            }
-        }
-
-        return categories;
     };
 
     return (
@@ -141,17 +105,10 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
             render={({ handleSubmit, submitting }: FormRenderProps<FormValues>) => (
                 <ModalFormContainer onSubmit={handleSubmit}>
                     <Field name={"toFrom"}>
-                        {({ input, meta }: FieldRenderProps<AutocompleteOption, HTMLElement>) => (
-                            <Autocomplete
+                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
+                            <Input
                                 {...input}
-                                value={input.value}
-                                onChange={(value: AutocompleteOption | React.ChangeEvent<HTMLInputElement>) => {
-                                    if ("value" in value) {
-                                        input.onChange(value);
-                                    }
-                                }}
-                                onBlur={input.onBlur}
-                                options={[]}
+                                value={input.value || ""}
                                 error={meta.touched && meta.error}
                                 helperText={meta.touched && meta.error}
                                 label="To / From"
@@ -161,17 +118,10 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
                         )}
                     </Field>
                     <Field name={"account"}>
-                        {({ input, meta }: FieldRenderProps<AutocompleteOption, HTMLElement>) => (
-                            <Autocomplete
+                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
+                            <Input
                                 {...input}
-                                value={input.value}
-                                onChange={(value: AutocompleteOption | React.ChangeEvent<HTMLInputElement>) => {
-                                    if ("value" in value) {
-                                        input.onChange(value);
-                                    }
-                                }}
-                                onBlur={input.onBlur}
-                                options={getAccountOptions()}
+                                value={input.value || ""}
                                 error={meta.touched && meta.error}
                                 helperText={meta.touched && meta.error}
                                 label="Account"
@@ -181,17 +131,10 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
                         )}
                     </Field>
                     <Field name={"category"}>
-                        {({ input, meta }: FieldRenderProps<AutocompleteOption, HTMLElement>) => (
-                            <Autocomplete
+                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
+                            <Input
                                 {...input}
-                                value={input.value}
-                                onChange={(value: AutocompleteOption | React.ChangeEvent<HTMLInputElement>) => {
-                                    if ("value" in value) {
-                                        input.onChange(value);
-                                    }
-                                }}
-                                onBlur={input.onBlur}
-                                options={getCategoryOptions()}
+                                value={input.value || ""}
                                 error={meta.touched && meta.error}
                                 helperText={meta.touched && meta.error}
                                 label="Category"
