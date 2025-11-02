@@ -1,5 +1,4 @@
-import React from "react";
-import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
+import React, { useState } from "react";
 
 import { MonthCode } from "../../utils/getMonthCode";
 import Button from "../common/Button";
@@ -14,13 +13,22 @@ interface OwnProps {
 }
 
 interface FormValues {
-    categoryName?: string;
+    categoryName: string;
 }
 
 const BudgetCategoryAddForm = (props: OwnProps): JSX.Element => {
     const { addBudgetCategory } = useBudget();
 
-    const handleAddCategoryGroup = (values: FormValues) => {
+    const [values, setValues] = useState<FormValues>({
+        categoryName: "",
+    });
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setValues({ categoryName: event.target.value });
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
         if (values.categoryName) {
             addBudgetCategory(props.monthCode, props.group, values.categoryName);
         }
@@ -28,25 +36,16 @@ const BudgetCategoryAddForm = (props: OwnProps): JSX.Element => {
     };
 
     return (
-        <Form
-            onSubmit={handleAddCategoryGroup}
-            component={({ handleSubmit }: FormRenderProps) => (
-                <ModalFormContainer onSubmit={handleSubmit}>
-                    <Field name={"categoryName"}>
-                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input
-                                {...input}
-                                helperText={meta.touched && meta.error}
-                                error={meta.touched && meta.error}
-                                label="New Category"
-                                autoFocus
-                            />
-                        )}
-                    </Field>
-                    <Button type={"submit"}>Add</Button>
-                </ModalFormContainer>
-            )}
-        />
+        <ModalFormContainer onSubmit={handleSubmit}>
+            <Input
+                name="categoryName"
+                value={values.categoryName}
+                onChange={handleChange}
+                label="New Category"
+                autoFocus
+            />
+            <Button type={"submit"}>Add</Button>
+        </ModalFormContainer>
     );
 };
 

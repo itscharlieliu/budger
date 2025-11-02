@@ -23,8 +23,7 @@ const DateSelector = React.forwardRef(
         const { onChange, error, helperText, onBlur, onDayPickerHide, ...otherProps } = props;
 
         const handleDayChange = (day: Date) => {
-            // We need to be able to pass the date to react final form by doing this.
-            // TODO possibly move this to the form component?
+            // Convert the DatePicker's day selection to a standard onChange event format
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             onChange && onChange({ target: { value: day } });

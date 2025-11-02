@@ -1,5 +1,4 @@
-import React from "react";
-import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
+import React, { useState, useEffect } from "react";
 
 import formatMoney from "../../utils/formatMoney";
 import { MonthCode } from "../../utils/getMonthCode";
@@ -16,47 +15,53 @@ interface OwnProps {
 }
 
 interface FormValues {
-    budgeted?: string;
+    budgeted: string;
 }
 
 const BudgetCategoryEditForm = (props: OwnProps): JSX.Element => {
     const { editBudgetedAmount } = useBudget();
 
-    const handleAddCategoryGroup = (values: FormValues) => {
-        const updatedBudgetAmount = parseFloat(values.budgeted ? values.budgeted : "0");
+    const [values, setValues] = useState<FormValues>({
+        budgeted: props.defaultValue || "",
+    });
+
+    useEffect(() => {
+        setValues({ budgeted: props.defaultValue || "" });
+    }, [props.defaultValue]);
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setValues({ budgeted: event.target.value });
+    };
+
+    const formatMoneyOnBlur = () => {
+        if (values.budgeted) {
+            const formatted = formatMoney(values.budgeted, 2);
+            setValues({ budgeted: formatted });
+        }
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        const updatedBudgetAmount = parseFloat(values.budgeted || "0");
         editBudgetedAmount(props.monthCode, props.budgetCategory, isNaN(updatedBudgetAmount) ? 0 : updatedBudgetAmount);
         props.onSubmit && props.onSubmit();
     };
 
     return (
-        <Form
-            onSubmit={handleAddCategoryGroup}
-            component={({ handleSubmit }: FormRenderProps) => (
-                <ModalFormContainer onSubmit={handleSubmit}>
-                    <Field
-                        name={"budgeted"}
-                        defaultValue={props.defaultValue}
-                        format={(value: string) => formatMoney(value, 2)}
-                        formatOnBlur
-                    >
-                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input
-                                {...input}
-                                helperText={meta.touched && meta.error}
-                                error={meta.touched && meta.error}
-                                label="Budgeted"
-                                autoFocus
-                                onFocus={(event: React.FocusEvent<HTMLInputElement>) => {
-                                    event.target.select();
-                                    input.onFocus(event);
-                                }}
-                            />
-                        )}
-                    </Field>
-                    <Button type={"submit"}>Add</Button>
-                </ModalFormContainer>
-            )}
-        />
+        <ModalFormContainer onSubmit={handleSubmit}>
+            <Input
+                name="budgeted"
+                value={values.budgeted}
+                onChange={handleChange}
+                onBlur={formatMoneyOnBlur}
+                label="Budgeted"
+                autoFocus
+                onFocus={(event: React.FocusEvent<HTMLInputElement>) => {
+                    event.target.select();
+                }}
+            />
+            <Button type={"submit"}>Add</Button>
+        </ModalFormContainer>
     );
 };
 

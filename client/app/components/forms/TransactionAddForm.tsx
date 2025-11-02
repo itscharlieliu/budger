@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
-import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
 import styled from "styled-components";
 
 import { Transaction } from "../../store/transactions/transactionInterfaces";
@@ -17,13 +16,13 @@ interface OwnProps {
 }
 
 interface FormValues {
-    toFrom?: string;
-    account?: string;
-    category?: string;
-    date?: Date;
-    inFlow?: string;
-    outFlow?: string;
-    note?: string;
+    toFrom: string;
+    account: string;
+    category: string;
+    date: Date | undefined;
+    inFlow: string;
+    outFlow: string;
+    note: string;
 }
 
 interface FormErrors {
@@ -49,47 +48,103 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
     const { addTransaction } = useTransactions();
     const [monthCode, setMonthCode] = useState<MonthCode>(getMonthCodeFromDate(new Date()));
 
+    const [values, setValues] = useState<FormValues>({
+        toFrom: "",
+        account: "",
+        category: "",
+        date: undefined,
+        inFlow: "",
+        outFlow: "",
+        note: "",
+    });
+
+    const [errors, setErrors] = useState<FormErrors>({});
+    const [touched, setTouched] = useState<Record<string, boolean>>({});
+
     const toFromInputRef = useRef<HTMLInputElement>(null);
     const accountInputRef = useRef<HTMLInputElement>(null);
     const categoryInputRef = useRef<HTMLInputElement>(null);
     const dateInputRef = useRef<DayPickerInput>(null);
     const outInputRef = useRef<HTMLInputElement>(null);
 
-    const validate = (values: FormValues): FormErrors => {
-        const errors: FormErrors = {};
+    const validate = (vals: FormValues): FormErrors => {
+        const errs: FormErrors = {};
 
-        if (!values.toFrom) {
-            errors.toFrom = "Required";
+        if (!vals.toFrom) {
+            errs.toFrom = "Required";
         }
 
-        if (!values.account) {
-            errors.account = "Required";
+        if (!vals.account) {
+            errs.account = "Required";
         }
 
-        if (!values.category) {
-            errors.category = "Required";
+        if (!vals.category) {
+            errs.category = "Required";
         }
 
-        if (!values.date) {
-            errors.date = "Required";
+        if (!vals.date) {
+            errs.date = "Required";
         }
 
-        if (!values.inFlow && !values.outFlow) {
-            errors.inFlow = "Required";
-            errors.outFlow = "Required";
+        if (!vals.inFlow && !vals.outFlow) {
+            errs.inFlow = "Required";
+            errs.outFlow = "Required";
         }
 
-        return errors;
+        return errs;
     };
 
-    const onSubmit = async (values: FormValues) => {
+    const handleChange = (name: keyof FormValues) => (
+        event: React.ChangeEvent<HTMLInputElement> | { target: { value: Date } },
+    ) => {
+        const value = event.target.value;
+        setValues((prev) => ({ ...prev, [name]: value }));
+        if (touched[name]) {
+            const newErrors = validate({ ...values, [name]: value });
+            setErrors((prev) => ({ ...prev, [name]: newErrors[name] }));
+        }
+    };
+
+    const handleBlur = (name: keyof FormValues) => () => {
+        setTouched((prev) => ({ ...prev, [name]: true }));
+        const newErrors = validate(values);
+        setErrors((prev) => ({ ...prev, [name]: newErrors[name] }));
+    };
+
+    const formatMoneyOnBlur = (name: "inFlow" | "outFlow") => () => {
+        const value = values[name];
+        if (value) {
+            const formatted = formatMoney(value, 2);
+            setValues((prev) => ({ ...prev, [name]: formatted }));
+        }
+        handleBlur(name)();
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const newErrors = validate(values);
+        setErrors(newErrors);
+        setTouched({
+            toFrom: true,
+            account: true,
+            category: true,
+            date: true,
+            inFlow: true,
+            outFlow: true,
+            note: true,
+        });
+
+        if (Object.keys(newErrors).length > 0) {
+            return;
+        }
+
         const activity = (parseFloat(values.inFlow || "0") - parseFloat(values.outFlow || "0")) * 100;
 
         const transaction: Transaction = {
-            account: values.account!,
+            account: values.account,
             date: values.date!,
-            payee: values.toFrom!,
-            category: values.category!,
+            payee: values.toFrom,
+            category: values.category,
             note: values.note,
             activity,
         };
@@ -99,111 +154,104 @@ const TransactionAddForm = (props: OwnProps): JSX.Element => {
     };
 
     return (
-        <Form
-            onSubmit={onSubmit}
-            validate={validate}
-            render={({ handleSubmit, submitting }: FormRenderProps<FormValues>) => (
-                <ModalFormContainer onSubmit={handleSubmit}>
-                    <Field name={"toFrom"}>
-                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input
-                                {...input}
-                                value={input.value || ""}
-                                error={meta.touched && meta.error}
-                                helperText={meta.touched && meta.error}
-                                label="To / From"
-                                onFocus={() => accountInputRef.current && accountInputRef.current.focus()}
-                                ref={toFromInputRef}
-                            />
-                        )}
-                    </Field>
-                    <Field name={"account"}>
-                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input
-                                {...input}
-                                value={input.value || ""}
-                                error={meta.touched && meta.error}
-                                helperText={meta.touched && meta.error}
-                                label="Account"
-                                onFocus={() => categoryInputRef.current && categoryInputRef.current.focus()}
-                                ref={accountInputRef}
-                            />
-                        )}
-                    </Field>
-                    <Field name={"category"}>
-                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input
-                                {...input}
-                                value={input.value || ""}
-                                error={meta.touched && meta.error}
-                                helperText={meta.touched && meta.error}
-                                label="Category"
-                                onFocus={() => dateInputRef.current && dateInputRef.current.getInput().focus()}
-                                ref={categoryInputRef}
-                            />
-                        )}
-                    </Field>
-                    <Field name={"date"}>
-                        {({ input, meta }: FieldRenderProps<Date, HTMLElement>) => {
-                            return (
-                                <DateSelector
-                                    {...input}
-                                    onBlur={(event: React.FocusEvent<HTMLDivElement>) => {
-                                        input.value && setMonthCode(getMonthCodeFromDate(input.value));
-                                        input.onBlur(event);
-                                    }}
-                                    value={input.value}
-                                    error={meta.touched && meta.error}
-                                    helperText={meta.touched && meta.error}
-                                    onDayPickerHide={() => outInputRef.current && outInputRef.current.focus()}
-                                    ref={dateInputRef}
-                                />
-                            );
-                        }}
-                    </Field>
-                    <Field name={"outFlow"} format={(value: string) => formatMoney(value, 2)} formatOnBlur>
-                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input
-                                {...input}
-                                value={input.value || ""}
-                                helperText={meta.touched && meta.error}
-                                error={meta.touched && meta.error}
-                                label="Out"
-                                ref={outInputRef}
-                            />
-                        )}
-                    </Field>
-                    <Field name={"inFlow"} format={(value: string) => formatMoney(value, 2)} formatOnBlur>
-                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input
-                                {...input}
-                                value={input.value || ""}
-                                helperText={meta.touched && meta.error}
-                                error={meta.touched && meta.error}
-                                label="In"
-                            />
-                        )}
-                    </Field>
-                    <Field name={"note"}>
-                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input
-                                {...input}
-                                helperText={meta.touched && meta.error}
-                                error={meta.touched && meta.error}
-                                label="Notes"
-                            />
-                        )}
-                    </Field>
+        <ModalFormContainer onSubmit={handleSubmit}>
+            <Input
+                name="toFrom"
+                value={values.toFrom}
+                onChange={handleChange("toFrom")}
+                onBlur={handleBlur("toFrom")}
+                error={touched.toFrom && !!errors.toFrom}
+                helperText={touched.toFrom ? errors.toFrom : undefined}
+                label="To / From"
+                onFocus={() => accountInputRef.current && accountInputRef.current.focus()}
+                ref={toFromInputRef}
+            />
+            <Input
+                name="account"
+                value={values.account}
+                onChange={handleChange("account")}
+                onBlur={handleBlur("account")}
+                error={touched.account && !!errors.account}
+                helperText={touched.account ? errors.account : undefined}
+                label="Account"
+                onFocus={() => categoryInputRef.current && categoryInputRef.current.focus()}
+                ref={accountInputRef}
+            />
+            <Input
+                name="category"
+                value={values.category}
+                onChange={handleChange("category")}
+                onBlur={handleBlur("category")}
+                error={touched.category && !!errors.category}
+                helperText={touched.category ? errors.category : undefined}
+                label="Category"
+                onFocus={() => dateInputRef.current && dateInputRef.current.getInput().focus()}
+                ref={categoryInputRef}
+            />
+            <DateSelector
+                onChange={
+                    ((event: { target: { value: Date } }) => {
+                        const value = event.target.value;
+                        setValues((prev) => {
+                            if (value) {
+                                setMonthCode(getMonthCodeFromDate(value));
+                            }
+                            return { ...prev, date: value };
+                        });
+                        if (touched.date) {
+                            const newErrors = validate({ ...values, date: value });
+                            setErrors((prev) => ({ ...prev, date: newErrors.date }));
+                        }
+                    }) as any
+                }
+                onBlur={(event: React.FocusEvent<HTMLDivElement>) => {
+                    if (values.date) {
+                        setMonthCode(getMonthCodeFromDate(values.date));
+                    }
+                    handleBlur("date")();
+                }}
+                value={values.date}
+                error={touched.date && !!errors.date}
+                helperText={touched.date ? errors.date : undefined}
+                onDayPickerHide={() => outInputRef.current && outInputRef.current.focus()}
+                ref={dateInputRef}
+            />
+            <Input
+                name="outFlow"
+                value={values.outFlow}
+                onChange={handleChange("outFlow")}
+                onBlur={formatMoneyOnBlur("outFlow")}
+                error={touched.outFlow && !!errors.outFlow}
+                helperText={touched.outFlow ? errors.outFlow : undefined}
+                label="Out"
+                ref={outInputRef}
+            />
+            <Input
+                name="inFlow"
+                value={values.inFlow}
+                onChange={handleChange("inFlow")}
+                onBlur={formatMoneyOnBlur("inFlow")}
+                error={touched.inFlow && !!errors.inFlow}
+                helperText={touched.inFlow ? errors.inFlow : undefined}
+                label="In"
+            />
+            <Input
+                name="note"
+                value={values.note}
+                onChange={handleChange("note")}
+                onBlur={handleBlur("note")}
+                error={touched.note && !!errors.note}
+                helperText={touched.note ? errors.note : undefined}
+                label="Notes"
+            />
 
-                    <ButtonContainer>
-                        <AddFormButton type={"submit"}>Add</AddFormButton>
-                        <AddFormButton type={"button"} onClick={() => props.onSubmit()}>
-                            Cancel
-                        </AddFormButton>
-                    </ButtonContainer>
-                </ModalFormContainer>
-            )}
-        />
+            <ButtonContainer>
+                <AddFormButton type={"submit"}>Add</AddFormButton>
+                <AddFormButton type={"button"} onClick={() => props.onSubmit()}>
+                    Cancel
+                </AddFormButton>
+            </ButtonContainer>
+        </ModalFormContainer>
     );
 };
 

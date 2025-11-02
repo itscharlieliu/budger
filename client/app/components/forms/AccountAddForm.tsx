@@ -1,5 +1,4 @@
-import React from "react";
-import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
+import React, { useState } from "react";
 
 import { AccountType, BankAccount } from "../../store/accounts/accountsInterfaces";
 import formatMoney from "../../utils/formatMoney";
@@ -14,9 +13,9 @@ interface OwnProps {
 }
 
 interface FormValues {
-    accountName?: string;
-    budgeted?: boolean;
-    startingBalance?: string;
+    accountName: string;
+    budgeted: boolean;
+    startingBalance: string;
 }
 
 interface FormErrors {
@@ -28,66 +27,105 @@ interface FormErrors {
 const AccountAddForm = (props: OwnProps): JSX.Element => {
     const { addAccount } = useAccounts();
 
-    const handleAddAccount = (values: FormValues) => {
-        const startingBalance = parseFloat(values.startingBalance ? values.startingBalance : "0");
+    const [values, setValues] = useState<FormValues>({
+        accountName: "",
+        budgeted: false,
+        startingBalance: "",
+    });
 
-        if (values.accountName) {
-            const account: BankAccount = {
-                name: values.accountName,
-                type: values.budgeted ? AccountType.budgeted : AccountType.unbudgeted,
-                cachedBalance: isNaN(startingBalance) ? 0 : startingBalance,
-            };
-            addAccount(account);
+    const [errors, setErrors] = useState<FormErrors>({});
+    const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+    const handleValidation = (vals: FormValues): FormErrors => {
+        const errs: FormErrors = {};
+
+        if (!vals.accountName) {
+            errs.accountName = "This field cannot be empty";
         }
+
+        return errs;
+    };
+
+    const handleChange = (name: keyof FormValues) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = name === "budgeted" ? event.target.checked : event.target.value;
+        setValues((prev) => ({ ...prev, [name]: value }));
+        if (touched[name]) {
+            const newErrors = handleValidation({ ...values, [name]: value as any });
+            setErrors((prev) => ({ ...prev, [name]: newErrors[name] }));
+        }
+    };
+
+    const handleBlur = (name: keyof FormValues) => () => {
+        setTouched((prev) => ({ ...prev, [name]: true }));
+        const newErrors = handleValidation(values);
+        setErrors((prev) => ({ ...prev, [name]: newErrors[name] }));
+    };
+
+    const formatMoneyOnBlur = () => {
+        if (values.startingBalance) {
+            const formatted = formatMoney(values.startingBalance, 2);
+            setValues((prev) => ({ ...prev, startingBalance: formatted }));
+        }
+        handleBlur("startingBalance")();
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        const newErrors = handleValidation(values);
+        setErrors(newErrors);
+        setTouched({
+            accountName: true,
+            budgeted: true,
+            startingBalance: true,
+        });
+
+        if (Object.keys(newErrors).length > 0) {
+            return;
+        }
+
+        const startingBalance = parseFloat(values.startingBalance || "0");
+
+        const account: BankAccount = {
+            name: values.accountName,
+            type: values.budgeted ? AccountType.budgeted : AccountType.unbudgeted,
+            cachedBalance: isNaN(startingBalance) ? 0 : startingBalance,
+        };
+        addAccount(account);
         props.onSubmit && props.onSubmit();
     };
 
-    const handleValidation = (values: FormValues) => {
-        const errors: FormErrors = {};
-
-        if (!values.accountName) {
-            errors.accountName = "This field cannot be empty";
-        }
-
-        return errors;
-    };
-
     return (
-        <Form
-            onSubmit={handleAddAccount}
-            validate={handleValidation}
-            component={({ handleSubmit }: FormRenderProps) => (
-                <ModalFormContainer onSubmit={handleSubmit}>
-                    <Field name={"accountName"}>
-                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input
-                                {...input}
-                                helperText={meta.touched && meta.error}
-                                error={meta.touched && meta.error}
-                                label="Account Name"
-                                autoFocus
-                            />
-                        )}
-                    </Field>
-                    <Field name={"budgeted"} type={"checkbox"}>
-                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Switch {...input} spaced error={meta.touched && meta.error} label="Budgeted" />
-                        )}
-                    </Field>
-                    <Field name={"startingBalance"} format={(value: string) => formatMoney(value, 2)} formatOnBlur>
-                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input
-                                {...input}
-                                helperText={meta.touched && meta.error}
-                                error={meta.touched && meta.error}
-                                label="Starting Balance"
-                            />
-                        )}
-                    </Field>
-                    <Button type={"submit"}>Add</Button>
-                </ModalFormContainer>
-            )}
-        />
+        <ModalFormContainer onSubmit={handleSubmit}>
+            <Input
+                name="accountName"
+                value={values.accountName}
+                onChange={handleChange("accountName")}
+                onBlur={handleBlur("accountName")}
+                helperText={touched.accountName ? errors.accountName : undefined}
+                error={touched.accountName && !!errors.accountName}
+                label="Account Name"
+                autoFocus
+            />
+            <Switch
+                name="budgeted"
+                checked={values.budgeted}
+                onChange={handleChange("budgeted")}
+                onBlur={handleBlur("budgeted")}
+                spaced
+                error={touched.budgeted && !!errors.budgeted}
+                label="Budgeted"
+            />
+            <Input
+                name="startingBalance"
+                value={values.startingBalance}
+                onChange={handleChange("startingBalance")}
+                onBlur={formatMoneyOnBlur}
+                helperText={touched.startingBalance ? errors.startingBalance : undefined}
+                error={touched.startingBalance && !!errors.startingBalance}
+                label="Starting Balance"
+            />
+            <Button type={"submit"}>Add</Button>
+        </ModalFormContainer>
     );
 };
 

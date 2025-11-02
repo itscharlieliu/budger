@@ -1,5 +1,4 @@
-import React from "react";
-import { Field, FieldRenderProps, Form, FormRenderProps } from "react-final-form";
+import React, { useState } from "react";
 
 import { MonthCode } from "../../utils/getMonthCode";
 import Button from "../common/Button";
@@ -13,13 +12,22 @@ interface OwnProps {
 }
 
 interface FormValues {
-    groupName?: string;
+    groupName: string;
 }
 
 const BudgetGroupAddForm = (props: OwnProps): JSX.Element => {
     const { addBudgetGroup } = useBudget();
 
-    const handleAddCategoryGroup = (values: FormValues) => {
+    const [values, setValues] = useState<FormValues>({
+        groupName: "",
+    });
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setValues({ groupName: event.target.value });
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
         if (values.groupName) {
             addBudgetGroup(props.monthCode, values.groupName);
         }
@@ -27,25 +35,10 @@ const BudgetGroupAddForm = (props: OwnProps): JSX.Element => {
     };
 
     return (
-        <Form
-            onSubmit={handleAddCategoryGroup}
-            component={({ handleSubmit }: FormRenderProps) => (
-                <ModalFormContainer onSubmit={handleSubmit}>
-                    <Field name={"groupName"}>
-                        {({ input, meta }: FieldRenderProps<string, HTMLElement>) => (
-                            <Input
-                                {...input}
-                                helperText={meta.touched && meta.error}
-                                error={meta.touched && meta.error}
-                                label="New Group"
-                                autoFocus
-                            />
-                        )}
-                    </Field>
-                    <Button type={"submit"}>Add</Button>
-                </ModalFormContainer>
-            )}
-        />
+        <ModalFormContainer onSubmit={handleSubmit}>
+            <Input name="groupName" value={values.groupName} onChange={handleChange} label="New Group" autoFocus />
+            <Button type={"submit"}>Add</Button>
+        </ModalFormContainer>
     );
 };
 
