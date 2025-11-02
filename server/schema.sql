@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS accounts (
 -- Transactions table
 CREATE TABLE IF NOT EXISTS transactions (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    account_id INTEGER REFERENCES accounts(id) ON DELETE CASCADE,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    account_id INTEGER NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
     amount DECIMAL(15,2) NOT NULL,
     description TEXT,
     category VARCHAR(100),
@@ -38,23 +38,3 @@ CREATE TABLE IF NOT EXISTS transactions (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Insert sample data for testing. TODO Remove
--- Note: These are hashed passwords for 'password123'
-INSERT INTO users (email, name, password_hash) VALUES 
-    ('john@example.com', 'John Doe', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
-    ('jane@example.com', 'Jane Smith', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi')
-ON CONFLICT (email) DO NOTHING;
-
-INSERT INTO accounts (user_id, name, account_type, balance) VALUES 
-    (1, 'Main Checking', 'checking', 2500.00),
-    (1, 'Savings Account', 'savings', 10000.00),
-    (2, 'Credit Card', 'credit', -500.00)
-ON CONFLICT DO NOTHING;
-
-INSERT INTO transactions (user_id, account_id, amount, description, category, transaction_type, transaction_date) VALUES 
-    (1, 1, -50.00, 'Grocery shopping', 'Food', 'expense', '2024-01-15'),
-    (1, 1, 3000.00, 'Salary deposit', 'Income', 'income', '2024-01-01'),
-    (1, 2, 500.00, 'Transfer to savings', 'Savings', 'transfer', '2024-01-10'),
-    (2, 3, -25.00, 'Coffee shop', 'Food', 'expense', '2024-01-14'),
-    (1, 1, -120.00, 'Electric bill', 'Utilities', 'expense', '2024-01-12')
-ON CONFLICT DO NOTHING;
