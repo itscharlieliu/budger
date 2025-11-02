@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 
-import { AccountType, BankAccount } from "../../store/accounts/accountsInterfaces";
+import { BankAccount } from "../../store/accounts/accountsInterfaces";
 import formatMoney from "../../utils/formatMoney";
 import Button from "../common/Button";
 import Input from "../common/Input";
-import Switch from "../common/Switch";
 import ModalFormContainer from "../common/containers/ModalFormContainer";
 import { useAccounts } from "../../hooks/useAccounts";
 
@@ -14,13 +13,11 @@ interface OwnProps {
 
 interface FormValues {
     accountName: string;
-    budgeted: boolean;
     startingBalance: string;
 }
 
 interface FormErrors {
     accountName?: string;
-    budgeted?: string;
     startingBalance?: string;
 }
 
@@ -29,7 +26,6 @@ const AccountAddForm = (props: OwnProps): JSX.Element => {
 
     const [values, setValues] = useState<FormValues>({
         accountName: "",
-        budgeted: false,
         startingBalance: "",
     });
 
@@ -47,7 +43,7 @@ const AccountAddForm = (props: OwnProps): JSX.Element => {
     };
 
     const handleChange = (name: keyof FormValues) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = name === "budgeted" ? event.target.checked : event.target.value;
+        const value = event.target.value;
         setValues((prev) => ({ ...prev, [name]: value }));
         if (touched[name]) {
             const newErrors = handleValidation({ ...values, [name]: value as any });
@@ -69,13 +65,12 @@ const AccountAddForm = (props: OwnProps): JSX.Element => {
         handleBlur("startingBalance")();
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const newErrors = handleValidation(values);
         setErrors(newErrors);
         setTouched({
             accountName: true,
-            budgeted: true,
             startingBalance: true,
         });
 
@@ -87,10 +82,10 @@ const AccountAddForm = (props: OwnProps): JSX.Element => {
 
         const account: BankAccount = {
             name: values.accountName,
-            type: values.budgeted ? AccountType.budgeted : AccountType.unbudgeted,
             cachedBalance: isNaN(startingBalance) ? 0 : startingBalance,
+            accountType: "checking", // Default account type, you may want to make this configurable
         };
-        addAccount(account);
+        await addAccount(account);
         props.onSubmit && props.onSubmit();
     };
 
@@ -105,15 +100,6 @@ const AccountAddForm = (props: OwnProps): JSX.Element => {
                 error={touched.accountName && !!errors.accountName}
                 label="Account Name"
                 autoFocus
-            />
-            <Switch
-                name="budgeted"
-                checked={values.budgeted}
-                onChange={handleChange("budgeted")}
-                onBlur={handleBlur("budgeted")}
-                spaced
-                error={touched.budgeted && !!errors.budgeted}
-                label="Budgeted"
             />
             <Input
                 name="startingBalance"

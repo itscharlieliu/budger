@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { theme } from "../defs/theme";
 import PlusIcon from "../resources/images/plusIcon.svg";
 import Trash from "../resources/images/trash.svg";
-import { AccountType, BankAccount } from "../store/accounts/accountsInterfaces";
+import { BankAccount } from "../store/accounts/accountsInterfaces";
 import formatMoney from "../utils/formatMoney";
 import Button from "../components/common/Button";
 import Modal from "../components/common/Modal";
@@ -53,53 +53,38 @@ const AccountsHeader = (): JSX.Element => {
                 Account Name
                 <AccountAddButton icon={<PlusIcon />} flat onClick={() => setIsAddingAccount(true)} />
             </GridHeaderContainer>
-            <GridHeaderContainer>Type</GridHeaderContainer>
             <GridHeaderContainer>Balance</GridHeaderContainer>
         </>
     );
 };
 
 const AccountsRow = (props: AccountsRowProps): JSX.Element => {
-    let accountType = "";
-
-    switch (props.type) {
-        case AccountType.budgeted:
-            accountType = "Budgeted";
-            break;
-        case AccountType.unbudgeted:
-            accountType = "Unbudgeted";
-            break;
-        default:
-            accountType = "Unknown";
-    }
-
     return (
         <>
             <GridBoxContainer>
                 {props.name}
                 <AccountRowButton icon={<Trash />} onClick={() => props.onDelete()} flat />
             </GridBoxContainer>
-            <GridBoxContainer>{accountType}</GridBoxContainer>
             <GridBoxContainer>{formatMoney(props.cachedBalance, 2)}</GridBoxContainer>
         </>
     );
 };
 
 const AccountsScreen = (): JSX.Element => {
-    const { allAccounts, deleteAccount } = useAccounts();
+    const { allAccounts, deleteAccount, isLoading } = useAccounts();
 
     return (
         <SecureScreenContainer>
             <AccountsContainer>
                 <AccountsHeader />
-                {allAccounts.length === 0 && <InfoCard>No accounts added.</InfoCard>}
-                {allAccounts.map((bankAccount: BankAccount, index: number) => {
+                {isLoading && <InfoCard>Loading accounts...</InfoCard>}
+                {!isLoading && allAccounts.length === 0 && <InfoCard>No accounts added.</InfoCard>}
+                {allAccounts.map((bankAccount: BankAccount) => {
                     return (
                         <AccountsRow
-                            key={"bankAccount" + index}
+                            key={bankAccount.id || `bankAccount-${bankAccount.name}`}
                             name={bankAccount.name}
-                            type={bankAccount.type}
-                            onDelete={() => deleteAccount(index)}
+                            onDelete={() => bankAccount.id && deleteAccount(bankAccount.id)}
                             cachedBalance={bankAccount.cachedBalance}
                         />
                     );

@@ -1,127 +1,157 @@
 import { useState, useEffect, useCallback } from "react";
-import { ACCOUNTS } from "../defs/storageKeys";
 import { BankAccount, AllAccounts } from "../store/accounts/accountsInterfaces";
-import validateAccounts from "../utils/validateAccounts";
+import { API_URL } from "../defs/urls";
+import { useAuth } from "../contexts/AuthContext";
+
+interface ServerAccount {
+    id: number;
+    name: string;
+    account_type: string;
+    balance: number;
+    created_at: string;
+    updated_at: string;
+}
 
 export interface UseAccountsReturn {
     allAccounts: AllAccounts;
     isLoading: boolean;
     error: string | null;
-    addAccount: (account: BankAccount) => void;
-    updateAccount: (accountIndex: number, updates: Partial<BankAccount>) => void;
-    deleteAccount: (accountIndex: number) => void;
-    setCachedBalance: (accountIndex: number, balance: number) => void;
+    addAccount: (account: BankAccount) => Promise<void>;
+    updateAccount: (accountId: number, updates: Partial<BankAccount>) => Promise<void>;
+    deleteAccount: (accountId: number) => Promise<void>;
+    setCachedBalance: (accountId: number, balance: number) => Promise<void>;
 }
+
+// Convert server account to client account format
+const convertServerAccount = (serverAccount: ServerAccount): BankAccount => {
+    // Map server account_type to client type
+    // For now, defaulting to budgeted. You may want to add a mapping logic here
+    // or add a field to the server to track budgeted/unbudgeted
+    return {
+        id: serverAccount.id,
+        name: serverAccount.name,
+        cachedBalance: serverAccount.balance,
+        accountType: serverAccount.account_type,
+    };
+};
 
 export const useAccounts = (): UseAccountsReturn => {
     const [allAccounts, setAllAccounts] = useState<AllAccounts>([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const { token } = useAuth();
 
-    // Load accounts from localStorage on mount
+    // Load accounts from server on mount
     useEffect(() => {
-        try {
-            const totalAccountsJson = localStorage.getItem(ACCOUNTS);
-            const accounts: BankAccount[] = totalAccountsJson ? JSON.parse(totalAccountsJson) : [];
-
-            if (!validateAccounts(accounts)) {
-                console.warn("Invalid accounts data", accounts);
-                setError("Invalid accounts data");
-                return;
-            }
-
-            setAllAccounts(accounts);
-        } catch (error) {
-            setError("Failed to load accounts");
+        if (!token) {
+            setAllAccounts([]);
+            setIsLoading(false);
+            return;
         }
-    }, []);
 
-    const saveAccounts = useCallback((newAccounts: AllAccounts) => {
-        localStorage.setItem(ACCOUNTS, JSON.stringify(newAccounts));
-        setAllAccounts(newAccounts);
-    }, []);
-
-    const addAccount = useCallback(
-        (account: BankAccount) => {
+        const fetchAccounts = async () => {
             setIsLoading(true);
             setError(null);
 
             try {
-                const newAccounts = [...allAccounts, account];
-                saveAccounts(newAccounts);
+                const response = await fetch(`${API_URL}/accounts`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                const data = await response.json();
+
+                if (data.success && Array.isArray(data.data)) {
+                    const convertedAccounts = data.data.map(convertServerAccount);
+                    setAllAccounts(convertedAccounts);
+                } else {
+                    setError(data.error || "Failed to load accounts");
+                    setAllAccounts([]);
+                }
             } catch (error) {
+                console.error("Error fetching accounts:", error);
+                setError("Failed to load accounts");
+                setAllAccounts([]);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchAccounts();
+    }, [token]);
+
+    const addAccount = useCallback(
+        async (account: BankAccount) => {
+            if (!token) {
+                setError("Not authenticated");
+                return;
+            }
+
+            setIsLoading(true);
+            setError(null);
+
+            try {
+                // Map client account_type to server account_type
+                // Default to "checking" if account_type is not provided
+                const accountType = account.accountType || "checking";
+
+                const response = await fetch(`${API_URL}/accounts`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({
+                        name: account.name,
+                        account_type: accountType,
+                        balance: account.cachedBalance,
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Refetch accounts to get the updated list with IDs
+                    const fetchResponse = await fetch(`${API_URL}/accounts`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+
+                    const fetchData = await fetchResponse.json();
+
+                    if (fetchData.success && Array.isArray(fetchData.data)) {
+                        const convertedAccounts = fetchData.data.map(convertServerAccount);
+                        setAllAccounts(convertedAccounts);
+                    }
+                } else {
+                    setError(data.error || "Failed to add account");
+                }
+            } catch (error) {
+                console.error("Error adding account:", error);
                 setError("Failed to add account");
             } finally {
                 setIsLoading(false);
             }
         },
-        [allAccounts, saveAccounts],
+        [token],
     );
 
-    const updateAccount = useCallback(
-        (accountIndex: number, updates: Partial<BankAccount>) => {
-            setIsLoading(true);
-            setError(null);
+    const updateAccount = useCallback(async (accountId: number, updates: Partial<BankAccount>) => {
+        // TODO: Implement update endpoint on server
+        setError("Update account not yet implemented on server");
+    }, []);
 
-            try {
-                if (accountIndex >= 0 && accountIndex < allAccounts.length) {
-                    const newAccounts = [...allAccounts];
-                    newAccounts[accountIndex] = { ...newAccounts[accountIndex], ...updates };
-                    saveAccounts(newAccounts);
-                } else {
-                    setError("Account not found");
-                }
-            } catch (error) {
-                setError("Failed to update account");
-            } finally {
-                setIsLoading(false);
-            }
-        },
-        [allAccounts, saveAccounts],
-    );
+    const deleteAccount = useCallback(async (accountId: number) => {
+        // TODO: Implement delete endpoint on server
+        setError("Delete account not yet implemented on server");
+    }, []);
 
-    const deleteAccount = useCallback(
-        (accountIndex: number) => {
-            setIsLoading(true);
-            setError(null);
-
-            try {
-                if (accountIndex >= 0 && accountIndex < allAccounts.length) {
-                    const newAccounts = allAccounts.filter((_, index) => index !== accountIndex);
-                    saveAccounts(newAccounts);
-                } else {
-                    setError("Account not found");
-                }
-            } catch (error) {
-                setError("Failed to delete account");
-            } finally {
-                setIsLoading(false);
-            }
-        },
-        [allAccounts, saveAccounts],
-    );
-
-    const setCachedBalance = useCallback(
-        (accountIndex: number, balance: number) => {
-            setIsLoading(true);
-            setError(null);
-
-            try {
-                if (accountIndex >= 0 && accountIndex < allAccounts.length) {
-                    const newAccounts = [...allAccounts];
-                    newAccounts[accountIndex].cachedBalance = balance;
-                    saveAccounts(newAccounts);
-                } else {
-                    setError("Account not found");
-                }
-            } catch (error) {
-                setError("Failed to set cached balance");
-            } finally {
-                setIsLoading(false);
-            }
-        },
-        [allAccounts, saveAccounts],
-    );
+    const setCachedBalance = useCallback(async (accountId: number, balance: number) => {
+        // TODO: Implement update endpoint on server to update balance
+        setError("Update account balance not yet implemented on server");
+    }, []);
 
     return {
         allAccounts,
